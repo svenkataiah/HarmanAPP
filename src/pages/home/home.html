@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Symitar</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <button ion-button (click)="previewCamera()">
+    <ion-icon name="eye"></ion-icon> Preview Camera
+  </button>
+
+  <button ion-button (click)="scanProperty()">
+      <ion-icon name="search"></ion-icon> Scan Property
+    </button>
+    <div class="place_div">div1 </div>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+
+      <ion-title center (click)="viewMap()">View Map</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+
+  <ion-footer>
+      <ion-toolbar>
+        <p>{{currentLocation}}</p>
+        <ion-buttons end>
+          <button ion-button icon-right color="royal" (click)="viewMap()">
+            View Map
+            <ion-icon name="send"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>

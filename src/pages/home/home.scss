@@ -1,0 +1,34 @@
+page-home {
+.page-header{
+    height: 45px;
+    background: #e2e2e2;
+    -webkit-box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
+    -moz-box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
+    box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
+}
+.place_div{
+    position: fixed;
+    top: 100px;
+    left: 50px;
+    z-index: 99999;
+}
+
+ .ion-content {
+    background-color: transparent;
+  }
+
+ .ion-app {
+    background-color: transparent;
+  }
+
+body {
+    background-color: transparent;
+  }
+
+  html {
+    background-color: transparent;
+  }
+
+}
+
+
