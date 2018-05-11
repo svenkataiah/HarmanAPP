@@ -16,7 +16,9 @@ declare var google;
 export class HomePage {
   currentLocation: any = '';
   nearbyPlaces: any;
-  errorMessage:any;
+  errorMessage: any;
+  scanPropertyToggle:any = true;
+  
   constructor(
     public navCtrl: NavController,
     private CameraPreview: CameraPreview,
@@ -37,13 +39,16 @@ export class HomePage {
   }
 
   previewCamera() {
-
+    this.scanPropertyToggle = false;
     this.currentLocationProvider.getCurrentLocation()
-    .then((response)=>{
-      console.log(response);
-      this.getCurrentLocationAddress(response.coords.latitude,response.coords.longitude);
-      this.getNearByPlaces(response.coords.latitude,response.coords.longitude)
-    });
+      .then((response) => {
+        console.log(response);
+
+        setInterval(() => {
+          this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
+          this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
+        }, 5000)
+      });
 
     //this.navCtrl.push(ScanPropertyPage)
     let options = {
@@ -59,11 +64,13 @@ export class HomePage {
 
     this.CameraPreview.startCamera(options);
 
-    
+
   }
 
   ionViewDidLeave() {
     this.CameraPreview.stopCamera();
+    this.nearbyPlaces = null;
+    this.scanPropertyToggle = true;
   }
 
   getCurrentLocationAddress(lat, lng) {
@@ -88,75 +95,48 @@ export class HomePage {
 
   getNearByPlaces(lat, lng) {
     this.nearByPlacesProvider.getNearByPlaces(lat, lng)
-      .subscribe((response)=>{
+      .subscribe((response) => {
         console.log(response['results']);
 
         //filter nearby location
         var nearByplacesResponse = response['results'];
-        var filterednearByPlaces =  nearByplacesResponse.filter(function(el){
-          return el.types[0]!='point_of_interest';
+        var filterednearByPlaces = nearByplacesResponse.filter(function (el) {
+          return el.types[0] != 'point_of_interest';
         });
 
         //add distance to filtered nearby location
         filterednearByPlaces.forEach(element => {
-            var distance = getDistanceFromLatLonInKm(lat,lng,element.geometry.location.lat,element.geometry.location.lng)
-            element.distance = distance.toFixed(3)+' KM';
-          });
+          var distance = getDistanceFromLatLonInKm(lat, lng, element.geometry.location.lat, element.geometry.location.lng)
+          element.distance = distance.toFixed(3) + ' KM';
+        });
 
-          this.nearbyPlaces = filterednearByPlaces;
-          console.log(this.nearbyPlaces);
-
-
+        this.nearbyPlaces = filterednearByPlaces;
+        console.log(this.nearbyPlaces);
       },
-      (error)=>{
-        this.errorMessage = error;
-      }
-    
-    );
+        (error) => {
+          this.errorMessage = error;
+        }
 
-      //calculate distance between two location
-      function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
-        var R = 6371; // Radius of the earth in km
-        var dLat = deg2rad(lat2-lat1);  // deg2rad below
-        var dLon = deg2rad(lon2-lon1); 
-        var a = 
-          Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-          Math.sin(dLon/2) * Math.sin(dLon/2)
-          ; 
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-        var d = R * c; // Distance in km
-        return d;
-      }
-      
-      function deg2rad(deg) {
-        return deg * (Math.PI/180)
-      }
+      );
 
+    //calculate distance between two location
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+      var dLon = deg2rad(lon2 - lon1);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // Distance in km
+      return d;
+    }
 
-
-      // var map = new google.maps.Map(document.getElementById('maps'), {
-      //   center: lat,lng,
-      //   zoom: 15
-      // });
-      // var infowindow = new google.maps.InfoWindow();
-      // var service = new google.maps.places.PlacesService();
-      // service.nearbySearch({
-      //   location: lat,lng,
-      //   radius: 500,
-      //   type: ['']
-      // }, callback);
-
-
-      // function callback(results, status) {
-      //   console.log("places");
-      //   if (status === google.maps.places.PlacesServiceStatus.OK) {
-      //     for (var i = 0; i < results.length; i++) {
-      //       console.log(results[i]);
-      //     }
-      //   }
-      // }
-
+    function deg2rad(deg) {
+      return deg * (Math.PI / 180)
+    }
   }
 
 

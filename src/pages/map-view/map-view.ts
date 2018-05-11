@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
+import { NearByPlacesProvider } from '../../providers/near-by-places/near-by-places';
 declare var google;
 
 @IonicPage()
@@ -18,7 +19,8 @@ export class MapViewPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private geolocation: Geolocation,
-    private currentLocationProvider: CurrentLocationProvider
+    private currentLocationProvider: CurrentLocationProvider,
+    private nearByPlacesProvider: NearByPlacesProvider
   ) {
   }
 
@@ -34,9 +36,7 @@ export class MapViewPage {
   }
 
   ionViewDidLoad() {
-    setInterval(() => {
       this.getCurrentLatLng();
-    }, 5000);
   }
 
 
@@ -56,21 +56,31 @@ export class MapViewPage {
     });
     
     var infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch({
-      location: position,
-      radius: 5000,
-      type: ['']
-    }, callback);
+
+    // var service = new google.maps.places.PlacesService(map);
+    // service.nearbySearch({
+    //   location: position,
+    //   radius: 5000,
+    //   type: ['']
+    // }, callback);
 
 
-    function callback(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          createMarker(results[i]);
-        }
+    // function callback(results, status) {
+    //   if (status === google.maps.places.PlacesServiceStatus.OK) {
+    //     for (var i = 0; i < results.length; i++) {
+    //       createMarker(results[i]);
+    //     }
+    //   }
+    // }
+
+    this.nearByPlacesProvider.getNearByPlaces(lat, lng)
+    .subscribe((response)=>{
+      console.log(response['results']);
+      for (var i = 0; i < response['results'].length; i++) {
+        createMarker(response['results'][i]);
       }
-    }
+    });
+  
 
     function createMarker(place) {
       console.log(place);
@@ -107,26 +117,8 @@ export class MapViewPage {
       }
     }
 
-    //trigger when marker changed
-    // var _this = this;
-    // function markerCoords(markerobject) {
-    //   google.maps.event.addListener(markerobject, 'dragend', function (evt) {
-    //     console.log(evt.latLng.lat() + " " + evt.latLng.lng());
-    //   });
-
-    //   google.maps.event.addListener(markerobject, 'drag', function (evt) {
-    //     console.log(evt.latLng.lat() + " " + evt.latLng.lng());
-    //     this.mapInit(evt.latLng.lat(),evt.latLng.lng());
-    //   });
-    // }
 
     this.markerCoords(marker1)
-
-
-
-
-
-
 
   }
   
@@ -140,9 +132,6 @@ export class MapViewPage {
       //this.mapInit(evt.latLng.lat(),evt.latLng.lng());
     });
   }
-
-
-
 
   getCurrentLocation(lat, lng) {
     var _this = this;

@@ -9,15 +9,15 @@
 
 <ion-content>
 
-  <!-- <button ion-button (click)="previewCamera()">
-    <ion-icon name="eye"></ion-icon> Preview Camera
-  </button> -->
 
-  <button ion-button full (click)="previewCamera()">
-    <ion-icon name="search"></ion-icon> Scan Property
-  </button>
-
-  <ion-list>
+  <ion-card *ngIf="scanPropertyToggle">
+      <img src="assets/imgs/scan.png" />
+      <div class="card-title"><button ion-button full (click)="previewCamera()">
+          <ion-icon name="search"></ion-icon> Scan Property
+        </button></div>
+    </ion-card>
+ 
+  <ion-list *ngIf="!scanPropertyToggle">
     <ion-item *ngFor="let places of nearbyPlaces">
       <ion-avatar item-start>
         <img [src]="places.icon" width="20">
