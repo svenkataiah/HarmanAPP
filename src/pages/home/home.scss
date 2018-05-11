@@ -31,4 +31,14 @@ body {
 
 }
 
+.item-md {
+  width: 200px;
+  margin: 0px auto;
+  padding-left: 0px;
+  background: transparent;
+}
+
+.item-md.item-block .item-inner{
+  border: none;
+}
 

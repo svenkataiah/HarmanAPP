@@ -9,10 +9,13 @@ import { LoginPage } from '../pages/login/login';
 import { ScanPropertyPage } from '../pages/scan-property/scan-property';
 import { MapViewPage } from '../pages/map-view/map-view';
 
+import { HttpClientModule } from '@angular/common/http';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
+import { NearByPlacesProvider } from '../providers/near-by-places/near-by-places';
+import { CurrentLocationProvider } from '../providers/current-location/current-location';
 @NgModule({
   declarations: [
     MyApp,
@@ -25,6 +28,7 @@ import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, Camer
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -40,8 +44,9 @@ import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, Camer
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Geolocation,
-    CameraPreview
-
+    CameraPreview,
+    NearByPlacesProvider,
+    CurrentLocationProvider
   ]
 })
 export class AppModule {}
