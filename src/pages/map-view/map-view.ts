@@ -52,7 +52,7 @@ export class MapViewPage {
     var position = { lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('maps'), {
       center: position,
-      zoom: 15
+      zoom: 10
     });
     
     var infowindow = new google.maps.InfoWindow();
