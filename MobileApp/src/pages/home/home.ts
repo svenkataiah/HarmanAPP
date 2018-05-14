@@ -15,10 +15,12 @@ declare var google;
 })
 export class HomePage {
   currentLocation: any = '';
-  nearbyPlaces: any;
+  nearbyPlaces: any = [];
   errorMessage: any;
-  scanPropertyToggle:any = true;
-  
+  scanPropertyToggle: any = true;
+  nearByPlaceType: any;
+  loadingIcon:any = false;
+
   constructor(
     public navCtrl: NavController,
     private CameraPreview: CameraPreview,
@@ -30,24 +32,34 @@ export class HomePage {
 
   }
 
+  ngOnInit() {
+    this.nearByPlaceType = ['atm', 'bank', 'school', 'store', 'train_station', 'hospital', 'gas_station']
+  }
+
   scanProperty() {
     this.navCtrl.push(ScanPropertyPage)
   }
 
   viewMap() {
-    this.navCtrl.push(MapViewPage)
+    this.navCtrl.push(MapViewPage,{data:JSON.stringify(this.nearbyPlaces)});
+  }
+
+  userProfile(){
+
   }
 
   previewCamera() {
+    this.loadingIcon = true;
     this.scanPropertyToggle = false;
     this.currentLocationProvider.getCurrentLocation()
       .then((response) => {
         console.log(response);
 
-        setInterval(() => {
-          this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
-          this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
-        }, 5000)
+        //setInterval(() => {
+          this.nearbyPlaces = [];
+        this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
+        this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
+        //}, 10000)
       });
 
     //this.navCtrl.push(ScanPropertyPage)
@@ -73,11 +85,11 @@ export class HomePage {
     this.scanPropertyToggle = true;
   }
 
+  //Get Curremnt address using lat and lng
   getCurrentLocationAddress(lat, lng) {
     var _this = this;
     var geocoder = new google.maps.Geocoder();
     var latLng = new google.maps.LatLng(lat, lng);
-
     if (geocoder) {
       geocoder.geocode({ 'latLng': latLng }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
@@ -85,7 +97,6 @@ export class HomePage {
           _this.currentLocation = results[0].formatted_address;
         }
         else {
-
           console.log("Geocoding failed: " + status);
         }
       }); //geocoder.geocode()
@@ -93,31 +104,39 @@ export class HomePage {
   }
 
 
+  //Get near by places
   getNearByPlaces(lat, lng) {
-    this.nearByPlacesProvider.getNearByPlaces(lat, lng)
-      .subscribe((response) => {
-        console.log(response['results']);
+    //loop by places types
+    this.nearByPlaceType.forEach((el) => {
+      this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
+        .subscribe((response) => {
+          console.log(response['results']);
+          var nearByplacesResponse = response['results'];
 
-        //filter nearby location
-        var nearByplacesResponse = response['results'];
-        var filterednearByPlaces = nearByplacesResponse.filter(function (el) {
-          return el.types[0] != 'point_of_interest';
-        });
+          //add distance to nearby location
+          var count = 0;
+          nearByplacesResponse.forEach((element, i) => {
 
-        //add distance to filtered nearby location
-        filterednearByPlaces.forEach(element => {
-          var distance = getDistanceFromLatLonInKm(lat, lng, element.geometry.location.lat, element.geometry.location.lng)
-          element.distance = distance.toFixed(3) + ' KM';
-        });
+            if (element.types[0] == el && count < 1) { // check type and take first object
+              console.log(element.types[0]);
+              count++;
+              //calculate distance
+              var distance = getDistanceFromLatLonInKm(lat, lng, element.geometry.location.lat, element.geometry.location.lng)
+              element.distance = distance.toFixed(3) + ' KM';
+              this.nearbyPlaces.push(nearByplacesResponse); // push nearby location object
+              return;
+            }
 
-        this.nearbyPlaces = filterednearByPlaces;
-        console.log(this.nearbyPlaces);
-      },
-        (error) => {
-          this.errorMessage = error;
-        }
+          });
+          count = 0;
+          this.loadingIcon = false;
+        },
+          (error) => {
+            this.errorMessage = error;
+          }
+        );
 
-      );
+    });
 
     //calculate distance between two location
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {

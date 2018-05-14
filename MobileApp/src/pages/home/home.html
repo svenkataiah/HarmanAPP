@@ -3,43 +3,133 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Symitar</ion-title>
+    <ion-title text-center>Scan Property</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
 
+    <img class="loadingIcon" src="https://www.outsavvy.com/img/loading.gif" *ngIf="loadingIcon"/>
 
-  <ion-card *ngIf="scanPropertyToggle">
-      <img src="assets/imgs/scan.png" />
-      <div class="card-title"><button ion-button full (click)="previewCamera()">
-          <ion-icon name="search"></ion-icon> Scan Property
-        </button></div>
-    </ion-card>
- 
-  <ion-list *ngIf="!scanPropertyToggle">
+  <ion-card text-center class="propertyScanner" *ngIf="scanPropertyToggle">
+    <img src="http://www.virtual-realty-llc.com/img/house.png" />
+    <div class="card-title">
+      <button ion-button (click)="previewCamera()">
+        <ion-icon name="search"></ion-icon> Scan Property
+      </button>
+    </div>
+  </ion-card>
+
+  <!-- <ion-list *ngIf="!scanPropertyToggle">
     <ion-item *ngFor="let places of nearbyPlaces">
       <ion-avatar item-start>
-        <img [src]="places.icon" width="20">
+        <img [src]="places[0].icon" width="20">
       </ion-avatar>
-      <h2>{{places.types[0]}}</h2>
-      <h3>{{places.distance}}</h3>
+      <h2>{{places[0].types[0]}}</h2>
+      <h3>{{places[0].distance}}</h3>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
+  <div class="div_left" *ngIf="!scanPropertyToggle && nearbyPlaces.length>0">
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/atm.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>School</span>
+        <span>1.5 KM</span>
+      </div>
+    </div>
+
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/bank-building.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>Hospital</span>
+        <span>0.5 KM</span>
+      </div>
+    </div>
+
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/metro.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>Store</span>
+        <span>0.5 KM</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="div_right" *ngIf="!scanPropertyToggle && nearbyPlaces.length>0">
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/atm.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>ATM</span>
+        <span>1.5 KM</span>
+      </div>
+    </div>
+
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/bank-building.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>Bank</span>
+        <span>0.5 KM</span>
+      </div>
+    </div>
+
+    <div class="nearbyPlaces left">
+      <div class="img">
+        <img src="assets/imgs/ScanProperty/metro.png" width="20">
+      </div>
+
+      <div class="info">
+        <span>Train</span>
+        <span>0.5 KM</span>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- <div *ngFor="let places of nearbyPlaces" class="places">
+    <ion-avatar item-start>
+      <img [src]="places[0].icon" width="20">
+    </ion-avatar>
+    <h2>{{places[0].types[0]}}</h2>
+    <h3>{{places[0].distance}}</h3>
+  </div> -->
+  <div style="font-size: 12px;" class="current_location">{{currentLocation}}</div>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-
     <ion-title center (click)="viewMap()">View Map</ion-title>
   </ion-toolbar>
 </ion-footer>
 
 <ion-footer>
   <ion-toolbar>
-    <p style="font-size: 12px;">{{currentLocation}}</p>
-    <ion-buttons end>
+
+    <ion-buttons text-center>
       <button ion-button icon-right color="royal" (click)="viewMap()">
         View Map
         <ion-icon name="send"></ion-icon>

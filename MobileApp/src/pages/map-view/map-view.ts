@@ -36,7 +36,7 @@ export class MapViewPage {
   }
 
   ionViewDidLoad() {
-      this.getCurrentLatLng();
+    this.getCurrentLatLng();
   }
 
 
@@ -52,43 +52,34 @@ export class MapViewPage {
     var position = { lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('maps'), {
       center: position,
-      zoom: 10
+      zoom: 13
     });
-    
+
     var infowindow = new google.maps.InfoWindow();
 
-    // var service = new google.maps.places.PlacesService(map);
-    // service.nearbySearch({
-    //   location: position,
-    //   radius: 5000,
-    //   type: ['']
-    // }, callback);
+    this.nearByPlacesProvider.getNearByPlaces(lat, lng, '')
+      .subscribe((response) => {
+        console.log(response['results']);
+        for (var i = 0; i < response['results'].length; i++) {
+          createMarker(response['results'][i]);
+        }
+      });
 
-
-    // function callback(results, status) {
-    //   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    //     for (var i = 0; i < results.length; i++) {
-    //       createMarker(results[i]);
-    //     }
-    //   }
-    // }
-
-    this.nearByPlacesProvider.getNearByPlaces(lat, lng)
-    .subscribe((response)=>{
-      console.log(response['results']);
-      for (var i = 0; i < response['results'].length; i++) {
-        createMarker(response['results'][i]);
-      }
-    });
-  
 
     function createMarker(place) {
-      console.log(place);
+
+      var icon = {
+        url: place.icon, // url
+        scaledSize: new google.maps.Size(20, 20), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+      };
+
       var placeLoc = place.geometry.location;
       var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location,
-        icon: place.icon
+        icon: icon
       });
 
 
@@ -100,12 +91,18 @@ export class MapViewPage {
     }
 
     //current location marker
+    var CurrentLocationIcon = {
+      url: "https://d30y9cdsu7xlg0.cloudfront.net/png/607183-200.png", // url
+      scaledSize: new google.maps.Size(40, 40), // scaled size
+      origin: new google.maps.Point(0,0), // origin
+      anchor: new google.maps.Point(0, 0) // anchor
+  };
     var marker1 = new google.maps.Marker({
       map: map,
       position: position,
       draggable: true,
       animation: google.maps.Animation.DROP,
-      icon: "https://images.vexels.com/media/users/3/141916/isolated/lists/dcd10d362e49a3c161379047a940ba7d-location-pin-stroke-icon.png"
+      icon: CurrentLocationIcon
     });
     marker1.addListener('click', toggleBounce);
 
@@ -121,11 +118,9 @@ export class MapViewPage {
     this.markerCoords(marker1)
 
   }
-  
+
   markerCoords(markerobject) {
-    google.maps.event.addListener(markerobject, 'dragend', function (evt) {
-      console.log(evt.latLng.lat() + " " + evt.latLng.lng());
-    });
+    
 
     google.maps.event.addListener(markerobject, 'drag', function (evt) {
       console.log(evt.latLng.lat() + " " + evt.latLng.lng());
