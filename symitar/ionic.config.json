@@ -1,8 +1,0 @@
-{
-  "name": "symitar",
-  "app_id": "87db0fff",
-  "type": "ionic-angular",
-  "integrations": {
-    "cordova": {}
-  }
-}
