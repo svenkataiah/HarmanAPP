@@ -1,0 +1,11 @@
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/bin/Debug/netcoreapp2.0/QuickHomeLoanAPI.deps.json
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/bin/Debug/netcoreapp2.0/QuickHomeLoanAPI.runtimeconfig.json
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/bin/Debug/netcoreapp2.0/QuickHomeLoanAPI.runtimeconfig.dev.json
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/bin/Debug/netcoreapp2.0/QuickHomeLoanAPI.dll
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/bin/Debug/netcoreapp2.0/QuickHomeLoanAPI.pdb
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.csprojResolveAssemblyReference.cache
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.csproj.CoreCompileInputs.cache
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.AssemblyInfoInputs.cache
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.AssemblyInfo.cs
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.dll
+/Users/dkumar/Github/JHA/HarmanAPP/WebAPI/QuickHomeLoanAPI/QuickHomeLoanAPI/obj/Debug/netcoreapp2.0/QuickHomeLoanAPI.pdb
