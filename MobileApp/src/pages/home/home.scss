@@ -5,7 +5,13 @@ page-home {
     -webkit-box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
     -moz-box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
     box-shadow: 1px 1px 5px -4px rgba(0,0,0,0.67);
+
+    .user-btn{
+      margin-right: 14px;
+    }
 }
+
+
 .place_div{
     position: fixed;
     top: 100px;
@@ -50,14 +56,22 @@ body {
     border-radius: 4px;
   }
 
-  .nearbyPlaces.left {
-    width: 88px;
+  .nearbyPlaces{
+    width: 90px;
     height: 37px;
-    background: rgba(117, 111, 111, 0.8);
+    background: rgba(117, 111, 111, 0.5);
     margin-top: 15px;
     padding: 4px 7px;
-    border-radius: 10px;
+   
     box-sizing: border-box;
+  }
+
+  .nearbyPlaces.left {
+    border-radius: 0px 10px 10px 0px;
+}
+
+.nearbyPlaces.right {
+  border-radius: 10px 0px 0px 10px;
 }
 
 .nearbyPlaces .img{
@@ -83,25 +97,26 @@ body {
 
 .div_left{
   position: absolute;
-  left: 3px;
+  left: 0px;
   top: 15px;
 }
 
 .div_right{
   position: absolute;
-  right: 3px;
+  right: 0px;
   top: 15px;
 }
 
 .current_location{
   width: 100%;
   position: absolute;
-  bottom: 15px;
-  font-size: 10px;
+  bottom: 70px;
   text-align: center;
   background: rgba(0, 0, 0, 0.509804);
   z-index: 10000000000;
   color: #fff;
+  font-size: 12px;
+  padding: 10px;
 }
 
 .propertyScanner{
@@ -112,16 +127,23 @@ body {
 }
 
 .propertyScanner img{
-  width: 90%;
+  width: 75%;
   margin: 0px auto;
-  margin-top: 40px;
+  margin-top: 18%;
+  margin-bottom: 4%;
 }
 
 .loadingIcon{
   margin: 0px 34%;
   width: 100px;
 }
-
+ 
+.card-title{
+  margin-top: 40px;
+}
+.navigation-btn{
+  width: 100px;
+}
 }
 
 

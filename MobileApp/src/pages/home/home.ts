@@ -7,7 +7,14 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HttpClient } from '@angular/common/http';
 import { NearByPlacesProvider } from '../../providers/near-by-places/near-by-places';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
+import { UserInfoPage } from '../user-info/user-info';
 declare var google;
+// picture options
+const pictureOpts: CameraPreviewPictureOptions = {
+  width: 1280,
+  height: 1280,
+  quality: 85
+}
 
 @Component({
   selector: 'page-home',
@@ -19,11 +26,15 @@ export class HomePage {
   errorMessage: any;
   scanPropertyToggle: any = true;
   nearByPlaceType: any;
-  loadingIcon:any = false;
+  loadingIcon: any = false;
+
+  nearbyLocationsStock: any = {}
+  picture: any;
+
 
   constructor(
     public navCtrl: NavController,
-    private CameraPreview: CameraPreview,
+    private cameraPreview: CameraPreview,
     private geolocation: Geolocation,
     private http: HttpClient,
     private nearByPlacesProvider: NearByPlacesProvider,
@@ -37,53 +48,55 @@ export class HomePage {
   }
 
   scanProperty() {
-    this.navCtrl.push(ScanPropertyPage)
+    this.previewCamera();
+    setTimeout(() => {
+      this.takePicture();
+    }, 2000);
+    
+    this.getCurrentLocation();
   }
 
-  viewMap() {
-    this.navCtrl.push(MapViewPage,{data:JSON.stringify(this.nearbyPlaces)});
-  }
-
-  userProfile(){
-
-  }
 
   previewCamera() {
-    this.loadingIcon = true;
-    this.scanPropertyToggle = false;
-    this.currentLocationProvider.getCurrentLocation()
-      .then((response) => {
-        console.log(response);
-
-        //setInterval(() => {
-          this.nearbyPlaces = [];
-        this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
-        this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
-        //}, 10000)
-      });
-
     //this.navCtrl.push(ScanPropertyPage)
     let options = {
       x: 0,
       y: 0,
       width: window.screen.width,
       height: window.screen.height,
-      camera: this.CameraPreview.CAMERA_DIRECTION.BACK,
+      camera: this.cameraPreview.CAMERA_DIRECTION.BACK,
       toBack: true,
       tapPhoto: true,
       previewDrag: true
     };
-
-    this.CameraPreview.startCamera(options);
-
-
+    this.cameraPreview.startCamera(options);
   }
 
-  ionViewDidLeave() {
-    this.CameraPreview.stopCamera();
-    this.nearbyPlaces = null;
-    this.scanPropertyToggle = true;
+  takePicture() {
+    // take a picture
+    this.cameraPreview.takePicture(pictureOpts).then((imageData) => {
+      this.picture = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+      this.picture = 'assets/img/test.jpg';
+    });
   }
+
+  getCurrentLocation() {
+    this.loadingIcon = true;
+    this.scanPropertyToggle = false;
+    this.currentLocationProvider.getCurrentLocation()
+      .then((response) => {
+        if (response.coords.latitude && response.coords.longitude) {
+          this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
+          this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
+        }
+
+      },
+        (err) => {
+          this.errorMessage = err;
+        });
+  }
+
 
   //Get Curremnt address using lat and lng
   getCurrentLocationAddress(lat, lng) {
@@ -100,6 +113,8 @@ export class HomePage {
           console.log("Geocoding failed: " + status);
         }
       }); //geocoder.geocode()
+    } else {
+      this.errorMessage = 'probelm in loading address';
     }
   }
 
@@ -110,23 +125,20 @@ export class HomePage {
     this.nearByPlaceType.forEach((el) => {
       this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
         .subscribe((response) => {
-          console.log(response['results']);
           var nearByplacesResponse = response['results'];
-
           //add distance to nearby location
           var count = 0;
           nearByplacesResponse.forEach((element, i) => {
 
             if (element.types[0] == el && count < 1) { // check type and take first object
-              console.log(element.types[0]);
               count++;
               //calculate distance
-              var distance = getDistanceFromLatLonInKm(lat, lng, element.geometry.location.lat, element.geometry.location.lng)
-              element.distance = distance.toFixed(3) + ' KM';
-              this.nearbyPlaces.push(nearByplacesResponse); // push nearby location object
+              var distance = getDistanceFromLatLonInKm(lat, lng, element.geometry.location.lat, element.geometry.location.lng).toFixed(3)
+              element.distance = distance + ' KM';
+              this.nearbyPlaces.push(element); // push nearby location object
+              this.nearbyLocationsStock[el] = distance;
               return;
             }
-
           });
           count = 0;
           this.loadingIcon = false;
@@ -135,8 +147,11 @@ export class HomePage {
             this.errorMessage = error;
           }
         );
-
     });
+
+
+    console.log(this.nearbyLocationsStock)
+    console.log(this.nearbyPlaces);
 
     //calculate distance between two location
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -158,7 +173,24 @@ export class HomePage {
     }
   }
 
+  viewMap() {
+    var data = {
+      data: {
+        nearbyPlaces: JSON.stringify(this.nearbyPlaces),
+        scanPropertyPicture: this.picture
+      }
+    }
+    this.navCtrl.push(MapViewPage, data);
+  }
 
+  userInfo() {
+    this.navCtrl.push(UserInfoPage);
+  }
 
+  ionViewDidLeave() {
+    this.cameraPreview.stopCamera();
+    this.scanPropertyToggle = true;
+    this.nearbyPlaces = [];
+  }
 
 }

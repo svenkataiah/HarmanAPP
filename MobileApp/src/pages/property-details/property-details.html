@@ -1,0 +1,211 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center>Property Details</ion-title>
+    <ion-buttons end (click)="userInfo()">
+      <button ion-button icon-only class="user-btn">
+        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <!-- Segment buttons with icons -->
+  <ion-segment [(ngModel)]="icons">
+    <ion-segment-button value="camera" (click)="switchTabs('ownerInfo')" class="segment-button segment-activated">
+      <img src="assets/imgs/OwnerInfo/owner.png" /> Owner
+    </ion-segment-button>
+    <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')">
+      <img src="assets/imgs/OwnerInfo/information.png" /> Basic Info
+    </ion-segment-button>
+    <ion-segment-button value="gallery" (click)="switchTabs('gallery')">
+      <img src="assets/imgs/OwnerInfo/gallery.png" /> Gallery
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-grid *ngIf="tabStatus=='ownerInfo'" class="owner-info">
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/real-state-seller.png" /> Owner
+      </ion-col>
+      <ion-col>
+        Bob Mathew
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/home.png" /> Property Type
+      </ion-col>
+      <ion-col>
+        Single Family Home
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/calendar.png" /> Year Built
+      </ion-col>
+      <ion-col>
+        2004
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/house-with-dollar-sign.png" /> Last Sold
+      </ion-col>
+      <ion-col>
+        $ 185,000.00
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/price-tag.png" /> Price Per sqft
+      </ion-col>
+      <ion-col>
+        $38.00
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/style.png" /> Style
+      </ion-col>
+      <ion-col>
+        Single Family Residency
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <hr>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/last mortgage.png" />Last Mortgaged
+      </ion-col>
+      <ion-col>
+        The House was last Mortgaged by the previous owners in 2009.
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/OwnerInfo/other comment.png" /> Other Comments
+      </ion-col>
+      <ion-col>
+        The House has been refurbished in 2017 and has a beautiful maintained lawn.
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="tabStatus=='basicInfo'" class="basic-info">
+    <ion-row>
+      <ion-col>
+        <img [src]="scanPropertyPicture" height="330" style="width: 100%;"/>
+        <!-- <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" height="330" style="width: 100%;" /> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="currentAddress">
+        {{currentLocationAddress}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="tabStatus=='gallery'" class="gallery">
+    <ion-row>
+      <ion-col>
+        <img src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        />
+      </ion-col>
+      <ion-col>
+        <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
+      </ion-col>
+      <ion-col>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        />
+      </ion-col>
+      <ion-col>
+        <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
+      </ion-col>
+      <ion-col>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        />
+      </ion-col>
+      <ion-col>
+        <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
+      </ion-col>
+      <ion-col>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar *ngIf="tabStatus=='gallery'">
+    <ion-buttons text-center>
+      <button ion-button class="navigation-btn" (click)="viewMap()">
+        <span class="btn-text"> Interested In Property ? </span>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="tabStatus=='basicInfo'" class="basic-info-toolbar">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="property-info">
+          <div class="icon">
+            <img src="assets/imgs/PropertyDetails/BEDROOMS.png" />
+          </div>
+          <div class="total"> 02</div>
+        </ion-col>
+        <ion-col class="property-info">
+          <div class="icon">
+            <img src="assets/imgs/PropertyDetails/bath.png" />
+          </div>
+          <div class="total"> 03</div>
+        </ion-col>
+        <ion-col class="property-info">
+          <div class="icon">
+            <img src="assets/imgs/PropertyDetails/squarefeet.png" />
+          </div>
+          <div class="total"> 2312</div>
+        </ion-col>
+        <ion-col class="property-info">
+          <div class="icon">
+            <img src="assets/imgs/PropertyDetails/sqftlot.png" />
+          </div>
+          <div class="total">2332</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

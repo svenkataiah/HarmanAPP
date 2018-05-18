@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title text-center>Scan Property</ion-title>
-    <ion-buttons end>
+    <ion-buttons end class="user-btn" (click)="userInfo()">
       <button ion-button icon-only>
         <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
       </button>
@@ -13,94 +13,87 @@
 </ion-header>
 
 <ion-content>
-
-    <img class="loadingIcon" src="https://www.outsavvy.com/img/loading.gif" *ngIf="loadingIcon"/>
+  <img class="loadingIcon" src="https://ugroupcu.com/wp-content/themes/ucgroup/assets/image/pageLoader.gif" *ngIf="loadingIcon"
+  />
 
   <ion-card text-center class="propertyScanner" *ngIf="scanPropertyToggle">
-    <img src="http://www.virtual-realty-llc.com/img/house.png" />
+    <img src="assets/imgs/ScanProperty.png" />
     <div class="card-title">
-      <button ion-button (click)="previewCamera()">
-        <ion-icon name="search"></ion-icon> Scan Property
+      <button ion-button (click)="scanProperty()">
+        <ion-icon name="search"></ion-icon>
+        <span class="btn-text">Scan Property</span>
       </button>
     </div>
+
   </ion-card>
 
-  <!-- <ion-list *ngIf="!scanPropertyToggle">
-    <ion-item *ngFor="let places of nearbyPlaces">
-      <ion-avatar item-start>
-        <img [src]="places[0].icon" width="20">
-      </ion-avatar>
-      <h2>{{places[0].types[0]}}</h2>
-      <h3>{{places[0].distance}}</h3>
-    </ion-item>
-  </ion-list> -->
-  <div class="div_left" *ngIf="!scanPropertyToggle && nearbyPlaces.length>0">
+  <div class="div_left" *ngIf="!scanPropertyToggle && nearbyPlaces?.length>0">
     <div class="nearbyPlaces left">
       <div class="img">
-        <img src="assets/imgs/ScanProperty/atm.png" width="20">
+        <img src="assets/imgs/ScanProperty/school.png" width="20">
       </div>
 
       <div class="info">
         <span>School</span>
-        <span>1.5 KM</span>
+        <span>{{nearbyLocationsStock?.school?nearbyLocationsStock.school+' KM':'-'}}</span>
       </div>
     </div>
 
     <div class="nearbyPlaces left">
       <div class="img">
-        <img src="assets/imgs/ScanProperty/bank-building.png" width="20">
+        <img src="assets/imgs/ScanProperty/hospital.png" width="20">
       </div>
 
       <div class="info">
         <span>Hospital</span>
-        <span>0.5 KM</span>
+        <span>{{nearbyLocationsStock?.hospital?nearbyLocationsStock.hospital+' KM':'-'}}</span>
       </div>
     </div>
 
     <div class="nearbyPlaces left">
       <div class="img">
-        <img src="assets/imgs/ScanProperty/metro.png" width="20">
+        <img src="assets/imgs/ScanProperty/store.png" width="20">
       </div>
 
       <div class="info">
         <span>Store</span>
-        <span>0.5 KM</span>
+        <span>{{nearbyLocationsStock?.store?nearbyLocationsStock.store+' KM':'-'}}</span>
       </div>
     </div>
 
   </div>
 
-  <div class="div_right" *ngIf="!scanPropertyToggle && nearbyPlaces.length>0">
-    <div class="nearbyPlaces left">
+  <div class="div_right" *ngIf="!scanPropertyToggle && nearbyPlaces?.length>0">
+    <div class="nearbyPlaces right">
       <div class="img">
         <img src="assets/imgs/ScanProperty/atm.png" width="20">
       </div>
 
       <div class="info">
         <span>ATM</span>
-        <span>1.5 KM</span>
+        <span>{{nearbyLocationsStock?.atm?nearbyLocationsStock.atm+' KM':'-'}}</span>
       </div>
     </div>
 
-    <div class="nearbyPlaces left">
+    <div class="nearbyPlaces right">
       <div class="img">
         <img src="assets/imgs/ScanProperty/bank-building.png" width="20">
       </div>
 
       <div class="info">
         <span>Bank</span>
-        <span>0.5 KM</span>
+        <span>{{nearbyLocationsStock?.bank?nearbyLocationsStock.bank+' KM':'-'}}</span>
       </div>
     </div>
 
-    <div class="nearbyPlaces left">
+    <div class="nearbyPlaces right">
       <div class="img">
-        <img src="assets/imgs/ScanProperty/metro.png" width="20">
+        <img src="assets/imgs/ScanProperty/fuel-station-pump.png" width="20">
       </div>
 
       <div class="info">
-        <span>Train</span>
-        <span>0.5 KM</span>
+        <span>Fuel</span>
+        <span>{{nearbyLocationsStock?.gas_station?nearbyLocationsStock.gas_station+' KM':'-'}}</span>
       </div>
     </div>
 
@@ -116,23 +109,16 @@
     <h2>{{places[0].types[0]}}</h2>
     <h3>{{places[0].distance}}</h3>
   </div> -->
-  <div style="font-size: 12px;" class="current_location">{{currentLocation}}</div>
+  <div class="current_location" *ngIf="!scanPropertyToggle">{{currentLocation}}</div>
 
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-title center (click)="viewMap()">View Map</ion-title>
-  </ion-toolbar>
-</ion-footer>
 
-<ion-footer>
+<ion-footer *ngIf="!scanPropertyToggle">
   <ion-toolbar>
-
     <ion-buttons text-center>
-      <button ion-button icon-right color="royal" (click)="viewMap()">
-        View Map
-        <ion-icon name="send"></ion-icon>
+      <button ion-button class="navigation-btn" (click)="viewMap()">
+        <span class="btn-text">View Map </span>
       </button>
     </ion-buttons>
   </ion-toolbar>
