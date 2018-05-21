@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -19,6 +20,10 @@ import { NearByPlacesProvider } from '../providers/near-by-places/near-by-places
 import { CurrentLocationProvider } from '../providers/current-location/current-location';
 import { UserInfoPage } from '../pages/user-info/user-info';
 import { SignupPage } from '../pages/signup/signup';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { NotificationsPage } from '../pages/notifications/notifications';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -29,7 +34,8 @@ import { SignupPage } from '../pages/signup/signup';
     MapViewPage,
     PropertyDetailsPage,
     UserInfoPage,
-    SignupPage
+    SignupPage,
+    NotificationsPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,8 @@ import { SignupPage } from '../pages/signup/signup';
     MapViewPage,
     PropertyDetailsPage,
     UserInfoPage,
-    SignupPage
+    SignupPage,
+    NotificationsPage
   ],
   providers: [
     StatusBar,
@@ -55,7 +62,9 @@ import { SignupPage } from '../pages/signup/signup';
     Geolocation,
     CameraPreview,
     NearByPlacesProvider,
-    CurrentLocationProvider
+    CurrentLocationProvider,
+    PhotoViewer,
+    Push
   ]
 })
 export class AppModule {}

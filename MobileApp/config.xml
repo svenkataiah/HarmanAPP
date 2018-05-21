@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>myApp</name>
-    <description>An awesome Ionic/Cordova app.</description>
+<widget id="com.easyloanapp.android" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Easy Loan</name>
+    <description>Easy Home Loan App</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
@@ -84,5 +84,7 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <plugin name="cordova-plugin-camera-preview" spec="^0.9.0" />
     <allow-navigation href="http://10.98.8.85:8100" />
-    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-device-motion" spec="^2.0.1" />
+    <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

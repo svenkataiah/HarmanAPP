@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { UserInfoPage } from '../user-info/user-info';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 /**
  * Generated class for the PropertyDetailsPage page.
@@ -21,7 +22,11 @@ export class PropertyDetailsPage {
   scanPropertyPicture: any;
   currentLocationAddress: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private photoViewer: PhotoViewer
+  ) {
     this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
     this.currentLocationAddress = this.navParams.get('data').currentLocationAddress;
   }
@@ -42,6 +47,10 @@ export class PropertyDetailsPage {
 
   userInfo() {
     this.navCtrl.push(UserInfoPage);
+  }
+
+  viewPhoto(url){
+    this.photoViewer.show(url);
   }
 
 }

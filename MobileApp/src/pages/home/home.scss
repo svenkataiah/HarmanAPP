@@ -77,14 +77,14 @@ body {
 .nearbyPlaces .img{
   float: left;
   padding: 2px 4px 0px 0px;
-  border-right: 1px solid #fff;
 }
 
 .nearbyPlaces .info{
   float: left;
-    font-size: 11px;
-    padding: 2px 4px;
-    color: #fff;
+  font-size: 11px;
+  padding: 1px 4px;
+  border-left: 1px solid #fff;
+  color: #fff;
 }
 
 .nearbyPlaces .info span {
