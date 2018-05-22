@@ -1,4 +1,14 @@
 ﻿<Properties StartupConfiguration="{7A2BB0FA-1253-48B6-A253-26815041299A}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuickHomeLoanAPI Status">
+    <Files>
+      <File FileName="QuickHomeLoanAPI Status" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.QuickHomeLoanAPI FirstBuild="True" />
+  <MonoDevelop.Ide.ItemProperties.QuickHomeLoanAPI PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
