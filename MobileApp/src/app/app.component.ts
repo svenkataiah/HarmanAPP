@@ -54,6 +54,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
+  regid:any;
   pushNotification() {
     if (this.platform.is('cordova')) {
       // to check if we have permission
@@ -83,24 +84,24 @@ export class MyApp {
       this.push.listChannels().then((channels) => console.log('List of channels', channels))
 
       // to initialize push notifications
-
+      
       const options: PushOptions = {
         android: {
-          forceShow: true,
-          sound : true,
-          vibrate: true,
           senderID: '623706415166',
-          
+          forceShow: true,
+          sound : 'default',
+          vibrate: true,
+          icon:'',
         },
         ios: {
           alert: 'true',
           badge: true,
-          sound: 'true'
+          sound: 'default'
         },
-        // windows: {},
-        // browser: {
-        //   pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-        // }
+        windows: {},
+        browser: {
+          pushServiceURL: 'http://virtiledge.com/fcm/?id='+this.regid
+        }
       };
 
       const pushObject: PushObject = this.push.init(options);
@@ -108,11 +109,16 @@ export class MyApp {
 
       pushObject.on('notification').subscribe((notification: any) => {
         console.log('Received a notification', notification);
-        this.nav.push(NotificationsPage);
+        //this.nav.push(NotificationsPage);
+        
       });
 
 
-      pushObject.on('registration').subscribe((registration: any) => console.log('Device registered', registration));
+      pushObject.on('registration').subscribe((registration: any) => {
+        console.log('Device registered', registration.registrationId)
+        this.regid = registration.registrationId;
+        
+      });
 
       pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
     }

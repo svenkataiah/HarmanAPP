@@ -1,3 +1,9 @@
 page-map-view {
 
+    .loading-icon{
+        position: fixed;
+        top: 50%;
+        z-index: 10000000000000000;
+        left: 50%;
+    }
 }

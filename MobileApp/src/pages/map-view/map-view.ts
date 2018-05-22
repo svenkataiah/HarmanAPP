@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
@@ -27,7 +27,8 @@ export class MapViewPage {
     public navParams: NavParams,
     private geolocation: Geolocation,
     private currentLocationProvider: CurrentLocationProvider,
-    private nearByPlacesProvider: NearByPlacesProvider
+    private nearByPlacesProvider: NearByPlacesProvider,
+    public alertCtrl: AlertController
   ) {
     this.nearByPlaces = JSON.parse(this.navParams.get('data').nearbyPlaces);
     this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
@@ -95,40 +96,30 @@ export class MapViewPage {
     var infowindow = new google.maps.InfoWindow();
 
 
-
-    // this.nearByPlacesProvider.getNearByPlaces(lat, lng, '')
-    //   .subscribe((response) => {
-    //     console.log(response['results']);
-    //     for (var i = 0; i < response['results'].length; i++) {
-    //       createMarker(response['results'][i]);
-    //     }
-    //   });
-
-    if (marker == 'drag') {
-      //create markers on location change
       this.nearByPlaceType.forEach((el) => {
-        this.nearByPlacesProvider.getNearByPlaces(lat, lng, '')
+        this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
           .subscribe((response) => {
-            console.log(response['results']);
+            console.log(response);
+            var nearByplacesResponse = response['results'];
+            //add distance to nearby location
             var count = 0;
-            for (var i = 0; i < response['results'].length; i++) {
-              if (response['results'][i]['types'][0] == el && count < 1) { // check type and take first object
-                count++;
-                createMarker(response['results'][i]);
-                return;
+            nearByplacesResponse.forEach((element, i) => {
+  
+              if (element.types[0] == el && count<5) { // check type and take first object
+               count++;
+                createMarker(nearByplacesResponse[i]);
               }
-            }
+            });
             count = 0;
-          });
+          },
+            (error) => {
+              console.log(error);
+              current.showAlert();
+            }
+          );
       });
-    } else {
-      //cretae markers on page load
-      for (var i = 0; i < this.nearByPlaces.length; i++) {
-        createMarker(this.nearByPlaces[i]);
-      }
 
 
-    }
 
 
 
@@ -138,21 +129,23 @@ export class MapViewPage {
     function createMarker(place) {
       var url = place.icon;
       if (place.types[0] == 'atm') {
-        url = 'assets/imgs/MapView/atm.png';
+        url = 'assets/imgs/MapView/atmV10.png';
       } else if (place.types[0] == 'school') {
         url = 'assets/imgs/MapView/school.png';
       }
       else if (place.types[0] == 'bank') {
-        url = 'assets/imgs/MapView/bank-building.png';
+        url = 'assets/imgs/MapView/bank-buildingV10.png';
       }
       else if (place.types[0] == 'gas_station') {
-        url = 'assets/imgs/MapView/fuel-station-pump.png';
+        url = 'assets/imgs/MapView/fuel-station-pumpV10.png';
       }
       else if (place.types[0] == 'hospital') {
-        url = 'assets/imgs/MapView/hospital-buildings.png';
+        url = 'assets/imgs/MapView/hospital-buildingsV10.png';
       }
       else if (place.types[0] == 'store') {
-        url = 'assets/imgs/MapView/store.png';
+        url = 'assets/imgs/MapView/storeV10.png';
+      } else if (place.types[0] == 'train_station') {
+        url = 'assets/imgs/MapView/metroV10.png';
       }
       var icon = {
         url: url, // url
@@ -285,6 +278,15 @@ export class MapViewPage {
 
   userInfo() {
     this.navCtrl.push(UserInfoPage);
+  }
+
+  showAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Api Error',
+      subTitle: 'You have exceeded your daily request quota for this API.',
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }

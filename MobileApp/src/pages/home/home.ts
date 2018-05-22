@@ -94,6 +94,7 @@ export class HomePage {
       },
         (err) => {
           this.errorMessage = err;
+          console.log(err);
         });
   }
 
@@ -125,6 +126,7 @@ export class HomePage {
     this.nearByPlaceType.forEach((el) => {
       this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
         .subscribe((response) => {
+          console.log(response);
           var nearByplacesResponse = response['results'];
           //add distance to nearby location
           var count = 0;
@@ -145,6 +147,8 @@ export class HomePage {
         },
           (error) => {
             this.errorMessage = error;
+            console.log("near by location error");
+            console.log(error);
           }
         );
     });
@@ -170,6 +174,10 @@ export class HomePage {
 
     function deg2rad(deg) {
       return deg * (Math.PI / 180)
+    }
+
+    if(this.nearbyLocationsStock==null){
+      this.getCurrentLocation();
     }
   }
 

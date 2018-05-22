@@ -102,7 +102,8 @@
   <ion-grid *ngIf="tabStatus=='basicInfo'" class="basic-info">
     <ion-row>
       <ion-col>
-        <img [src]="scanPropertyPicture" height="330" style="width: 100%;"/>
+        <img [src]="scanPropertyPicture" height="350" style="width: 100%;"
+        (click)="viewPhoto(scanPropertyPicture)" />
         <!-- <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" height="330" style="width: 100%;" /> -->
       </ion-col>
     </ion-row>
@@ -133,36 +134,36 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <img src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        <img (click)="viewPhoto('https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg')" src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
         />
       </ion-col>
       <ion-col>
-        <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+        <img (click)="viewPhoto('https://teja9.kuikr.com/restatic/build/image/c_img6.jpg')" src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
+        <img (click)="viewPhoto('http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg')" src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
       </ion-col>
       <ion-col>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+        <img (click)="viewPhoto('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA')" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        <img (click)="viewPhoto('https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg')" src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
         />
       </ion-col>
       <ion-col>
-        <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+        <img (click)="viewPhoto('https://teja9.kuikr.com/restatic/build/image/c_img6.jpg')" src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
+        <img (click)="viewPhoto('http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg')" src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
       </ion-col>
       <ion-col>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+        <img (click)="viewPhoto('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA')" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
       </ion-col>
     </ion-row>
   </ion-grid>
