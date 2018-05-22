@@ -4,6 +4,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
 import { NearByPlacesProvider } from '../../providers/near-by-places/near-by-places';
+import { PropertyDetailsPage } from '../property-details/property-details';
+import { UserInfoPage } from '../user-info/user-info';
 declare var google;
 
 @IonicPage()
@@ -13,6 +15,11 @@ declare var google;
 })
 export class MapViewPage {
   currentLocation: any = '';
+  nearByPlaces: any = [];
+  position: any;
+  nearByPlaceType: any;
+  scanPropertyPicture: any;
+
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   constructor(
@@ -22,6 +29,14 @@ export class MapViewPage {
     private currentLocationProvider: CurrentLocationProvider,
     private nearByPlacesProvider: NearByPlacesProvider
   ) {
+    this.nearByPlaces = JSON.parse(this.navParams.get('data').nearbyPlaces);
+    this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
+    console.log(this.nearByPlaces);
+    console.log(this.navParams.get('data').scanPropertyPicture);
+  }
+
+  ngOnInit() {
+    this.nearByPlaceType = ['atm', 'bank', 'school', 'store', 'train_station', 'hospital', 'gas_station']
   }
 
   getCurrentLatLng() {
@@ -30,65 +45,127 @@ export class MapViewPage {
         var lat = response.coords.latitude;
         var lng = response.coords.longitude;
         var position = { lat: lat, lng: lng };
-        this.getCurrentLocation(lat, lng);
-        this.mapInit(lat, lng);
+        this.position = position;
+        this.getCurrentLocationAddress(lat, lng);
+        console.log(this.currentLocation);
+        setTimeout(() => {
+          this.mapInit(lat, lng, '');
+        }, 1500);
+
       })
   }
 
   ionViewDidLoad() {
-      this.getCurrentLatLng();
+    this.getCurrentLatLng();
   }
 
 
 
-  scanProperty() {
-    this.navCtrl.push(ScanPropertyPage)
+  propertyDetails() {
+    var data = {
+      data: {
+        scanPropertyPicture: this.scanPropertyPicture,
+        currentAddres: this.currentLocation,
+        currentLocationAddress: this.currentLocation
+      }
+    }
+    this.navCtrl.push(PropertyDetailsPage, data);
   }
 
 
-  mapInit(lat, lng) {
 
 
+
+  mapInit(lat, lng, marker) {
+
+    if (marker == 'drag') {
+      //this.nearByPlaces = [];
+      this.getCurrentLocationAddress(lat, lng);
+
+    }
+
+    var current = this;
     var position = { lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('maps'), {
       center: position,
-      zoom: 10
+      zoom: 15,
+      disableDefaultUI: true
     });
-    
+
     var infowindow = new google.maps.InfoWindow();
 
-    // var service = new google.maps.places.PlacesService(map);
-    // service.nearbySearch({
-    //   location: position,
-    //   radius: 5000,
-    //   type: ['']
-    // }, callback);
 
 
-    // function callback(results, status) {
-    //   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    //     for (var i = 0; i < results.length; i++) {
-    //       createMarker(results[i]);
+    // this.nearByPlacesProvider.getNearByPlaces(lat, lng, '')
+    //   .subscribe((response) => {
+    //     console.log(response['results']);
+    //     for (var i = 0; i < response['results'].length; i++) {
+    //       createMarker(response['results'][i]);
     //     }
-    //   }
-    // }
+    //   });
 
-    this.nearByPlacesProvider.getNearByPlaces(lat, lng)
-    .subscribe((response)=>{
-      console.log(response['results']);
-      for (var i = 0; i < response['results'].length; i++) {
-        createMarker(response['results'][i]);
+    if (marker == 'drag') {
+      //create markers on location change
+      this.nearByPlaceType.forEach((el) => {
+        this.nearByPlacesProvider.getNearByPlaces(lat, lng, '')
+          .subscribe((response) => {
+            console.log(response['results']);
+            var count = 0;
+            for (var i = 0; i < response['results'].length; i++) {
+              if (response['results'][i]['types'][0] == el && count < 1) { // check type and take first object
+                count++;
+                createMarker(response['results'][i]);
+                return;
+              }
+            }
+            count = 0;
+          });
+      });
+    } else {
+      //cretae markers on page load
+      for (var i = 0; i < this.nearByPlaces.length; i++) {
+        createMarker(this.nearByPlaces[i]);
       }
-    });
-  
+
+
+    }
+
+
+
+
+
 
     function createMarker(place) {
-      console.log(place);
+      var url = place.icon;
+      if (place.types[0] == 'atm') {
+        url = 'assets/imgs/MapView/atm.png';
+      } else if (place.types[0] == 'school') {
+        url = 'assets/imgs/MapView/school.png';
+      }
+      else if (place.types[0] == 'bank') {
+        url = 'assets/imgs/MapView/bank-building.png';
+      }
+      else if (place.types[0] == 'gas_station') {
+        url = 'assets/imgs/MapView/fuel-station-pump.png';
+      }
+      else if (place.types[0] == 'hospital') {
+        url = 'assets/imgs/MapView/hospital-buildings.png';
+      }
+      else if (place.types[0] == 'store') {
+        url = 'assets/imgs/MapView/store.png';
+      }
+      var icon = {
+        url: url, // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+      };
+
       var placeLoc = place.geometry.location;
       var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location,
-        icon: place.icon
+        icon: icon
       });
 
 
@@ -100,12 +177,18 @@ export class MapViewPage {
     }
 
     //current location marker
+    var CurrentLocationIcon = {
+      url: "assets/imgs/MapView/location-detailsV2.png", // url
+      scaledSize: new google.maps.Size(60, 60), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(0, 0) // anchor
+    };
     var marker1 = new google.maps.Marker({
       map: map,
       position: position,
       draggable: true,
       animation: google.maps.Animation.DROP,
-      icon: "https://images.vexels.com/media/users/3/141916/isolated/lists/dcd10d362e49a3c161379047a940ba7d-location-pin-stroke-icon.png"
+      icon: CurrentLocationIcon
     });
     marker1.addListener('click', toggleBounce);
 
@@ -117,23 +200,29 @@ export class MapViewPage {
       }
     }
 
+    // Allow each marker to have an info window   
+    console.log(this.currentLocation)
+    var infoWindow = new google.maps.InfoWindow()
+    infoWindow.setContent("<p style='width: 200px;color: green;background #000;'>" + this.currentLocation + "</p>");
+    infoWindow.open(map, marker1);
 
     this.markerCoords(marker1)
 
   }
-  
+
   markerCoords(markerobject) {
-    google.maps.event.addListener(markerobject, 'dragend', function (evt) {
-      console.log(evt.latLng.lat() + " " + evt.latLng.lng());
-    });
+    var _this = this;
 
     google.maps.event.addListener(markerobject, 'drag', function (evt) {
-      console.log(evt.latLng.lat() + " " + evt.latLng.lng());
-      //this.mapInit(evt.latLng.lat(),evt.latLng.lng());
+
+      setTimeout(() => {
+        _this.mapInit(evt.latLng.lat(), evt.latLng.lng(), 'drag');
+      }, 2000);
+
     });
   }
 
-  getCurrentLocation(lat, lng) {
+  getCurrentLocationAddress(lat, lng) {
     var _this = this;
     var geocoder = new google.maps.Geocoder();
     var latLng = new google.maps.LatLng(lat, lng);
@@ -153,5 +242,49 @@ export class MapViewPage {
 
   }
 
+
+  //Get near by places
+  getNearByPlaces(lat, lng) {
+
+    //loop by places types
+    this.nearByPlaceType.forEach((el) => {
+      this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
+        .subscribe((response) => {
+          var nearByplacesResponse = response['results'];
+          console.log(nearByplacesResponse)
+          //add distance to nearby location
+          var count = 0;
+          nearByplacesResponse.forEach((element, i) => {
+
+            if (element.types[0] == el && count < 1) { // check type and take first object
+              //console.log(element.types[0] + " " + el);
+              console.log(element);
+
+              count++;
+
+              this.nearByPlaces.push(element); // push nearby location object
+
+              return;
+            }
+
+          });
+          count = 0;
+
+
+
+        },
+          (error) => {
+
+          }
+        );
+
+
+    });
+
+  }
+
+  userInfo() {
+    this.navCtrl.push(UserInfoPage);
+  }
 
 }
