@@ -22,7 +22,7 @@ namespace QuickHomeLoanAPI.Controllers
         public IEnumerable<string> Get()
         {
 			var notification = new NotificationManager();
-			//notification.SendNotificationFromFirebaseCloud();
+			notification.SendNotificationFromFirebaseCloud();
 			return new string[] { "value1", _configuration.GetConfigurationByKey() };
         }
 

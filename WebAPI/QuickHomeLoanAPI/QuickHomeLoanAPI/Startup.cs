@@ -26,6 +26,12 @@ namespace QuickHomeLoanAPI
         {
             services.AddMvc();
 			services.AddSingleton<IConfigurationManager, ConfigurationManager>();
+			services.AddCors(o => o.AddPolicy("AllowAllOriginsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,8 +41,9 @@ namespace QuickHomeLoanAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+			app.UseCors("AllowAllOriginsPolicy");
             app.UseMvc();
+
         }
     }
 }

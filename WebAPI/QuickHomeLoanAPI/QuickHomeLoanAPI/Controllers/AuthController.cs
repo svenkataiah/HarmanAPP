@@ -13,14 +13,8 @@ namespace QuickHomeLoanAPI.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/values/5
+        // GET api/auth/userid/password
 		[HttpGet("{userId}/{password}")]
 		public UserInfo Get(string userId, string password)
         {
@@ -43,10 +37,11 @@ namespace QuickHomeLoanAPI.Controllers
             
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
+		// POST api/auth/register
+		[HttpPost("register")]
+		public bool Post([FromBody]string value)
+		{
+			return true;
         }
 
         // PUT api/values/5
