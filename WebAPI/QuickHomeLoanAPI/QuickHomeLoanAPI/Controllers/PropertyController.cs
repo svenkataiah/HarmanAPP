@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using QuickHomeLoanAPI.Manager;
 using QuickHomeLoanAPI.Model;
 
 namespace QuickHomeLoanAPI.Controllers
@@ -14,6 +15,8 @@ namespace QuickHomeLoanAPI.Controllers
         [HttpGet]
 		public  PropertyDetail Get()
         {
+			 
+
 			return new PropertyDetail()
 			{
 				OwnerInfo = new OwnerInfo{
