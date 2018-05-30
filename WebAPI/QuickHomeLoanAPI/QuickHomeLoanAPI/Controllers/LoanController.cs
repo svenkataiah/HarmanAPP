@@ -62,7 +62,7 @@ namespace QuickHomeLoanAPI.Controllers
 				AccountNumber = "XXXXXXX987098",
 				LoanId = "APXJ78658795RT",
 				Name = "CORRY H DOCHO",
-				PropertyAddress = "",
+				PropertyAddress = "602 Glendale Street Oak Lawn, IL 60453",
 				RequiredDocuments = new string[]{
 					"Passport",
 					"State Driving License",
