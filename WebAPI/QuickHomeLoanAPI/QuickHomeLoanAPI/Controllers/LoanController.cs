@@ -191,12 +191,12 @@ namespace QuickHomeLoanAPI.Controllers
 
         // POST api/loan
         [HttpPost]
-        public string Post([FromBody]string registrationId)
+		public string Post([FromBody]LoanRequest loanRequest)
         {
 			var referenceId = "APXJ78658795RT";
 			var message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : "+ referenceId;
 			var notification = new NotificationManager();
-			notification.SendNotificationFromFirebaseCloud(registrationId, message);
+			notification.SendNotificationFromFirebaseCloud(loanRequest.RegistrationId, message);
 			return referenceId;
         }
     }

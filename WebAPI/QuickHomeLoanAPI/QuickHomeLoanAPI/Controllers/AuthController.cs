@@ -38,8 +38,8 @@ namespace QuickHomeLoanAPI.Controllers
         }
 
 		// POST api/auth/register
-		[HttpPost("register")]
-		public bool Post([FromBody]string value)
+		[HttpGet("register/{registrationId}")]
+		public bool Register(string registrationId )
 		{
 			return true;
         }
