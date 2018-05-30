@@ -6,7 +6,12 @@ namespace QuickHomeLoanAPI.Model
         public LoanBasicInfo()
         {
         }
-        public string AccountNumber {
+        public string LoanId
+		{
+			get;
+			set;
+		}
+		public string AccountNumber {
             get;
             set;
         }

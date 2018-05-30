@@ -8,6 +8,11 @@ namespace QuickHomeLoanAPI.Model
         public LoanApplication()
         {
         }
+        public Notification Notification
+		{
+			get;
+			set;
+		}
 		public LoanBasicInfo LoanBasicInfo
 		{
 			get;

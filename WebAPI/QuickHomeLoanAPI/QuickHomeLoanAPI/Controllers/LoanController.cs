@@ -15,6 +15,43 @@ namespace QuickHomeLoanAPI.Controllers
     [Route("api/[controller]")]
     public class LoanController : Controller
 	{
+		// GET api/loan/list/5
+		[HttpGet("list/{accountNumber}")]
+		public List<LoanApplication> GetLoanList(string accountNumber)
+		{
+			var loans = new List<LoanApplication>()
+			{
+				new LoanApplication{
+					LoanBasicInfo = new LoanBasicInfo
+			        {
+				        AccountNumber = "XXXXXXX987098",
+						LoanId = "APXJ78658795RT",
+				        Name = "CORRY H DOCHO",
+						PropertyAddress = "66 County Court Elgin, IL 60120",
+				        Comments = "You are Eligible for the loan."
+			         },
+					Notification = new Model.Notification{
+						Title = "Easy Home Loan",
+						Message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : APXJ78658795RT"
+					}
+				},
+				new LoanApplication{
+                    LoanBasicInfo = new LoanBasicInfo
+                    {
+						AccountNumber = "XXXXXXX987098",
+                        LoanId = "APXJ78658805RT",
+						Name = "CORRY H DOCHO",
+						PropertyAddress = "602 Glendale Street Oak Lawn, IL 60453",
+                        Comments = "You are Eligible for the loan."
+					},
+                    Notification = new Model.Notification{
+                        Title = "Easy Home Loan",
+						Message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : APXJ78658795RQ"
+                    }
+                }
+			};
+			return loans;
+		}
         // GET api/loan/5
         [HttpGet("{loanId}")]
 		public LoanApplication Get(string loanId)
@@ -23,6 +60,7 @@ namespace QuickHomeLoanAPI.Controllers
 			loan.LoanBasicInfo = new LoanBasicInfo
 			{
 				AccountNumber = "XXXXXXX987098",
+				LoanId = "APXJ78658795RT",
 				Name = "CORRY H DOCHO",
 				PropertyAddress = "",
 				RequiredDocuments = new string[]{
@@ -153,11 +191,13 @@ namespace QuickHomeLoanAPI.Controllers
 
         // POST api/loan
         [HttpPost]
-        public string Post([FromBody]string value)
+        public string Post([FromBody]string registrationId)
         {
+			var referenceId = "APXJ78658795RT";
+			var message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : "+ referenceId;
 			var notification = new NotificationManager();
-			notification.SendNotificationFromFirebaseCloud(value);
-            return "APXJ78658795RT";
+			notification.SendNotificationFromFirebaseCloud(registrationId, message);
+			return referenceId;
         }
     }
 }

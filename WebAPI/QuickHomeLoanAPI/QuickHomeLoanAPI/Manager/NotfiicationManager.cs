@@ -20,7 +20,7 @@ namespace QuickHomeLoanAPI.Manager
 		public NotificationManager()
 		{
 		}
-		public String SendNotificationFromFirebaseCloud(string registrationId)
+		public String SendNotificationFromFirebaseCloud(string registrationId, string message)
 		{
 			var result = "-1";
 			var serverKey = "AIzaSyAHaXxhR2bPClCvXkPcf1zOFIV6H4d6OBI";
@@ -35,7 +35,7 @@ namespace QuickHomeLoanAPI.Manager
 			using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
 			{
 				var regID = registrationId ;// "edIcORW6tYc:APA91bGtJXmYiguuxJNoIh5d9zV0cZPQyHXcRvwlZm3IQFZ_ytkloUIgSUErK3IpKCeRp7uDrkJUguEHUBOicegmpffo8plFIB3MiXKV5Kbc3xt6WA_aNFIR_7BL3nIO3L-tJMlTxeCP";
-				string json = "{\"registration_ids\": [\"" + regID + "\"],\"data\": {\"message\": \"Your Laon application hasbeen processed. Please login to the app and check the details\",}}";
+				string json = "{\"registration_ids\": [\"" + regID + "\"],\"data\": {\"message\": \"" +message+ "\",}}";
 				streamWriter.Write(json);
 				streamWriter.Flush();
 			}
