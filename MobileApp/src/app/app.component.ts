@@ -10,6 +10,9 @@ import { LoginPage } from '../pages/login/login';
 import { PropertyDetailsPage } from '../pages/property-details/property-details';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { NotificationsPage } from '../pages/notifications/notifications';
+import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
+import { LoanDetailsPage } from '../pages/loan-details/loan-details';
 
 @Component({
   templateUrl: 'app.html'
@@ -17,7 +20,7 @@ import { NotificationsPage } from '../pages/notifications/notifications';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
   pages: Array<{ title: string, component: any }>;
 
@@ -25,17 +28,22 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private push: Push
+    private push: Push,
+    private http: HttpClient,
+    private storage: Storage
   ) {
+    this.pushNotification();
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Scan Property', component: HomePage },
+      { title: 'Notifications', component: NotificationsPage },
       { title: 'Logout', component: LoginPage }
+      
     ];
 
-    this.pushNotification();
+  
 
   }
 
@@ -54,7 +62,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  regid:any;
+  regid: any;
   pushNotification() {
     if (this.platform.is('cordova')) {
       // to check if we have permission
@@ -84,14 +92,14 @@ export class MyApp {
       this.push.listChannels().then((channels) => console.log('List of channels', channels))
 
       // to initialize push notifications
-      
+
       const options: PushOptions = {
         android: {
           senderID: '623706415166',
           forceShow: true,
-          sound : 'default',
+          sound: 'default',
           vibrate: true,
-          icon:'',
+          icon: '',
         },
         ios: {
           alert: 'true',
@@ -100,7 +108,7 @@ export class MyApp {
         },
         windows: {},
         browser: {
-          pushServiceURL: 'http://virtiledge.com/fcm/?id='+this.regid
+          pushServiceURL: 'http://virtiledge.com/fcm/?id=' + this.regid
         }
       };
 
@@ -110,14 +118,20 @@ export class MyApp {
       pushObject.on('notification').subscribe((notification: any) => {
         console.log('Received a notification', notification);
         //this.nav.push(NotificationsPage);
-        
+
+        setTimeout(() => {
+          this.rootPage = LoanDetailsPage;
+        }, 0);
+
       });
 
 
       pushObject.on('registration').subscribe((registration: any) => {
+        this.storage.remove('registrationId');
+        this.storage.set('registrationId', registration.registrationId);
         console.log('Device registered', registration.registrationId)
         this.regid = registration.registrationId;
-        
+        this.http.post("http://quickhomeloanapi.azurewebsites.net/api/auth/register", { regid: this.regid });
       });
 
       pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));

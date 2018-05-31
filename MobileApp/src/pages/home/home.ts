@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
 import { MapViewPage } from '../map-view/map-view';
@@ -30,6 +30,8 @@ export class HomePage {
 
   nearbyLocationsStock: any = {}
   picture: any;
+  apiErrorMsg: any;
+  apiError: any = false;
 
 
   constructor(
@@ -38,7 +40,8 @@ export class HomePage {
     private geolocation: Geolocation,
     private http: HttpClient,
     private nearByPlacesProvider: NearByPlacesProvider,
-    private currentLocationProvider: CurrentLocationProvider
+    private currentLocationProvider: CurrentLocationProvider,
+    public alertCtrl: AlertController
   ) {
 
   }
@@ -52,7 +55,7 @@ export class HomePage {
     setTimeout(() => {
       this.takePicture();
     }, 2000);
-    
+
     this.getCurrentLocation();
   }
 
@@ -93,7 +96,8 @@ export class HomePage {
 
       },
         (err) => {
-          this.errorMessage = err;
+          this.apiError = true;
+          this.apiErrorMsg = err;
           console.log(err);
         });
   }
@@ -116,6 +120,7 @@ export class HomePage {
       }); //geocoder.geocode()
     } else {
       this.errorMessage = 'probelm in loading address';
+
     }
   }
 
@@ -149,6 +154,8 @@ export class HomePage {
             this.errorMessage = error;
             console.log("near by location error");
             console.log(error);
+            this.apiError = true;
+            this.apiErrorMsg = error;
           }
         );
     });
@@ -176,8 +183,12 @@ export class HomePage {
       return deg * (Math.PI / 180)
     }
 
-    if(this.nearbyLocationsStock==null){
+    if (this.nearbyLocationsStock == null) {
       this.getCurrentLocation();
+    }
+
+    if (this.apiError) {
+      this.showAlert(this.apiErrorMsg);
     }
   }
 
@@ -199,6 +210,15 @@ export class HomePage {
     this.cameraPreview.stopCamera();
     this.scanPropertyToggle = true;
     this.nearbyPlaces = [];
+  }
+
+  showAlert(error) {
+    let alert = this.alertCtrl.create({
+      title: 'Api Error',
+      subTitle: this.apiErrorMsg,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }

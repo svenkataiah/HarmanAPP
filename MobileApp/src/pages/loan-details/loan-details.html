@@ -1,0 +1,182 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center>Loan Details</ion-title>
+    <ion-buttons end class="user-btn" (click)="userInfo()">
+      <button ion-button icon-only>
+        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <!-- Segment buttons with icons -->
+  <ion-segment [(ngModel)]="icons">
+    <ion-segment-button value="camera" (click)="switchTabs('ownerInfo')" class="segment-button segment-activated">
+      <img src="assets/imgs/LoanEligibility/AccountInformationDark-01.png" /> Account Info
+    </ion-segment-button>
+    <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')" class="segment-button segment-activated">
+      <img src="assets/imgs/LoanEligibility/LoanEligibilityDark-01.png" /> Loan Eligibility
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-grid *ngIf="tabStatus=='ownerInfo'" class="owner-info">
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/AccountInfo/user.png" /> Name
+      </ion-col>
+      <ion-col>
+        {{loanDetails?.loanBasicInfo?.name}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/AccountInfo/accountnumber.png" />Account Number
+      </ion-col>
+      <ion-col>
+        {{loanDetails?.loanBasicInfo?.accountNumber}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/AccountInfo/propertyaddress.png" /> Property Address
+      </ion-col>
+      <ion-col>
+        {{loanDetails?.loanBasicInfo?.propertyAddress}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/AccountInfo/requireddocuments.png" />Required Documents
+      </ion-col>
+      <ion-col>
+        {{loanDetails?.loanBasicInfo?.requiredDocuments[0]}}
+        <br> {{loanDetails?.loanBasicInfo?.requiredDocuments[1]}}
+        <br> {{loanDetails?.loanBasicInfo?.requiredDocuments[2]}}
+        <br>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="heading">
+        <img src="assets/imgs/AccountInfo/comments.png" />Other Comments From CU
+      </ion-col>
+      <ion-col>
+        {{loanDetails?.loanBasicInfo?.comments}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="tabStatus=='basicInfo'" class="basic-info">
+    <ion-card *ngFor="let loan of loanDetails.loanOptions; let i = index">
+      <ion-card-header>
+        <ion-grid>
+          <ion-row class="row">
+            <ion-col class="col">
+              <h3>Loan Tenure {{i+1}} :</h3>
+            </ion-col>
+            <ion-col class="col">
+              <h3>{{loan?.tenure}}</h3>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="row">
+            <ion-col class="col-md-8">
+              Maximun Loan
+            </ion-col>
+            <ion-col class="col-md-4">
+              {{loan?.loanAmount | currency:'USD':true:'4.2-2'}}
+            </ion-col>
+          </ion-row>
+          <ion-row class="row">
+            <ion-col class="col">
+              Interest Rate
+            </ion-col>
+            <ion-col class="col">
+              {{loan?.interestRate | currency:'USD':true:'4.2-2'}}
+            </ion-col>
+          </ion-row>
+          <ion-row class="row">
+            <ion-col class="col">
+              EMI Amount
+            </ion-col>
+            <ion-col class="col">
+              {{loan?.emiAmount | currency:'USD':true:'4.2-2'}}
+            </ion-col>
+          </ion-row>
+          <ion-row class="row">
+            <ion-col class="col">
+              Loan Schedule
+            </ion-col>
+            <ion-col class="col">
+              <a href="#" (click)="loanSchedule(loan.loanSchedule,i)">Click Here</a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+  <ion-grid class="basic-info" *ngIf="tabStatus=='loanTenureDetails'">
+    <ion-row class="row">
+      <ion-col class="col" text-center>
+        <h6>Loan Tenure {{loanTenureDetails.index+1}} </h6>
+      </ion-col>
+    </ion-row>
+    <ion-scroll scrollX="true" zoom="true">
+      <table>
+        <thead>
+          <tr>
+            <th>Tenure (Yr)</th>
+            <th text-right>Principal Paid</th>
+            <th text-right>Interest Paid</th>
+            <th text-right>Balance Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let loanTenure of loanTenureDetails">
+            <td style="text-transform: uppercase">{{loanTenure?.tenureYear}}</td>
+            <td text-right>{{loanTenure?.principalPaid | currency:'USD':true:'4.2-2'}}</td>
+            <td text-right>{{loanTenure?.interestPaid | currency:'USD':true:'4.2-2'}}</td>
+            <td text-right>{{loanTenure?.balance | currency:'USD':true:'4.2-2'}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th text-right>{{loanTenureDetails?.principalPaidTotal | currency:'USD':true:'4.2-2'}}</th>
+            <th text-right>{{loanTenureDetails?.interestPaidTotal | currency:'USD':true:'4.2-2'}}</th>
+            <th text-right>{{loanTenureDetails?.balanceTotal | currency:'USD':true:'4.2-2'}}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </ion-scroll>
+  </ion-grid>
+
+  <ion-grid *ngIf="tabStatus=='loanTenureDetails'">
+    <ion-row class="row">
+      <ion-col class="col" text-left>
+        <h6>YEARLY TOTAL</h6>
+      </ion-col>
+      <ion-col class="col" text-right>
+        <h5>{{loanTenureDetails?.yearlyTotal | currency:'USD':true:'4.2-2'}}</h5>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer *ngIf="tabStatus=='loanTenureDetails'">
+  <ion-toolbar>
+
+    <ion-buttons text-center>
+      <button ion-button class="navigation-btn" (click)="applyLoan()">
+        <span class="btn-text">Apply Loan</span>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

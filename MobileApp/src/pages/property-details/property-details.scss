@@ -56,4 +56,44 @@ page-property-details {
             }
         }
     }
+    .alert-md .alert-button-group{
+        padding: 0px;
+        padding-bottom: 20px;
+    }
+
+    .alert-md .alert-button{
+        color: #fff;
+    }
+
+    .alert-md .alert-head {
+        text-align: center;
+    }
+    
+    .alert-md .alert-message{
+        text-align: center;
+    }
+
+    .alert-md .alert-title {
+        font-size: 22px;
+        border-bottom: 1px solid gray;
+        padding-bottom: 10px;
+        color: #353434;
+    }
+
+    .alert-md .alert-button:last-child {
+        color: #fff;
+        background: #2ec95c;
+    }
+
+    .card-header-md {
+        font-size: 1.6rem;
+        color: #222;
+        margin: 16px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid;
+    }
+
+    .grid {
+        background: #f7f7f7;
+    }
 }

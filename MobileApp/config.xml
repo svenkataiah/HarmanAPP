@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.easyloanapp.android" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.easyhomeloan.android" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Easy Loan</name>
     <description>Easy Home Loan App</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -86,5 +86,6 @@
     <allow-navigation href="http://10.98.8.85:8100" />
     <plugin name="cordova-plugin-device-motion" spec="^2.0.1" />
     <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
-    <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
+    <engine name="android" spec="7.0.0" />
 </widget>

@@ -19,6 +19,8 @@ export class MapViewPage {
   position: any;
   nearByPlaceType: any;
   scanPropertyPicture: any;
+  apiError:any = false;
+  apiErrorMsg: any;
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -32,8 +34,6 @@ export class MapViewPage {
   ) {
     this.nearByPlaces = JSON.parse(this.navParams.get('data').nearbyPlaces);
     this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
-    console.log(this.nearByPlaces);
-    console.log(this.navParams.get('data').scanPropertyPicture);
   }
 
   ngOnInit() {
@@ -96,28 +96,30 @@ export class MapViewPage {
     var infowindow = new google.maps.InfoWindow();
 
 
-      this.nearByPlaceType.forEach((el) => {
-        this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
-          .subscribe((response) => {
-            console.log(response);
-            var nearByplacesResponse = response['results'];
-            //add distance to nearby location
-            var count = 0;
-            nearByplacesResponse.forEach((element, i) => {
-  
-              if (element.types[0] == el && count<5) { // check type and take first object
-               count++;
-                createMarker(nearByplacesResponse[i]);
-              }
-            });
-            count = 0;
-          },
-            (error) => {
-              console.log(error);
-              current.showAlert();
+    this.nearByPlaceType.forEach((el) => {
+      this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
+        .subscribe((response) => {
+          console.log(response);
+          var nearByplacesResponse = response['results'];
+          //add distance to nearby location
+          var count = 0;
+          nearByplacesResponse.forEach((element, i) => {
+
+            if (element.types[0] == el && count < 5) { // check type and take first object
+              count++;
+              createMarker(nearByplacesResponse[i]);
             }
-          );
-      });
+          });
+          count = 0;
+        },
+          (error) => {
+            console.log(error);
+            current.apiErrorMsg = error;
+            current.apiError = true;
+
+          }
+        );
+    });
 
 
 
@@ -199,8 +201,11 @@ export class MapViewPage {
     infoWindow.setContent("<p style='width: 200px;color: green;background #000;'>" + this.currentLocation + "</p>");
     infoWindow.open(map, marker1);
 
-    this.markerCoords(marker1)
+    this.markerCoords(marker1);
 
+    if (this.apiError) {
+      this.showAlert(this.apiErrorMsg);
+    }
   }
 
   markerCoords(markerobject) {
@@ -227,7 +232,7 @@ export class MapViewPage {
           _this.currentLocation = results[0].formatted_address;
         }
         else {
-
+          _this.showAlert(status);
           console.log("Geocoding failed: " + status);
         }
       }); //geocoder.geocode()
@@ -236,54 +241,16 @@ export class MapViewPage {
   }
 
 
-  //Get near by places
-  getNearByPlaces(lat, lng) {
 
-    //loop by places types
-    this.nearByPlaceType.forEach((el) => {
-      this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
-        .subscribe((response) => {
-          var nearByplacesResponse = response['results'];
-          console.log(nearByplacesResponse)
-          //add distance to nearby location
-          var count = 0;
-          nearByplacesResponse.forEach((element, i) => {
-
-            if (element.types[0] == el && count < 1) { // check type and take first object
-              //console.log(element.types[0] + " " + el);
-              console.log(element);
-
-              count++;
-
-              this.nearByPlaces.push(element); // push nearby location object
-
-              return;
-            }
-
-          });
-          count = 0;
-
-
-
-        },
-          (error) => {
-
-          }
-        );
-
-
-    });
-
-  }
 
   userInfo() {
     this.navCtrl.push(UserInfoPage);
   }
 
-  showAlert() {
+  showAlert(error) {
     let alert = this.alertCtrl.create({
       title: 'Api Error',
-      subTitle: 'You have exceeded your daily request quota for this API.',
+      subTitle: this.apiErrorMsg,
       buttons: ['OK']
     });
     alert.present();

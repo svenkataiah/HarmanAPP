@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the NotificationsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { HttpClient } from '@angular/common/http';
+import { LoanDetailsPage } from '../loan-details/loan-details';
 
 @IonicPage()
 @Component({
@@ -14,12 +9,25 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'notifications.html',
 })
 export class NotificationsPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  notificationsDetails: any;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private http: HttpClient) {
   }
 
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
+    console.log('ionViewDidLoad PropertyDetailsPage');
+    this.http.get("http://quickhomeloanapi.azurewebsites.net/api/loan/list/loanid")
+      .subscribe((response) => {
+        console.log(response);
+        this.notificationsDetails = response;
+      })
+  }
+
+  itemSelected(item){
+    this.navCtrl.push(LoanDetailsPage);
   }
 
 }

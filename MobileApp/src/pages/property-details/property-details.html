@@ -32,7 +32,7 @@
         <img src="assets/imgs/OwnerInfo/real-state-seller.png" /> Owner
       </ion-col>
       <ion-col>
-        Bob Mathew
+        {{ownerInfo?.name}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -48,7 +48,7 @@
         <img src="assets/imgs/OwnerInfo/calendar.png" /> Year Built
       </ion-col>
       <ion-col>
-        2004
+        {{characteristics?.yearBuilt}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -64,7 +64,7 @@
         <img src="assets/imgs/OwnerInfo/price-tag.png" /> Price Per sqft
       </ion-col>
       <ion-col>
-        $38.00
+        {{dimensions?.lotAreaSquareFeet}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -86,7 +86,7 @@
         <img src="assets/imgs/OwnerInfo/last mortgage.png" />Last Mortgaged
       </ion-col>
       <ion-col>
-        The House was last Mortgaged by the previous owners in 2009.
+        -
       </ion-col>
     </ion-row>
     <ion-row>
@@ -94,7 +94,7 @@
         <img src="assets/imgs/OwnerInfo/other comment.png" /> Other Comments
       </ion-col>
       <ion-col>
-        The House has been refurbished in 2017 and has a beautiful maintained lawn.
+        -
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -172,11 +172,14 @@
 
 
 <ion-footer>
-  <ion-toolbar *ngIf="tabStatus=='gallery'">
+  <ion-toolbar *ngIf="tabStatus=='gallery' || tabStatus=='ownerInfo'">
     <ion-buttons text-center>
-      <button ion-button class="navigation-btn" (click)="viewMap()">
+      <button ion-button class="navigation-btn" *ngIf="!interested" (click)="showConfirm()">
         <span class="btn-text"> Interested In Property ? </span>
       </button>
+      <button ion-button class="navigation-btn" *ngIf="interested" (click)="LoanDetails()">
+          <span class="btn-text"> Get Loan Details</span>
+        </button>
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="tabStatus=='basicInfo'" class="basic-info-toolbar">
@@ -198,13 +201,13 @@
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/squarefeet.png" />
           </div>
-          <div class="total"> 2312</div>
+          <div class="total"> {{dimensions?.lotAreaSquareFeet}}</div>
         </ion-col>
         <ion-col class="property-info">
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/sqftlot.png" />
           </div>
-          <div class="total">2332</div>
+          <div class="total">5000</div>
         </ion-col>
       </ion-row>
     </ion-grid>

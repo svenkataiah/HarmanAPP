@@ -1,3 +1,9 @@
 page-notifications {
-
+    background: #fff;
+    ion-content{
+        background: #fff !important;
+    }
+    ion-label {
+        white-space: inherit;
+    }
 }

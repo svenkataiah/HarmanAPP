@@ -117,7 +117,7 @@
 <ion-footer *ngIf="!scanPropertyToggle">
   <ion-toolbar>
     <ion-buttons text-center>
-      <button ion-button class="navigation-btn" (click)="viewMap()">
+      <button ion-button class="navigation-btn" *ngIf="!scanPropertyToggle && nearbyPlaces?.length>0" (click)="viewMap()">
         <span class="btn-text">View Map </span>
       </button>
     </ion-buttons>

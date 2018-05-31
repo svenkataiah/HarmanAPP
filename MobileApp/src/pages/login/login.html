@@ -22,11 +22,11 @@
 
     <ion-item class="login-links">
       <a text-start>Forgot Password?</a>
-      <a text-end (click)="signup()"> New User Signup</a>
+      <a text-end (click)="signup()">User Signup</a>
     </ion-item>
 
   </ion-list>
   <div padding text-center>
-    <button block ion-button (click)="login()">Sign In</button>
+    <button block ion-button [disabled]="loginBtn" (click)="login()">Sign In</button>
   </div>
 </ion-content>

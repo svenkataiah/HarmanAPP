@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { MapViewPage } from '../../pages/map-view/map-view';
@@ -7,12 +8,7 @@ import { ScanPropertyPage } from '../../pages/scan-property/scan-property';
 import { MenusPage } from '../../pages/menus/menus';
 import { HomePage } from '../home/home';
 import { SignupPage } from '../signup/signup';
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LoanDetailsPage } from '../loan-details/loan-details';
 
 @IonicPage()
 @Component({
@@ -23,11 +19,15 @@ export class LoginPage {
   username: any;
   password: any;
   loginStatus: any;
+  loginUser: any;
+  loginBtn: any = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private toastCtrl: ToastController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private http: HttpClient
+  ) {
   }
 
   ionViewDidLoad() {
@@ -35,17 +35,22 @@ export class LoginPage {
   }
 
   login() {
-    if (this.username == "admin" && this.password == "admin") {
-      this.presentToast();
-      setTimeout(()=>{
-        this.navCtrl.setRoot(HomePage);
-      },3000);
-      
-    } else {
-      this.username = '';
-      this.password = '';
-      this.showAlert();
-    }
+    this.loginBtn = true;
+    this.http.get("http://quickhomeloanapi.azurewebsites.net/api/auth/" + this.username + "/" + this.password)
+      .subscribe((response) => {
+        console.log(response);
+        if (response['isAuthenticated']) {
+          this.presentToast();
+          setTimeout(() => {
+            this.navCtrl.setRoot(HomePage);
+          }, 3000);
+        } else {
+          this.loginBtn = false;
+          this.username = '';
+          this.password = '';
+          this.showAlert();
+        }
+      })
   }
 
   signup() {
@@ -66,7 +71,7 @@ export class LoginPage {
     toast.present();
   }
 
-  
+
   showAlert() {
     let alert = this.alertCtrl.create({
       title: 'Login Failed!',

@@ -10,6 +10,8 @@ import { LoginPage } from '../pages/login/login';
 import { ScanPropertyPage } from '../pages/scan-property/scan-property';
 import { MapViewPage } from '../pages/map-view/map-view';
 import { PropertyDetailsPage } from '../pages/property-details/property-details';
+import { LoanDetailsPage } from '../pages/loan-details/loan-details';
+import { SuccessPage } from '../pages/success/success';
 
 import { HttpClientModule } from '@angular/common/http';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -23,6 +25,7 @@ import { SignupPage } from '../pages/signup/signup';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { NotificationsPage } from '../pages/notifications/notifications';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -35,12 +38,15 @@ import { NotificationsPage } from '../pages/notifications/notifications';
     PropertyDetailsPage,
     UserInfoPage,
     SignupPage,
-    NotificationsPage
+    NotificationsPage,
+    LoanDetailsPage,
+    SuccessPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpClientModule
+    HttpClientModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -53,7 +59,9 @@ import { NotificationsPage } from '../pages/notifications/notifications';
     PropertyDetailsPage,
     UserInfoPage,
     SignupPage,
-    NotificationsPage
+    NotificationsPage,
+    LoanDetailsPage,
+    SuccessPage
   ],
   providers: [
     StatusBar,
