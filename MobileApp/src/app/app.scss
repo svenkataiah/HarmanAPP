@@ -81,14 +81,37 @@ box-shadow: inset 10px 10px 120px -37px rgba(87,87,87,1);
   top: 4px;
 }
 
-.segment .segment-button.activated, .segment .segment-button,.segment .segment-button.activated, .segment .segment-button.segment-activated{
+.segment .segment-button{
   border: none;
 }
 
-.segment .segment-button.segment-activated{
+.segment .segment-activated{
   font-weight: bold;
 }
 
 .toolbar-title-md{
   margin-right: 10px;
 }
+
+.loading-md .loading-wrapper{
+  padding: 10px;
+  color: #2ec95c;
+  //background-color: #2ec95c;
+}
+
+.loading-md .spinner-dots circle{
+  stroke: #2ec95c;
+}
+
+ion-header{
+  .toolbar-background{
+    background: #f27b35;
+  }
+  .toolbar-title {
+    color: #fff;
+  }
+  .bar-button-default, .bar-button-clear-default, .bar-button-default{
+    color: #fff;
+  }
+}
+

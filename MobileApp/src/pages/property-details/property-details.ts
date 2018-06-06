@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { UserInfoPage } from '../user-info/user-info';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
@@ -26,6 +26,7 @@ export class PropertyDetailsPage {
   interested: any;
   interestedBtn: any = false;
   registrationId: any;
+  loading: any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,14 +34,14 @@ export class PropertyDetailsPage {
     private photoViewer: PhotoViewer,
     private http: HttpClient,
     public alertCtrl: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    public loadingCtrl: LoadingController
   ) {
     this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
     this.currentLocationAddress = this.navParams.get('data').currentLocationAddress;
 
     // Or to get a key/value pair
     storage.get('registrationId').then((val) => {
-      console.log('Your age is', val);
       this.registrationId = val;
     });
   }
@@ -50,10 +51,17 @@ export class PropertyDetailsPage {
     this.http.get("http://quickhomeloanapi.azurewebsites.net/api/property")
       .subscribe((response) => {
         console.log(response);
-        this.propertyDetails = response['propertyValues'];
-        this.ownerInfo = response['ownerInfo']
-        this.characteristics = response['characteristics']
-        this.dimensions = response['dimensions'];
+        this.presentLoadingDefault('Fetching property information from DTDB...');
+        setTimeout(() => {
+
+          this.propertyDetails = response['propertyValues'];
+          this.ownerInfo = response['ownerInfo']
+          this.characteristics = response['characteristics']
+          this.dimensions = response['dimensions'];
+          this.loading.dismiss();
+
+        }, 4000);
+
       })
   }
 
@@ -67,8 +75,8 @@ export class PropertyDetailsPage {
   }
 
   registerNotification() {
-     this.http.get("http://virtiledge.com/fcm/?registrationid="+this.registrationId)
-    //this.http.post("http://quickhomeloanapi.azurewebsites.net/api/loan", { RegistrationId: this.registrationId })
+    this.http.get("http://virtiledge.com/fcm/?registrationid=" + this.registrationId)
+      //this.http.post("http://quickhomeloanapi.azurewebsites.net/api/loan", { RegistrationId: this.registrationId })
       .subscribe((response) => {
         this.showAlert();
         console.log(response);
@@ -92,7 +100,7 @@ export class PropertyDetailsPage {
   showAlert() {
     let alert = this.alertCtrl.create({
       title: '',
-      subTitle: 'Thank You for your Interest on this Property. <br> You will recieve a notification from bank',
+      subTitle: 'Thank You for your Interest. You will recieve a notification shortly',
       buttons: ['OK']
     });
     alert.present();
@@ -100,8 +108,8 @@ export class PropertyDetailsPage {
 
   showConfirm() {
     let confirm = this.alertCtrl.create({
-      title: 'Need Loan?',
-      message: 'Would you be interested in applying for loan?',
+      title: 'Need Loan?<hr>',
+      message: 'Would you like to apply for loan?',
       buttons: [
         {
           text: 'Cancel',
@@ -110,15 +118,34 @@ export class PropertyDetailsPage {
           }
         },
         {
-          text: 'Yes Check Eligibility',
+          text: 'Yes, Check for Eligibility',
           handler: () => {
             console.log('Agree clicked');
-            this.registerNotification();
+            this.presentLoadingDefault('Property information is being sent to the financial institution...');
+            setTimeout(() => {
+              this.registerNotification();
+              this.loading.dismiss();
+              this.navCtrl.setRoot(this.propertyDetails);
+            }, 5000);
           }
         }
       ]
     });
     confirm.present();
+  }
+
+
+  presentLoadingDefault(content) {
+    this.loading = this.loadingCtrl.create({
+      content: content,
+      spinner: 'dots'
+    });
+
+    this.loading.present();
+  }
+
+  ionViewWillLeave() {
+    this.loading.dismiss();
   }
 
 }

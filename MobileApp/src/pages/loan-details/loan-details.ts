@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { SuccessPage } from '../success/success';
 
@@ -13,10 +13,12 @@ export class LoanDetailsPage {
   tabStatus: any = 'ownerInfo';
   loanDetails: any;
   loanTenureDetails: any;
+  loading: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private http: HttpClient
+    private http: HttpClient,
+    public loadingCtrl: LoadingController
   ) {
   }
 
@@ -42,7 +44,7 @@ export class LoanDetailsPage {
     for (var i = 0; i < loanTenureArrayObject.length; i++) {
       balanceTotal = balanceTotal + parseInt(loanTenureArrayObject[i].balance);
     };
-    var yearlyTotal = principalPaidTotal+interestPaidTotal+balanceTotal;
+    var yearlyTotal = principalPaidTotal + interestPaidTotal + balanceTotal;
     this.loanTenureDetails = loanTenureArrayObject;
     this.loanTenureDetails.index = index;
     this.loanTenureDetails.principalPaidTotal = principalPaidTotal;
@@ -62,8 +64,27 @@ export class LoanDetailsPage {
     this.http.get("http://quickhomeloanapi.azurewebsites.net/api/loan/loanid")
       .subscribe((response) => {
         console.log(response);
-        this.loanDetails = response;
+        this.presentLoadingDefault();
+        setTimeout(()=>{
+          this.loanDetails = response;
+          this.loading.dismiss();
+        },4000);
       })
+  }
+
+
+  presentLoadingDefault() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Fetching Account Information and Loan Tenure details...',
+      spinner: 'dots',
+      showBackdrop: false
+    });
+
+    this.loading.present();
+  }
+    
+  ionViewWillLeave(){
+    this.loading.dismiss();
   }
 
 }

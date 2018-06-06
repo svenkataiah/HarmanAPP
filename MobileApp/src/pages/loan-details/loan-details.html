@@ -15,14 +15,15 @@
 <ion-content>
   <!-- Segment buttons with icons -->
   <ion-segment [(ngModel)]="icons">
-    <ion-segment-button value="camera" (click)="switchTabs('ownerInfo')" class="segment-button segment-activated">
+    
+    <ion-segment-button value="camera" (click)="switchTabs('ownerInfo')" class="segment-button {{tabStatus=='ownerInfo'?'activate':''}}">
       <img src="assets/imgs/LoanEligibility/AccountInformationDark-01.png" /> Account Info
     </ion-segment-button>
-    <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')" class="segment-button segment-activated">
+    <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')" class="segment-button">
       <img src="assets/imgs/LoanEligibility/LoanEligibilityDark-01.png" /> Loan Eligibility
     </ion-segment-button>
   </ion-segment>
-
+  
   <ion-grid *ngIf="tabStatus=='ownerInfo'" class="owner-info">
     <ion-row>
       <ion-col class="heading">

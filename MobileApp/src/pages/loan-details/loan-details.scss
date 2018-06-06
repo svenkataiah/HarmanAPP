@@ -4,7 +4,7 @@ page-loan-details {
         background: #f7f7f7 !important;
         .owner-info{
             .col{
-                padding: 20px 20px;
+                padding: 15px 15px;
             }
         } 
     }
@@ -87,6 +87,11 @@ page-loan-details {
     }
     ion-scroll[scrollX] {
         min-height: 30rem;
+    }
+
+    .activate{
+        opacity: 1;
+        font-weight: bold;
     }
 
 }

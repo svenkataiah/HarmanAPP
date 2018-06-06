@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
 import { MapViewPage } from '../map-view/map-view';
@@ -27,6 +27,7 @@ export class HomePage {
   scanPropertyToggle: any = true;
   nearByPlaceType: any;
   loadingIcon: any = false;
+  loading: any;
 
   nearbyLocationsStock: any = {}
   picture: any;
@@ -41,7 +42,8 @@ export class HomePage {
     private http: HttpClient,
     private nearByPlacesProvider: NearByPlacesProvider,
     private currentLocationProvider: CurrentLocationProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController
   ) {
 
   }
@@ -85,7 +87,8 @@ export class HomePage {
   }
 
   getCurrentLocation() {
-    this.loadingIcon = true;
+    //this.loadingIcon = true;
+    this.presentLoadingDefault();
     this.scanPropertyToggle = false;
     this.currentLocationProvider.getCurrentLocation()
       .then((response) => {
@@ -149,6 +152,7 @@ export class HomePage {
           });
           count = 0;
           this.loadingIcon = false;
+          this.loading.dismiss();
         },
           (error) => {
             this.errorMessage = error;
@@ -220,5 +224,21 @@ export class HomePage {
     });
     alert.present();
   }
+
+  presentLoadingDefault() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Fetching nearby places...',
+      spinner: 'dots'
+    });
+
+    this.loading.present();
+
+    // setTimeout(() => {
+    //   loading.dismiss();
+    // }, 5000);
+  }
+
+
+
 
 }

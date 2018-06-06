@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
@@ -21,12 +21,15 @@ export class LoginPage {
   loginStatus: any;
   loginUser: any;
   loginBtn: any = false;
+  loading: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    private http: HttpClient
+    private http: HttpClient,
+    public loadingCtrl: LoadingController
   ) {
   }
 
@@ -36,12 +39,14 @@ export class LoginPage {
 
   login() {
     this.loginBtn = true;
+    this.presentLoadingDefault();
     this.http.get("http://quickhomeloanapi.azurewebsites.net/api/auth/" + this.username + "/" + this.password)
       .subscribe((response) => {
         console.log(response);
         if (response['isAuthenticated']) {
-          this.presentToast();
+          //this.presentToast();
           setTimeout(() => {
+            this.loading.dismiss();
             this.navCtrl.setRoot(HomePage);
           }, 3000);
         } else {
@@ -79,6 +84,15 @@ export class LoginPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  presentLoadingDefault() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Athenticating login...',
+      showBackdrop: false,
+      spinner: 'dots'
+    });
+    this.loading.present();
   }
 
 }

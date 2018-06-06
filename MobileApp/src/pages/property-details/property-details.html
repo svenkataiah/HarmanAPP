@@ -3,12 +3,13 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title text-center>Property Details</ion-title>
-    <ion-buttons end (click)="userInfo()">
-      <button ion-button icon-only class="user-btn">
-        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
-      </button>
-    </ion-buttons>
+    <ion-title text-center>Property Details
+      </ion-title>
+        <ion-buttons end class="user-btn" (click)="userInfo()">
+          <button ion-button icon-only>
+            <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+          </button>
+        </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -77,12 +78,6 @@
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <hr>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col class="heading">
         <img src="assets/imgs/OwnerInfo/last mortgage.png" />Last Mortgaged
       </ion-col>
       <ion-col>
@@ -102,9 +97,10 @@
   <ion-grid *ngIf="tabStatus=='basicInfo'" class="basic-info">
     <ion-row>
       <ion-col>
-        <img [src]="scanPropertyPicture" height="350" style="width: 100%;"
-        (click)="viewPhoto(scanPropertyPicture)" />
+        <img [src]="scanPropertyPicture" height="380" style="width: 100%;" (click)="viewPhoto(scanPropertyPicture)" />
         <!-- <img src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" height="330" style="width: 100%;" /> -->
+        <!-- <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg"
+        /> -->
       </ion-col>
     </ion-row>
     <ion-row>
@@ -115,55 +111,34 @@
   </ion-grid>
 
   <ion-grid *ngIf="tabStatus=='gallery'" class="gallery">
+
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg')" src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg"
         />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('https://teja9.kuikr.com/restatic/build/image/c_img6.jpg')" src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223501O-1524306077.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223501O-1524306077.jpeg"
+        />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg')" src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
-      </ion-col>
-      <ion-col>
-        <img (click)="viewPhoto('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA')" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <img (click)="viewPhoto('https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg')" src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223521O-1524302014.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223521O-1524302014.jpeg"
         />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('https://teja9.kuikr.com/restatic/build/image/c_img6.jpg')" src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
+        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223557O-1524302028.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223557O-1524302028.jpeg"
+        />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg')" src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
-      </ion-col>
-      <ion-col>
-        <img (click)="viewPhoto('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA')" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <img (click)="viewPhoto('https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg')" src="https://images3.roofandfloor.com/listing_4f41bc923f8065fa48baf425302157e1/1024x600/jrd-hill-county-in-kovaipudur-elevation-photo-iyx.jpg"
+        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223509O-1524302071.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223509O-1524302071.jpeg"
         />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('https://teja9.kuikr.com/restatic/build/image/c_img6.jpg')" src="https://teja9.kuikr.com/restatic/build/image/c_img6.jpg" />
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <img (click)="viewPhoto('http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg')" src="http://cdn.staticmb.com/property/microsite/jb-luxury-homes/images/elevation2.jpg" />
-      </ion-col>
-      <ion-col>
-        <img (click)="viewPhoto('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA')" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCyZvaRL5SiZcLMMZYokEzhMSjiSHlJvr055I4UhEt51VY6ogYcA" />
+        &nbsp;
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -177,9 +152,6 @@
       <button ion-button class="navigation-btn" *ngIf="!interested" (click)="showConfirm()">
         <span class="btn-text"> Interested In Property ? </span>
       </button>
-      <button ion-button class="navigation-btn" *ngIf="interested" (click)="LoanDetails()">
-          <span class="btn-text"> Get Loan Details</span>
-        </button>
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="tabStatus=='basicInfo'" class="basic-info-toolbar">

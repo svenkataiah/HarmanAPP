@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
@@ -19,8 +19,9 @@ export class MapViewPage {
   position: any;
   nearByPlaceType: any;
   scanPropertyPicture: any;
-  apiError:any = false;
+  apiError: any = false;
   apiErrorMsg: any;
+  loading: any;
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -30,7 +31,8 @@ export class MapViewPage {
     private geolocation: Geolocation,
     private currentLocationProvider: CurrentLocationProvider,
     private nearByPlacesProvider: NearByPlacesProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController
   ) {
     this.nearByPlaces = JSON.parse(this.navParams.get('data').nearbyPlaces);
     this.scanPropertyPicture = this.navParams.get('data').scanPropertyPicture;
@@ -58,6 +60,7 @@ export class MapViewPage {
 
   ionViewDidLoad() {
     this.getCurrentLatLng();
+
   }
 
 
@@ -70,7 +73,8 @@ export class MapViewPage {
         currentLocationAddress: this.currentLocation
       }
     }
-    this.navCtrl.push(PropertyDetailsPage, data);
+    //this.navCtrl.push(PropertyDetailsPage, data);
+    this.navCtrl.setRoot(PropertyDetailsPage,data);
   }
 
 
@@ -78,7 +82,7 @@ export class MapViewPage {
 
 
   mapInit(lat, lng, marker) {
-
+    this.presentLoadingDefault();
     if (marker == 'drag') {
       //this.nearByPlaces = [];
       this.getCurrentLocationAddress(lat, lng);
@@ -116,7 +120,6 @@ export class MapViewPage {
             console.log(error);
             current.apiErrorMsg = error;
             current.apiError = true;
-
           }
         );
     });
@@ -169,6 +172,8 @@ export class MapViewPage {
         infowindow.setContent(place.name);
         infowindow.open(map, this);
       });
+
+      this.loading.dismiss();
     }
 
     //current location marker
@@ -206,6 +211,8 @@ export class MapViewPage {
     if (this.apiError) {
       this.showAlert(this.apiErrorMsg);
     }
+    this.loading.dismiss();
+
   }
 
   markerCoords(markerobject) {
@@ -242,7 +249,6 @@ export class MapViewPage {
 
 
 
-
   userInfo() {
     this.navCtrl.push(UserInfoPage);
   }
@@ -254,6 +260,24 @@ export class MapViewPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  presentLoadingDefault() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Loading Map View...',
+      spinner: 'dots',
+      showBackdrop: false
+    });
+
+    this.loading.present();
+  }
+
+
+
+
+
+  ionViewWillLeave() {
+    this.loading.dismiss();
   }
 
 }
