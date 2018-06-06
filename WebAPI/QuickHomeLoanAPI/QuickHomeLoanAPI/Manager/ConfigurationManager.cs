@@ -17,7 +17,7 @@ namespace QuickHomeLoanAPI.Manager
 		private readonly IConfiguration Configuration;
 		public string GetConfigurationByKey()
         {
-			return Configuration["CloudMessage:ServerKey"];
+			return Configuration.GetSection("CloudMessage").GetValue<string>("ServerKey");//["CloudMessage:ServerKey"];
         }
     }
 }

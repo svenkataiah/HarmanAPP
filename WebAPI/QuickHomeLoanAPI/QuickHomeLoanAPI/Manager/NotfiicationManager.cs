@@ -20,7 +20,7 @@ namespace QuickHomeLoanAPI.Manager
 		public NotificationManager()
 		{
 		}
-		public String SendNotificationFromFirebaseCloud()
+		public String SendNotificationFromFirebaseCloud(string registrationId, string message)
 		{
 			var result = "-1";
 			var serverKey = "AIzaSyAHaXxhR2bPClCvXkPcf1zOFIV6H4d6OBI";
@@ -30,15 +30,12 @@ namespace QuickHomeLoanAPI.Manager
 			httpWebRequest.ContentType = "application/json";
 			httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", serverKey));
 			httpWebRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
-
-			//httpWebRequest.Headers.Add(HttpRequestHeader.Authorization, "key=AAAA_mdH7ws:APA91bE0eBbB3RfM-9yi5U-FhTdp7es8EbkeYW9x7G1a0w7i_7hoenxrCnEkJVp6eHfOZ9s4LoHmeEI0SD2hVpvzKYjjKqYOkXz0rjhhQ60WMXBYyDq4-cSwtF17PN3BJ2VK0UoJt227");
 			httpWebRequest.Method = "POST";
+
 			using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
 			{
-				var regID = "edIcORW6tYc:APA91bGtJXmYiguuxJNoIh5d9zV0cZPQyHXcRvwlZm3IQFZ_ytkloUIgSUErK3IpKCeRp7uDrkJUguEHUBOicegmpffo8plFIB3MiXKV5Kbc3xt6WA_aNFIR_7BL3nIO3L-tJMlTxeCP";
-				string json = "{\"registration_ids\": [\"" + regID + "\"],\"data\": {\"message\": \"20% deal today!!\",}}";
-                 
-        
+				var regID = registrationId ;// "edIcORW6tYc:APA91bGtJXmYiguuxJNoIh5d9zV0cZPQyHXcRvwlZm3IQFZ_ytkloUIgSUErK3IpKCeRp7uDrkJUguEHUBOicegmpffo8plFIB3MiXKV5Kbc3xt6WA_aNFIR_7BL3nIO3L-tJMlTxeCP";
+				string json = "{\"registration_ids\": [\"" + regID + "\"],\"data\": {\"message\": \"" +message+ "\",}}";
 				streamWriter.Write(json);
 				streamWriter.Flush();
 			}
