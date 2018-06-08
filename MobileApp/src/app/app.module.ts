@@ -26,6 +26,11 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { NotificationsPage } from '../pages/notifications/notifications';
 import { IonicStorageModule } from '@ionic/storage';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import { Camera } from '@ionic-native/camera';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,7 @@ import { IonicStorageModule } from '@ionic/storage';
     SignupPage,
     NotificationsPage,
     LoanDetailsPage,
-    SuccessPage
+    UploadDocumentsPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,7 @@ import { IonicStorageModule } from '@ionic/storage';
     SignupPage,
     NotificationsPage,
     LoanDetailsPage,
-    SuccessPage
+    UploadDocumentsPage
   ],
   providers: [
     StatusBar,
@@ -72,7 +77,12 @@ import { IonicStorageModule } from '@ionic/storage';
     NearByPlacesProvider,
     CurrentLocationProvider,
     PhotoViewer,
-    Push
+    Push,
+    FileTransfer,
+    FileTransferObject,
+    File,
+    Camera,
+    FileChooser
   ]
 })
 export class AppModule {}

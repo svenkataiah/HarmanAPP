@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { SuccessPage } from '../success/success';
+import { UploadDocumentsPage } from '../upload-documents/upload-documents';
 
 @IonicPage()
 @Component({
@@ -56,7 +57,7 @@ export class LoanDetailsPage {
   }
 
   applyLoan() {
-    this.navCtrl.push(SuccessPage);
+    this.navCtrl.push(UploadDocumentsPage);
   }
 
   ionViewDidLoad() {

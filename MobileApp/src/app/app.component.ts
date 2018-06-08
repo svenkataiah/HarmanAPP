@@ -13,6 +13,7 @@ import { NotificationsPage } from '../pages/notifications/notifications';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { LoanDetailsPage } from '../pages/loan-details/loan-details';
+import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,7 +21,7 @@ import { LoanDetailsPage } from '../pages/loan-details/loan-details';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any = UploadDocumentsPage;
 
   pages: Array<{ title: string, component: any }>;
 
@@ -42,9 +43,6 @@ export class MyApp {
       { title: 'Logout', component: LoginPage }
       
     ];
-
-  
-
   }
 
   initializeApp() {
