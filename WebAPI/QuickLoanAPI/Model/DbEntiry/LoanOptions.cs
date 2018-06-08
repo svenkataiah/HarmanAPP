@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace QuickHomeLoanAPI.Model
+namespace QuickLoanAPI.Model.DbEntity
 {
 	public class LoanOptions
     {
 		public LoanOptions()
         {
 		}
+        public int Id { get; set; }
         public string Tenure
 		{
 			get;

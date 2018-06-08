@@ -1,5 +1,4 @@
-﻿using System;
-namespace QuickHomeLoanAPI.Model
+﻿namespace QuickLoanAPI.Model.DbEntity
 {
     public class OwnerInfo
     {
@@ -16,20 +15,6 @@ namespace QuickHomeLoanAPI.Model
 			get;
 			set;
 		}
-        public string CityAndState
-		{
-			get;
-			set;
-		}
-        public string PostalCode
-		{
-			get;
-			set;
-		}
-        public string StreetAddress
-		{
-			get;
-			set;
-		}
-	}
+        public Address Address { get; set; }
+    }
 }

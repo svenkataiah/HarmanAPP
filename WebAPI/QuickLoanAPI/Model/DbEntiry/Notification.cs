@@ -1,12 +1,13 @@
 ﻿using System;
-namespace QuickHomeLoanAPI.Model
+namespace QuickLoanAPI.Model.DbEntity
 {
 	public class Notification
 	{
 		public Notification()
 		{
 		}
-		public string Title
+        public int Id { get; set; }
+        public string Title
 		{
 			get;
 			set;

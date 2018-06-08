@@ -3,6 +3,7 @@ namespace QuickHomeLoanAPI.Model
 {
 	public class Credential
     {
+        public int Id { get; set; }
         public string UserId
         {
             get;

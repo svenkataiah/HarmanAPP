@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuickHomeLoanAPI.Model
+namespace QuickLoanAPI.Model.DbEntity
 {
     public class PropertyValues
     {

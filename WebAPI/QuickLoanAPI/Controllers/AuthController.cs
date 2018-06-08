@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QuickHomeLoanAPI.Data;
 using QuickHomeLoanAPI.Model;
+using QuickLoanAPI.Data;
+using QuickLoanAPI.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,41 +15,30 @@ namespace QuickHomeLoanAPI.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-
-        // GET api/auth/userid/password
-		[HttpGet("{userId}/{password}")]
-		public UserInfo Get(string userId, string password)
+        QuickLoanDbContext _context = null;
+        public AuthController(QuickLoanDbContext context)
         {
-			var userProfileCollection = new UserProfileCollection();
-			var result = userProfileCollection.UserProfile.Select(item => item).Where(item => item.Credential.UserId == userId && item.Credential.Password == password);
-			if (result.Any()){
-				var resultList = result.ToList();
-				return new UserInfo
-				{
-					isAuthenticated = true,
-					Name = resultList[0].Name,
-					Branch = resultList[0].Branch,
-					AccountNUmber = resultList[0].AccountNUmber
-				};
-			}
-			return new UserInfo
-			{
-				isAuthenticated = false
-			};
-            
+            _context = context;
         }
-
-		// POST api/auth/register
-		[HttpGet("register/{registrationId}")]
-		public bool Register(string registrationId )
-		{
-			return true;
+        // AUTHENTICATE USER : GET api/auth/userid/password
+        [HttpGet("{userId}/{password}")]
+		public IActionResult Authenticate(string userId, string password)
+        {
+            var authMgr = new AuthManager(_context);
+            return Ok(authMgr.AuthenticateUser(userId, password));
         }
 
         // PUT api/values/5
-		[HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+		[HttpPut("register")]
+        public IActionResult Register([FromBody]RegisterationInfo registerationInfo)
         {
+            var authMgr = new AuthManager(_context);
+            var status = authMgr.RegisterForNotification(registerationInfo);
+
+            return Ok(new
+            {
+                status
+            });
         }
 
         // DELETE api/values/5

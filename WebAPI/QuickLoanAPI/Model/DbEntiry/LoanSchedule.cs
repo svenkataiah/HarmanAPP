@@ -1,12 +1,13 @@
 ﻿using System;
-namespace QuickHomeLoanAPI.Model
+namespace QuickLoanAPI.Model.DbEntity
 {
     public class LoanSchedule
     {
 		public LoanSchedule()
         {
         }
-		public string TenureYear
+        public int Id { get; set; }
+        public string TenureYear
         {
             get;
             set;

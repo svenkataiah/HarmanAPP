@@ -1,4 +1,6 @@
 ﻿using System;
+using QuickLoanAPI.Model.DbEntity;
+
 namespace QuickHomeLoanAPI.Model
 {
     public class LoanRequest
@@ -6,10 +8,11 @@ namespace QuickHomeLoanAPI.Model
         public LoanRequest()
         {
         }
-        public string RegistrationId
+        public string UserId
 		{
 			get;
 			set;
 		}
+        public Address Address { get; set; }
     }
 }
