@@ -167,15 +167,18 @@ namespace QuickLoanAPI.Data
         }
         public string CreateLoanRequest(LoanRequest loanRequest)
         {
-            var account = _quickLoanDbContext.Accounts.Select(item => item).Where(item => item.OnlineUser.Id.ToString() == loanRequest.UserId).FirstOrDefault();
+            var account = (_quickLoanDbContext.Accounts
+                           .Include(item => item.OnlineUser))
+                           .Where(item => item.OnlineUser.Id == loanRequest.UserId).FirstOrDefault();
             var propMgr = new PropertyManager();
             var loan = _quickLoanDbContext.LoanApplications.LastOrDefault();
             var refNumber = account.Branch + "HL";
+            string sequenceNumber = "0000001";
             if (loan != null)
             {
-                var sequenceNumber = "0000000" + loan.Id.ToString();
-                refNumber += sequenceNumber.Substring(sequenceNumber.Length - 5);
+                sequenceNumber = "0000000" + loan.Id.ToString();
             }
+            refNumber += sequenceNumber.Substring(sequenceNumber.Length - 5);
             var loanApplication = new Model.DbEntity.LoanApplication
             {
                 Account = account,
@@ -193,17 +196,59 @@ namespace QuickLoanAPI.Data
 
             return refNumber;
         }
-        public string UpdateLoanRequest(string refId, LoanRequest loanRequest)
+        public string UpdateLoanRequest(QuickHomeLoanAPI.Model.LoanApplication loanApplication)
         {
-            var loan = _quickLoanDbContext.LoanApplications.Select(item => item).Where(item => item.ReferenceNo == refId).FirstOrDefault();
+            var loan = _quickLoanDbContext.LoanApplications
+                .Include( l => l.Address)
+                .Include( l => l.Property)
+                .Include( l => l.Property.PropertyAddress)
+                .Include( l => l.LoanOptions)
+                .Include( l => l.Documents)
+                .Include( l => l.Account)
+                .Include( l => l.Account.OnlineUser)
+                .Where(item => item.ReferenceNo == loanApplication.ReferenceId).FirstOrDefault();
 
+            if(loanApplication.Address != null)
+            {
+                loan.Address = loanApplication.Address;
+                loan.Address.AddressType = "LCA"; // loan communication address
+            }
 
+            if (loanApplication.PropertyAddress != null)
+            {
+                loan.Property.PropertyAddress.StreetAddress = loanApplication.PropertyAddress.StreetAddress;
+                loan.Property.PropertyAddress.StreetAddress1 = loanApplication.PropertyAddress.StreetAddress1;
+                loan.Property.PropertyAddress.City = loanApplication.PropertyAddress.City;
+                loan.Property.PropertyAddress.State = loanApplication.PropertyAddress.State;
+                loan.Property.PropertyAddress.ZipCode = loanApplication.PropertyAddress.ZipCode;
+                loan.Property.APN = loanApplication.APN;
+            }
+
+            loan.EmployerName = loanApplication.EmployerName;
+            loan.EmployerPhone = loanApplication.EmployerPhone;
+            loan.MonthlySalary = loanApplication.MonthlySalary;
+            loan.NoofYearsExp = loanApplication.NoofYearsExp;
+
+            loan.PassportNo = loanApplication.PassportNo;
+            loan.StateDLNo = loanApplication.StateDLNo;
+
+            loan.Documents = loanApplication.Documents;
+
+            var loanOption = loan.LoanOptions.Where(lo => lo.Id == loanApplication.SelectedLoanOption).FirstOrDefault();
+            if (loanOption != null)
+            {
+                loanOption.IsSelected = true;
+            }
             loan.Status = "AC";
             _quickLoanDbContext.SaveChanges();
 
-            var message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : " + loan.ReferenceNo;
+            var message = "We have received your loan application and sent a notification to the Loan Officer.";
             var notification = new NotificationManager();
             notification.SendNotificationFromFirebaseCloud(loan.Account.OnlineUser.NotificationRegId, message);
+
+            message = "A application has been received. Please review and take the necessary actions. RefId:" + loan.ReferenceNo;
+            var receiver = _quickLoanDbContext.Users.Where(u => u.UserType == 1).FirstOrDefault();
+            notification.SendNotificationFromFirebaseCloud(receiver.NotificationRegId, message);
 
             return loan.ReferenceNo;
         }
@@ -213,7 +258,18 @@ namespace QuickLoanAPI.Data
                 .Where(loan => loan.ReferenceNo == loanRefId)
                 .Include(loan => loan.LoanOptions)
                 .Include(loan => loan.Property)
-                .Include(loan => loan.Documents)).FirstOrDefault();
+                .Include(loan => loan.Documents)
+                .Include(loan => loan.Account)).FirstOrDefault();
+            return loanRequest;
+        }
+        public List<Model.DbEntity.LoanApplication> GetLoanHistory(string accountNumber, bool isLoanRequest )
+        {
+            var status = isLoanRequest ? "LU" : "AC";
+            var loanRequest = (_quickLoanDbContext.LoanApplications
+                .Include(loan => loan.Account))
+                .Include( loan => loan.Property)
+                .Include( loan => loan.Property.PropertyAddress)
+                .Where(loan => loan.Account.Number == accountNumber && loan.Status == status).ToList();
             return loanRequest;
         }
     }

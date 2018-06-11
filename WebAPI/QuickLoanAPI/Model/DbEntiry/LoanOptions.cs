@@ -30,7 +30,8 @@ namespace QuickLoanAPI.Model.DbEntity
 			set;
 
 		}
-		public List<LoanSchedule> LoanSchedule
+        public bool IsSelected { get; set; }
+        public List<LoanSchedule> LoanSchedule
 		{
 			get;
 			set;

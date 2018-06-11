@@ -17,7 +17,6 @@ namespace QuickLoanAPI.Data
         public DbSet<LoanSchedule> LoanSchedules { get; set; }
         public DbSet<PropertyDetail> PropertyDetails { get; set; }
         public DbSet<Document> Documents { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,8 +28,6 @@ namespace QuickLoanAPI.Data
             modelBuilder.Entity<LoanSchedule>().ToTable("LoanSchedule");
             modelBuilder.Entity<PropertyDetail>().ToTable("PropertyDetail");
             modelBuilder.Entity<Document>().ToTable("Document");
-            modelBuilder.Entity<Notification>().ToTable("Notification");
-
         }
     }
 }

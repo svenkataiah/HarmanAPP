@@ -29,7 +29,7 @@ namespace QuickHomeLoanAPI.Controllers
         }
 
         // PUT api/values/5
-		[HttpPut("register")]
+		[HttpPost("register")]
         public IActionResult Register([FromBody]RegisterationInfo registerationInfo)
         {
             var authMgr = new AuthManager(_context);

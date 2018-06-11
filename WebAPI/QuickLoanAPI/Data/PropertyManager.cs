@@ -38,7 +38,12 @@ namespace QuickLoanAPI.Data
                 MarketValue = "4573466",
                 SaleValue = "3568235",
                 TaxArea = "TX",
-                TotalTaxableValue = "879658"
+                TotalTaxableValue = "879658",
+                PropertyType ="Single Family Home",
+                LastSold ="1890765",
+                PricePerSqrt="690",
+                PropertyStyle = "Single Family Residency",
+                LastMortgaged = "98765"
             };
         }
     }

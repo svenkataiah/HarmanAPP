@@ -45,7 +45,7 @@ namespace QuickLoanAPI.Data
         {
             try
             {
-                var user = _context.Users.Select(item => item).Where(item => item.UserId == registerationInfo.UserId).FirstOrDefault();
+                var user = _context.Users.Select(item => item).Where(item => item.Id.ToString() == registerationInfo.UserId).FirstOrDefault();
                 user.NotificationRegId = registerationInfo.RegistrationId;
                 _context.SaveChanges();
                 return true;

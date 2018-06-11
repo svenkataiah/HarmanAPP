@@ -8,7 +8,7 @@ namespace QuickHomeLoanAPI.Model
         public LoanRequest()
         {
         }
-        public string UserId
+        public int UserId
 		{
 			get;
 			set;

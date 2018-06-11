@@ -11,6 +11,7 @@
 			get;
 			set;
 		}
+        public string PropertyType { get; set; }
         public Address PropertyAddress
         {
             get;
@@ -102,5 +103,9 @@
             get;
             set;
         }
+        public string LastSold { get; set; }
+        public string PricePerSqrt { get; set; }
+        public string PropertyStyle { get; set; }
+        public string LastMortgaged { get; set; }
     }
 }

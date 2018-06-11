@@ -27,44 +27,15 @@ namespace QuickHomeLoanAPI.Controllers
             _configuration = configuration;
         }
         // GET api/loan/list/5
-        [HttpGet("list/{accountNumber}")]
-		public List<LoanApplication> GetLoanList(string accountNumber)
+        [HttpGet("history/{accountNumber}/{isRequest}")]
+		public IActionResult GetLoanHistory(string accountNumber, bool isRequest)
 		{
-			var loans = new List<LoanApplication>()
-			{
-				new LoanApplication{
-					LoanBasicInfo = new LoanBasicInfo
-			        {
-				        AccountNumber = "XXXXXXX987098",
-						LoanId = "APXJ78658795RT",
-				        Name = "CORRY H DOCHO",
-						PropertyAddress = "66 County Court Elgin, IL 60120",
-				        Comments = "You are Eligible for the loan."
-			         },
-					//Notification = new Model.Notification{
-					//	Title = "Easy Home Loan",
-					//	Message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : APXJ78658795RT"
-					//}
-				},
-				new LoanApplication{
-                    LoanBasicInfo = new LoanBasicInfo
-                    {
-						AccountNumber = "XXXXXXX987098",
-                        LoanId = "APXJ78658805RT",
-						Name = "CORRY H DOCHO",
-						PropertyAddress = "602 Glendale Street Oak Lawn, IL 60453",
-                        Comments = "You are Eligible for the loan."
-					},
-      //              Notification = new Model.Notification{
-      //                  Title = "Easy Home Loan",
-						//Message = "We have received your loan application and sent for processing. Click here to view the eligibility details. Reference ID : APXJ78658795RQ"
-      //              }
-                }
-			};
-			return loans;
-		}
+            var loanMgr = new LoanManager(_context, _configuration);
+            var loans = loanMgr.GetLoanHistory(accountNumber, isRequest);
+            return Ok(loans);
+        }
         // GET api/loan/5
-        [HttpGet("{loanId}/{isRequest}")]
+        [HttpGet("details/{loanId}/{isRequest}")]
         public IActionResult GetLoanDetails(string loanId, bool isRequest)
         {
             var loanMgr = new LoanManager(_context, _configuration);
@@ -76,11 +47,11 @@ namespace QuickHomeLoanAPI.Controllers
             return Ok(loan);
         }
         // POST api/loan
-        [HttpPost("update/{refId}")]
-        public IActionResult UpdateLoanRequest(string refId, [FromBody]LoanRequest loanRequest)
+        [HttpPost("update")]
+        public IActionResult UpdateLoanRequest([FromBody]LoanApplication loanApplication)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(loanMgr.UpdateLoanRequest(refId, loanRequest));
+            return Ok(loanMgr.UpdateLoanRequest(loanApplication));
         }
         // POST api/loan
         [HttpPost("create")]

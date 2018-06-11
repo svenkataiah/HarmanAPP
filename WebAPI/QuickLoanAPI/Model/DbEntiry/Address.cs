@@ -10,6 +10,7 @@ namespace QuickLoanAPI.Model.DbEntity
         public int Id { get; set; }
         public string AddressType { get; set; }
         public string StreetAddress { get; set; }
+        public string StreetAddress1 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }

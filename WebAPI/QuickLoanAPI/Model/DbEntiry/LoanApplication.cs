@@ -11,12 +11,23 @@ namespace QuickLoanAPI.Model.DbEntity
             get;
             set;
         }
+        public Address Address { get; set; }
+
+        // Employement Details
+        public string EmployerName { get; set; }
+        public int MonthlySalary { get; set; }
+        public int NoofYearsExp { get; set; }
+        public string EmployerPhone { get; set; }
+
+        // Verification Details
+        public string PassportNo { get; set; }
+        public string StateDLNo { get; set; }
+
         public List<Document> Documents
         {
             get;
             set;
         }
-        public Notification Notification { get; set; }
         public PropertyDetail Property { get; set; }
         public string Comments
         {
