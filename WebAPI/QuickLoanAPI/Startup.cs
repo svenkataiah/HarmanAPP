@@ -29,6 +29,13 @@ namespace QuickLoanAPI
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc();
+            services.AddCors(o => o.AddPolicy("AllowAllOriginsPolicy", builder =>
+           {
+                builder.AllowAnyOrigin()
+                                       .AllowAnyMethod()
+                                       .AllowAnyHeader();
+                            }));
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,7 +45,7 @@ namespace QuickLoanAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("AllowAllOriginsPolicy");
             app.UseMvc();
         }
     }

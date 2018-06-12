@@ -185,14 +185,20 @@ namespace QuickLoanAPI.Data
                 LoanOptions = GetLoanOptions(),
                 Property = propMgr.GetPropertyDetail(loanRequest.Address),
                 ReferenceNo = refNumber,
+                CreatedDate = DateTime.Now,
                 Status = "LU"
             };
             _quickLoanDbContext.LoanApplications.Add(loanApplication);
             _quickLoanDbContext.SaveChanges();
 
+            var femSettings = _configuration.GetSection("fcmSettings");
+            var serverKey = femSettings["userServerKey"];
+            var senderId = femSettings["userSenderID"];
+            var webUrl = femSettings["webAddress"];
+
             var message = "We have received your loan request and sent for processing. Click here to view the eligibility details. Reference ID : " + refNumber;
             var notification = new NotificationManager();
-            notification.SendNotificationFromFirebaseCloud(account.OnlineUser.NotificationRegId, message);
+            notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, account.OnlineUser.NotificationRegId, message);
 
             return refNumber;
         }
@@ -206,7 +212,7 @@ namespace QuickLoanAPI.Data
                 .Include( l => l.Documents)
                 .Include( l => l.Account)
                 .Include( l => l.Account.OnlineUser)
-                .Where(item => item.ReferenceNo == loanApplication.ReferenceId).FirstOrDefault();
+                .Where(item => item.ReferenceNo == loanApplication.ReferenceNo).FirstOrDefault();
 
             if(loanApplication.Address != null)
             {
@@ -242,13 +248,19 @@ namespace QuickLoanAPI.Data
             loan.Status = "AC";
             _quickLoanDbContext.SaveChanges();
 
+            var femSettings = _configuration.GetSection("fcmSettings");
+            var serverKey = femSettings["userServerKey"];
+            var senderId = femSettings["userSenderID"];
+            var webUrl = femSettings["webAddress"];
             var message = "We have received your loan application and sent a notification to the Loan Officer.";
             var notification = new NotificationManager();
-            notification.SendNotificationFromFirebaseCloud(loan.Account.OnlineUser.NotificationRegId, message);
+            notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
 
+             serverKey = femSettings["bankerServerKey"];
+             senderId = femSettings["bankerSenderID"];
             message = "A application has been received. Please review and take the necessary actions. RefId:" + loan.ReferenceNo;
             var receiver = _quickLoanDbContext.Users.Where(u => u.UserType == 1).FirstOrDefault();
-            notification.SendNotificationFromFirebaseCloud(receiver.NotificationRegId, message);
+            notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, receiver.NotificationRegId, message);
 
             return loan.ReferenceNo;
         }
@@ -268,6 +280,22 @@ namespace QuickLoanAPI.Data
                .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
            });
             return loanRequest;
+        }
+        public string GetLatestLoanId(int userId)
+        {
+            var loanRequest = (_quickLoanDbContext.LoanApplications
+                .Include(loan => loan.Account)
+                 .Include(loan => loan.Account.OnlineUser)
+                 .Where(loan => loan.Account.OnlineUser.Id == userId)).OrderByDescending(loan => loan.Id).FirstOrDefault();
+            return loanRequest.ReferenceNo;
+        }
+        public string GetNearestBranch(string longitude, string latitude, int userId)
+        {
+            var loanRequest = (_quickLoanDbContext.LoanApplications
+                .Include(loan => loan.Account)
+                 .Include(loan => loan.Account.OnlineUser)
+                 .Where(loan => loan.Account.OnlineUser.Id == userId)).OrderByDescending(loan => loan.Id).FirstOrDefault();
+            return loanRequest.ReferenceNo;
         }
         public List<Model.DbEntity.LoanApplication> GetLoanHistory(int userId, bool isLoanRequest )
         {

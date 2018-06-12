@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace QuickLoanAPI.Model.DbEntity
 {
@@ -6,6 +7,7 @@ namespace QuickLoanAPI.Model.DbEntity
     {
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
+        public DateTime CreatedDate { get; set; }
         public Account Account
         {
             get;

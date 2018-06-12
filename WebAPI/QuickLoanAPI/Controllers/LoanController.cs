@@ -34,6 +34,12 @@ namespace QuickHomeLoanAPI.Controllers
             var loans = loanMgr.GetLoanHistory(userId, isRequest);
             return Ok(loans);
         }
+        [HttpGet("latestRefNo/{userId}")]
+        public IActionResult GetLatestLoanRefNo(int userId)
+        {
+            var loanMgr = new LoanManager(_context, _configuration);
+            return Ok(new { refNo = loanMgr.GetLatestLoanId(userId) });
+        }
         // GET api/loan/5
         [HttpGet("details/{loanId}/{isRequest}")]
         public IActionResult GetLoanDetails(string loanId, bool isRequest)
@@ -51,14 +57,14 @@ namespace QuickHomeLoanAPI.Controllers
         public IActionResult UpdateLoanRequest([FromBody]LoanApplication loanApplication)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(loanMgr.UpdateLoanRequest(loanApplication));
+            return Ok(new { refNo = loanMgr.UpdateLoanRequest(loanApplication) });
         }
         // POST api/loan
         [HttpPost("create")]
 		public IActionResult CreateLoanRequest([FromBody]LoanRequest loanRequest)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(loanMgr.CreateLoanRequest(loanRequest));
+            return Ok(new { refNo = loanMgr.CreateLoanRequest(loanRequest) });
         }
         [HttpPost]
         [Route("uploadfile")]

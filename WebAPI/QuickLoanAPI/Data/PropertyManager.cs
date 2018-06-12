@@ -18,7 +18,8 @@ namespace QuickLoanAPI.Data
                     City = "MISSION VIEJO",
                     State = "CA",
                     ZipCode = "92692",
-                    StreetAddress = "27911 ENCANTO"
+                    StreetAddress = "27911 ENCANTO",
+                    StreetAddress1 = string.Empty
                 },
                 PropertyAddress = address,
                 OwnerFirstName = "DIXON BRIAN L / DIXON PAMELA T",
