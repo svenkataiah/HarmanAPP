@@ -107,5 +107,7 @@
         public string PricePerSqrt { get; set; }
         public string PropertyStyle { get; set; }
         public string LastMortgaged { get; set; }
+        public int BedRoom { get; set; }
+        public int BathRoom { get; set; }
     }
 }

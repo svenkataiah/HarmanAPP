@@ -255,11 +255,18 @@ namespace QuickLoanAPI.Data
         public Model.DbEntity.LoanApplication GetLoanDetails(string loanRefId)
         {
             var loanRequest = (_quickLoanDbContext.LoanApplications
-                .Where(loan => loan.ReferenceNo == loanRefId)
-                .Include(loan => loan.LoanOptions)
+                 .Include(loan => loan.LoanOptions)
                 .Include(loan => loan.Property)
                 .Include(loan => loan.Documents)
-                .Include(loan => loan.Account)).FirstOrDefault();
+                .Include(loan => loan.Account)
+                 .Include(loan => loan.Property.PropertyAddress)
+                 .Where(loan => loan.ReferenceNo == loanRefId)).FirstOrDefault();
+
+            loanRequest.LoanOptions.ForEach(lo =>
+           {
+               lo.LoanSchedule = _quickLoanDbContext.LoanSchedules
+               .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
+           });
             return loanRequest;
         }
         public List<Model.DbEntity.LoanApplication> GetLoanHistory(int userId, bool isLoanRequest )

@@ -43,7 +43,9 @@ namespace QuickLoanAPI.Data
                 LastSold ="1890765",
                 PricePerSqrt="690",
                 PropertyStyle = "Single Family Residency",
-                LastMortgaged = "98765"
+                LastMortgaged = "98765",
+                BedRoom = 3,
+                BathRoom = 2
             };
         }
     }

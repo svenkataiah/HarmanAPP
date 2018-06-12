@@ -7,6 +7,7 @@ namespace QuickLoanAPI.Model.DbEntity
         {
         }
         public int Id { get; set; }
+        public int LoanOptionsId { get; set; }
         public string TenureYear
         {
             get;
