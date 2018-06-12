@@ -262,14 +262,15 @@ namespace QuickLoanAPI.Data
                 .Include(loan => loan.Account)).FirstOrDefault();
             return loanRequest;
         }
-        public List<Model.DbEntity.LoanApplication> GetLoanHistory(string accountNumber, bool isLoanRequest )
+        public List<Model.DbEntity.LoanApplication> GetLoanHistory(int userId, bool isLoanRequest )
         {
             var status = isLoanRequest ? "LU" : "AC";
             var loanRequest = (_quickLoanDbContext.LoanApplications
-                .Include(loan => loan.Account))
+                .Include(loan => loan.Account)
+                .Include(loan => loan.Account.OnlineUser)
                 .Include( loan => loan.Property)
-                .Include( loan => loan.Property.PropertyAddress)
-                .Where(loan => loan.Account.Number == accountNumber && loan.Status == status).ToList();
+                .Include( loan => loan.Property.PropertyAddress))
+                .Where(loan => loan.Account.OnlineUser.Id == userId && loan.Status == status).ToList();
             return loanRequest;
         }
     }

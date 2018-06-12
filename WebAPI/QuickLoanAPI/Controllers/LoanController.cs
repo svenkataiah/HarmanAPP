@@ -27,11 +27,11 @@ namespace QuickHomeLoanAPI.Controllers
             _configuration = configuration;
         }
         // GET api/loan/list/5
-        [HttpGet("history/{accountNumber}/{isRequest}")]
-		public IActionResult GetLoanHistory(string accountNumber, bool isRequest)
+        [HttpGet("history/{userId}/{isRequest}")]
+		public IActionResult GetLoanHistory(int userId, bool isRequest)
 		{
             var loanMgr = new LoanManager(_context, _configuration);
-            var loans = loanMgr.GetLoanHistory(accountNumber, isRequest);
+            var loans = loanMgr.GetLoanHistory(userId, isRequest);
             return Ok(loans);
         }
         // GET api/loan/5
