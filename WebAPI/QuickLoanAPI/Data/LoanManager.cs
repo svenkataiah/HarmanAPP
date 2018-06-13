@@ -29,13 +29,32 @@ namespace QuickLoanAPI.Data
         }
         public List<LoanOptions> GetLoanOptions()
         {
-            var loanRequest = (_quickLoanDbContext.LoanOptions) 
-                 .Where(lo => lo.LoanApplicationId == null).ToList();
+            var loanRequest = (_quickLoanDbContext.LoanOptions
+                .Where(lo => lo.LoanApplicationId == null))
+                .Select(lo => new LoanOptions
+                {   Id = lo.Id,
+                    LoanAmount = lo.LoanAmount,
+                    EMIAmount = lo.EMIAmount,
+                    InterestRate = lo.InterestRate,
+                    Tenure = lo.Tenure
+                }).ToList();
 
             loanRequest.ForEach(lo =>
             {
-                lo.LoanSchedule = _quickLoanDbContext.LoanSchedules
-                .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
+                lo.LoanSchedule = (_quickLoanDbContext.LoanSchedules
+                .Where(ls => ls.LoanOptionsId == lo.Id))
+                .Select(ls => new LoanSchedule
+                {
+                    PrincipalPaid = ls.PrincipalPaid,
+                    Balance = ls.Balance,
+                    InterestPaid = ls.InterestPaid,
+                    TenureYear = ls.TenureYear
+                }).ToList();
+            });
+
+            loanRequest.ForEach(lo =>
+            {
+                lo.Id = 0;
             });
             return loanRequest;
         }

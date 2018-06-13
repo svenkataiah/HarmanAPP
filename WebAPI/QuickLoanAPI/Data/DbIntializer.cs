@@ -10,6 +10,7 @@ namespace QuickLoanAPI.Data
         public static void Initialize(QuickLoanDbContext context)
         {
             context.Database.EnsureCreated();
+            //InitialiseLoanOptions(context);
             // Look for any users.
             if (context.Users.Any())
             {
