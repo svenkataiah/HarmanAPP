@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using QuickLoanAPI.Model.DbEntity;
+﻿using QuickLoanAPI.Model.DbEntity;
 
 namespace QuickLoanAPI.Data
 {
@@ -15,21 +11,22 @@ namespace QuickLoanAPI.Data
             {
                 OwnerAddress = new Address
                 {
-                    City = "MISSION VIEJO",
-                    State = "CA",
-                    ZipCode = "92692",
-                    StreetAddress = "27911 ENCANTO",
+                    FullAddress= "43 Mosely Ave, Staten Island, NY 10312",
+                    City = "Staten Island",
+                    State = "NY",
+                    ZipCode = "10312",
+                    StreetAddress = "43 Mosely Ave",
                     StreetAddress1 = string.Empty
                 },
                 PropertyAddress = address,
-                OwnerFirstName = "DIXON BRIAN L / DIXON PAMELA T",
-                OwnerLastName = "",
+                OwnerFirstName = "MATHEW",
+                OwnerLastName = "JACOB",
                 OwnerPhone = "6986986986",
                 APN = "AKJHU8656876",
                 NoOfStories = "2",
-                YearBuilt = "2006",
+                YearBuilt = "2003",
                 LotAreaAcres = "0.1584",
-                LotAreaSquareFeet = "6900",
+                LotAreaSquareFeet = "4500",
                 LotAreaDepth = "",
                 LotAreaWidth = "",
                 AssessedValue = "97898",
@@ -41,10 +38,10 @@ namespace QuickLoanAPI.Data
                 TaxArea = "TX",
                 TotalTaxableValue = "879658",
                 PropertyType ="Single Family Home",
-                LastSold ="1890765",
-                PricePerSqrt="690",
-                PropertyStyle = "Single Family Residency",
-                LastMortgaged = "98765",
+                LastSold = "780000",
+                PricePerSqrt= "222",
+                PropertyStyle = "Modern wooden building",
+                LastMortgaged = "670000",
                 BedRoom = 3,
                 BathRoom = 2
             };

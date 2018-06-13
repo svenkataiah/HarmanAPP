@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using QuickHomeLoanAPI.Manager;
@@ -30,122 +29,15 @@ namespace QuickLoanAPI.Data
         }
         public List<LoanOptions> GetLoanOptions()
         {
-            return new List<LoanOptions>{
-                        new LoanOptions {
-                            Tenure = "5 Years",
-                            LoanAmount = 87678557,
-                            EMIAmount = 98789,
-                            InterestRate = "11.23",
-                        LoanSchedule = new List<LoanSchedule>(){
-                            new LoanSchedule{
-                                TenureYear = "1 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                            },
-                            new LoanSchedule{
-                                      TenureYear = "2 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                                  },
-                            new LoanSchedule{
-                                      TenureYear = "3 Yr",
-                                      PrincipalPaid = 832535,
-                                      InterestPaid = 23432,
-                                      Balance = 655366
-                                  },
-                            new LoanSchedule{
-                                      TenureYear = "4 Yr",
-                                      PrincipalPaid = 88932535,
-                                      InterestPaid = 23432,
-                                      Balance = 55366
-                                  },
-                            new LoanSchedule{
-                                      TenureYear = "5 Yr",
-                                PrincipalPaid = 889378935,
-                                      InterestPaid = 23432,
-                                      Balance = 0
-                                  }
-                        }
-                        },
-                        new LoanOptions{
-                            Tenure = "10 Years",
-                            LoanAmount = 87678557,
-                            EMIAmount = 9876,
-                            InterestRate = "10.23",
-                        LoanSchedule = new List<LoanSchedule>(){
-                            new LoanSchedule{
-                                      TenureYear = "1 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "2 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "3 Yr",
-                                      PrincipalPaid = 832535,
-                                      InterestPaid = 23432,
-                                      Balance = 655366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "4 Yr",
-                                      PrincipalPaid = 88932535,
-                                      InterestPaid = 23432,
-                                      Balance = 55366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "5 Yr",
-                                      PrincipalPaid = 889378935,
-                                      InterestPaid = 23432,
-                                      Balance = 0
-                                  }
-                        }
-                        },
-                        new LoanOptions{
-                            Tenure = "12 Years",
-                            LoanAmount = 87678557,
-                            EMIAmount = 6098,
-                            InterestRate = "09.23",
-                        LoanSchedule = new List<LoanSchedule>(){
-                            new LoanSchedule{
-                                      TenureYear = "1 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "2 Yr",
-                                      PrincipalPaid = 432535,
-                                      InterestPaid = 23432,
-                                      Balance = 4555366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "3 Yr",
-                                      PrincipalPaid = 832535,
-                                      InterestPaid = 23432,
-                                      Balance = 655366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "4 Yr",
-                                      PrincipalPaid = 88932535,
-                                      InterestPaid = 23432,
-                                      Balance = 55366
-                                  },
-                                  new LoanSchedule{
-                                      TenureYear = "5 Yr",
-                                      PrincipalPaid = 889378935,
-                                      InterestPaid = 23432,
-                                      Balance = 0
-                                  }
-                        }
-                        }
-                };
+            var loanRequest = (_quickLoanDbContext.LoanOptions) 
+                 .Where(lo => lo.LoanApplicationId == null).ToList();
+
+            loanRequest.ForEach(lo =>
+            {
+                lo.LoanSchedule = _quickLoanDbContext.LoanSchedules
+                .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
+            });
+            return loanRequest;
         }
         public List<Document> GetRequiredDocuments()
         {
@@ -196,7 +88,7 @@ namespace QuickLoanAPI.Data
             var senderId = femSettings["userSenderID"];
             var webUrl = femSettings["webAddress"];
 
-            var message = "We have received your loan request and sent for processing. Click here to view the eligibility details. Reference ID : " + refNumber;
+            var message = "We have received your request for eligibility check. Click here to view the eligibility details. Reference ID : " + refNumber;
             var notification = new NotificationManager();
             notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, account.OnlineUser.NotificationRegId, message);
 
@@ -205,16 +97,16 @@ namespace QuickLoanAPI.Data
         public string UpdateLoanRequest(QuickHomeLoanAPI.Model.LoanApplication loanApplication)
         {
             var loan = _quickLoanDbContext.LoanApplications
-                .Include( l => l.Address)
-                .Include( l => l.Property)
-                .Include( l => l.Property.PropertyAddress)
-                .Include( l => l.LoanOptions)
-                .Include( l => l.Documents)
-                .Include( l => l.Account)
-                .Include( l => l.Account.OnlineUser)
+                .Include(l => l.Address)
+                .Include(l => l.Property)
+                .Include(l => l.Property.PropertyAddress)
+                .Include(l => l.LoanOptions)
+                .Include(l => l.Documents)
+                .Include(l => l.Account)
+                .Include(l => l.Account.OnlineUser)
                 .Where(item => item.ReferenceNo == loanApplication.ReferenceNo).FirstOrDefault();
 
-            if(loanApplication.Address != null)
+            if (loanApplication.Address != null)
             {
                 loan.Address = loanApplication.Address;
                 loan.Address.AddressType = "LCA"; // loan communication address
@@ -252,13 +144,13 @@ namespace QuickLoanAPI.Data
             var serverKey = femSettings["userServerKey"];
             var senderId = femSettings["userSenderID"];
             var webUrl = femSettings["webAddress"];
-            var message = "We have received your loan application and sent a notification to the Loan Officer.";
+            var message = "We have received your appraosal application and the mortgage expert has been notified.";
             var notification = new NotificationManager();
             notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
 
-             serverKey = femSettings["bankerServerKey"];
-             senderId = femSettings["bankerSenderID"];
-            message = "A application has been received. Please review and take the necessary actions. RefId:" + loan.ReferenceNo;
+            serverKey = femSettings["bankerServerKey"];
+            senderId = femSettings["bankerSenderID"];
+            message = "A new Appraisal application has been added to your queue. RefId:" + loan.ReferenceNo;
             var receiver = _quickLoanDbContext.Users.Where(u => u.UserType == 1).FirstOrDefault();
             notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, receiver.NotificationRegId, message);
 
@@ -297,14 +189,14 @@ namespace QuickLoanAPI.Data
                  .Where(loan => loan.Account.OnlineUser.Id == userId)).OrderByDescending(loan => loan.Id).FirstOrDefault();
             return loanRequest.ReferenceNo;
         }
-        public List<Model.DbEntity.LoanApplication> GetLoanHistory(int userId, bool isLoanRequest )
+        public List<Model.DbEntity.LoanApplication> GetLoanHistory(int userId, bool isLoanRequest)
         {
             var status = isLoanRequest ? "LU" : "AC";
             var loanRequest = (_quickLoanDbContext.LoanApplications
                 .Include(loan => loan.Account)
                 .Include(loan => loan.Account.OnlineUser)
-                .Include( loan => loan.Property)
-                .Include( loan => loan.Property.PropertyAddress))
+                .Include(loan => loan.Property)
+                .Include(loan => loan.Property.PropertyAddress))
                 .Where(loan => loan.Account.OnlineUser.Id == userId && loan.Status == status).ToList();
             return loanRequest;
         }
