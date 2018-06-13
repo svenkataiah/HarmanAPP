@@ -58,18 +58,22 @@ namespace QuickLoanAPI.Data
             }
             context.SaveChanges();
 
-            var users = new User[]
-          {
-              new User
-              {
-                  UserId = "marisa",
-                  UserType = 1,
-                  Password = "marisa",
-              }
-          };
-            foreach (User user in users)
+            var bankOfficers = new BankOfficer[]
+           {
+            new BankOfficer{
+            FirstName = "MARISA",
+            LastName = "CORNER",
+            Branch ="BR0002",
+            OnlineUser = new User{
+                UserId = "marisa",
+                Password = "marisa",
+                UserType = 1
+            } }
+           };
+            
+            foreach (BankOfficer bo in bankOfficers)
             {
-                context.Users.Add(user);
+                context.BankerOfficers.Add(bo);
             }
             context.SaveChanges();
         }

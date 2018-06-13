@@ -20,7 +20,22 @@ namespace QuickLoanAPI.Data
             if (result.Any())
             {
                 var resultList = result.ToList();
-                var account = _context.Accounts.Select(item => item).Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                if (resultList[0].UserType == 1)
+                {
+                    var banker = _context.BankerOfficers.Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                    if (banker != null)
+                    {
+                        return new UserInfo
+                        {
+                            isAuthenticated = true,
+                            UserId = resultList[0].Id,
+                            FirstName = banker.FirstName,
+                            LastName = banker.LastName,
+                            Branch = banker.Branch
+                        };
+                    }
+                 }
+                var account = _context.Accounts.Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
                 if (account != null)
                 {
                     return new UserInfo
