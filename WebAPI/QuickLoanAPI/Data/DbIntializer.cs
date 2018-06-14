@@ -22,7 +22,6 @@ namespace QuickLoanAPI.Data
 
             InitialiseLoanOptions(context);
         }
-
         private static void IntialiseBanker(QuickLoanDbContext context)
         {
             var bankOfficers = new BankOfficer[]
@@ -30,7 +29,11 @@ namespace QuickLoanAPI.Data
             new BankOfficer{
             FirstName = "ERIC",
             LastName = "JHON",
-            Branch ="BR0002",
+            Branch =new Branch
+               {
+                   BranchCode="BR0002",
+                   Name = "Branch 2"
+               },
             OnlineUser = new User{
                 UserId = "eric",
                 Password = "eric",
@@ -71,7 +74,11 @@ namespace QuickLoanAPI.Data
                 ZipCode =""
             }
             },
-            Branch ="BR0001",
+            Branch = new Branch
+               {
+                   BranchCode="BR0001",
+                   Name = "Branch 1"
+               },
             OnlineUser = new User{
                 UserId = "amurphy",
                 Password = "murphy",

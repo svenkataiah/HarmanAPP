@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using QuickHomeLoanAPI.Model;
 using QuickLoanAPI.Model;
 
@@ -19,7 +20,9 @@ namespace QuickLoanAPI.Data
                 var resultList = result.ToList();
                 if (resultList[0].UserType == 1)
                 {
-                    var banker = _context.BankerOfficers.Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                    var banker = _context.BankerOfficers
+                        .Include(bo => bo.Branch)
+                        . Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
                     if (banker != null)
                     {
                         return new UserInfo
@@ -28,11 +31,13 @@ namespace QuickLoanAPI.Data
                             UserId = resultList[0].Id,
                             FirstName = banker.FirstName,
                             LastName = banker.LastName,
-                            Branch = banker.Branch
+                            Branch = banker.Branch.BranchCode
                         };
                     }
                  }
-                var account = _context.Accounts.Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                var account = _context.Accounts
+                     .Include(ac => ac.Branch)
+                     .Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
                 if (account != null)
                 {
                     return new UserInfo
@@ -41,7 +46,7 @@ namespace QuickLoanAPI.Data
                         UserId = account.OnlineUser.Id,
                         FirstName = account.FirstName,
                         LastName = account.LastName,
-                        Branch = account.Branch,
+                        Branch = account.Branch.BranchCode,
                         AccountNumber = account.Number
                     };
                 }

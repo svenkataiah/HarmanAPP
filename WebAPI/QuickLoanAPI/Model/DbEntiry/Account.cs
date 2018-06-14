@@ -9,7 +9,8 @@ namespace QuickLoanAPI.Model.DbEntity
     {
         public int Id { get; set; }
         public string Number { get; set; }
-        public string Branch
+        public int BranchId { get; set; }
+        public Branch Branch
         {
             get;
             set;

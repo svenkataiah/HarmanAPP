@@ -25,6 +25,9 @@ namespace QuickLoanAPI.Model.DbEntity
         public string PassportNo { get; set; }
         public string StateDLNo { get; set; }
 
+        public User AssignedTo { get; set; }
+        public int AssignedToId { get; set; }
+        public string AssignedBranch { get; set; } // This Needs to be removed and added as branch relations 
         public List<Document> Documents
         {
             get;

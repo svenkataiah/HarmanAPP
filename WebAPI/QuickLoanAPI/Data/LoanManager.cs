@@ -69,34 +69,38 @@ namespace QuickLoanAPI.Data
                      new Document
                     {
                         DocumentType = "Passport",
-                    },
-                      new Document
-                    {
-                        DocumentType = "Payslip",
                     }
                 };
         }
         public string CreateLoanRequest(LoanRequest loanRequest)
         {
             var account = (_quickLoanDbContext.Accounts
-                           .Include(item => item.OnlineUser))
+                           .Include(item => item.OnlineUser)
+                            .Include(item => item.Branch))
                            .Where(item => item.OnlineUser.Id == loanRequest.UserId).FirstOrDefault();
             var propMgr = new PropertyManager();
             var loan = _quickLoanDbContext.LoanApplications.LastOrDefault();
-            var refNumber = account.Branch + "HL";
+            var refNumber = account.Branch.BranchCode + "HL";
             string sequenceNumber = "0000001";
             if (loan != null)
             {
                 sequenceNumber = "0000000" + loan.Id.ToString();
             }
             refNumber += sequenceNumber.Substring(sequenceNumber.Length - 5);
+            var receiver = _quickLoanDbContext.Users.Where(u => u.UserType == 1).FirstOrDefault();
+            var receiverBranch = _quickLoanDbContext.BankerOfficers
+                .Include(bo => bo.Branch)
+                .Include(bo => bo.OnlineUser)
+                .Where(bo => bo.OnlineUser.Id == receiver.Id).FirstOrDefault();
             var loanApplication = new Model.DbEntity.LoanApplication
             {
                 Account = account,
                 LoanOptions = GetLoanOptions(),
                 Property = propMgr.GetPropertyDetail(loanRequest.Address),
                 ReferenceNo = refNumber,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
+                AssignedTo = receiver,
+                AssignedBranch = receiverBranch.Branch.Name,
                 Status = "LU"
             };
             _quickLoanDbContext.LoanApplications.Add(loanApplication);
@@ -216,7 +220,8 @@ namespace QuickLoanAPI.Data
                 .Include(loan => loan.Account.OnlineUser)
                 .Include(loan => loan.Property)
                 .Include(loan => loan.Property.PropertyAddress))
-                .Where(loan => loan.Account.OnlineUser.Id == userId && loan.Status == status).ToList();
+                .Include(loan => loan.AssignedTo)
+                .Where(loan => loan.Account.OnlineUser.Id == userId && loan.Status == status).OrderByDescending(loan => loan.Id).ToList();
             return loanRequest;
         }
     }

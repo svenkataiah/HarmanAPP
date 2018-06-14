@@ -3,7 +3,8 @@
     public class BankOfficer
     {
         public int Id { get; set; }
-        public string Branch
+        public int BranchId { get; set; }
+        public Branch Branch
         {
             get;
             set;
