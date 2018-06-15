@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace QuickLoanAPI.Model.DbEntity
+﻿namespace QuickLoanAPI.Model.DbEntity
 {
-    public class Account
+    public class BankOfficer
     {
         public int Id { get; set; }
-        public string Number { get; set; }
         public int BranchId { get; set; }
         public Branch Branch
         {
@@ -17,7 +11,6 @@ namespace QuickLoanAPI.Model.DbEntity
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<Address> Addresses { get; set; }
         public User OnlineUser { get; set; }
     }
 }

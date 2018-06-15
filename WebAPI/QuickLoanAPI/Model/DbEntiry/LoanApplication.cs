@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace QuickLoanAPI.Model.DbEntity
 {
@@ -6,6 +7,7 @@ namespace QuickLoanAPI.Model.DbEntity
     {
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
+        public DateTime CreatedDate { get; set; }
         public Account Account
         {
             get;
@@ -23,6 +25,9 @@ namespace QuickLoanAPI.Model.DbEntity
         public string PassportNo { get; set; }
         public string StateDLNo { get; set; }
 
+        public User AssignedTo { get; set; }
+        public int AssignedToId { get; set; }
+        public string AssignedBranch { get; set; } // This Needs to be removed and added as branch relations 
         public List<Document> Documents
         {
             get;

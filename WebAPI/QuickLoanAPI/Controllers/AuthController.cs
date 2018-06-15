@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using QuickHomeLoanAPI.Data;
-using QuickHomeLoanAPI.Model;
+﻿using Microsoft.AspNetCore.Mvc;
 using QuickLoanAPI.Data;
 using QuickLoanAPI.Model;
 

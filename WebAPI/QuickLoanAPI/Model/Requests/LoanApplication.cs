@@ -10,7 +10,7 @@ namespace QuickHomeLoanAPI.Model
         {
 
         }
-        public string ReferenceId { get; set; }
+        public string ReferenceNo { get; set; }
 
         // Personal Information
         public string AccountNumber { get; set; }

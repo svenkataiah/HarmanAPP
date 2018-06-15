@@ -20,12 +20,12 @@ namespace QuickHomeLoanAPI.Manager
 		public NotificationManager()
 		{
 		}
-		public String SendNotificationFromFirebaseCloud(string registrationId, string message)
+		public String SendNotificationFromFirebaseCloud(string webAddr, string serverKey,string senderId, string registrationId, string message)
 		{
 			var result = "-1";
-			var serverKey = "AIzaSyAHaXxhR2bPClCvXkPcf1zOFIV6H4d6OBI";
-			var senderId = "623706415166";
-			var webAddr = "https://fcm.googleapis.com/fcm/send";
+			//var serverKey = "AIzaSyAHaXxhR2bPClCvXkPcf1zOFIV6H4d6OBI";
+			//var senderId = "623706415166";
+			//var webAddr = "https://fcm.googleapis.com/fcm/send";
 			var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
 			httpWebRequest.ContentType = "application/json";
 			httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", serverKey));
@@ -34,7 +34,7 @@ namespace QuickHomeLoanAPI.Manager
 
 			using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
 			{
-				var regID = registrationId ;// "edIcORW6tYc:APA91bGtJXmYiguuxJNoIh5d9zV0cZPQyHXcRvwlZm3IQFZ_ytkloUIgSUErK3IpKCeRp7uDrkJUguEHUBOicegmpffo8plFIB3MiXKV5Kbc3xt6WA_aNFIR_7BL3nIO3L-tJMlTxeCP";
+				var regID = registrationId ;
 				string json = "{\"registration_ids\": [\"" + regID + "\"],\"data\": {\"message\": \"" +message+ "\",}}";
 				streamWriter.Write(json);
 				streamWriter.Flush();

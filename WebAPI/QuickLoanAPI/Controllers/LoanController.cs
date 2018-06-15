@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using QuickHomeLoanAPI.Manager;
 using QuickHomeLoanAPI.Model;
 using QuickLoanAPI.Data;
 
@@ -34,6 +30,12 @@ namespace QuickHomeLoanAPI.Controllers
             var loans = loanMgr.GetLoanHistory(userId, isRequest);
             return Ok(loans);
         }
+        [HttpGet("latestRefNo/{userId}")]
+        public IActionResult GetLatestLoanRefNo(int userId)
+        {
+            var loanMgr = new LoanManager(_context, _configuration);
+            return Ok(new { refNo = loanMgr.GetLatestLoanId(userId) });
+        }
         // GET api/loan/5
         [HttpGet("details/{loanId}/{isRequest}")]
         public IActionResult GetLoanDetails(string loanId, bool isRequest)
@@ -47,18 +49,18 @@ namespace QuickHomeLoanAPI.Controllers
             return Ok(loan);
         }
         // POST api/loan
-        [HttpPost("update")]
-        public IActionResult UpdateLoanRequest([FromBody]LoanApplication loanApplication)
+        [HttpPost("update/{isSave}")]
+        public IActionResult UpdateLoanRequest(bool isSave, [FromBody]LoanApplication loanApplication)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(loanMgr.UpdateLoanRequest(loanApplication));
+            return Ok(new { refNo = loanMgr.UpdateLoanRequest(loanApplication, isSave) });
         }
         // POST api/loan
         [HttpPost("create")]
 		public IActionResult CreateLoanRequest([FromBody]LoanRequest loanRequest)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(loanMgr.CreateLoanRequest(loanRequest));
+            return Ok(new { refNo = loanMgr.CreateLoanRequest(loanRequest) });
         }
         [HttpPost]
         [Route("uploadfile")]

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using QuickHomeLoanAPI.Model;
 using QuickLoanAPI.Model;
 
@@ -20,7 +18,26 @@ namespace QuickLoanAPI.Data
             if (result.Any())
             {
                 var resultList = result.ToList();
-                var account = _context.Accounts.Select(item => item).Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                if (resultList[0].UserType == 1)
+                {
+                    var banker = _context.BankerOfficers
+                        .Include(bo => bo.Branch)
+                        . Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
+                    if (banker != null)
+                    {
+                        return new UserInfo
+                        {
+                            isAuthenticated = true,
+                            UserId = resultList[0].Id,
+                            FirstName = banker.FirstName,
+                            LastName = banker.LastName,
+                            Branch = banker.Branch.BranchCode
+                        };
+                    }
+                 }
+                var account = _context.Accounts
+                     .Include(ac => ac.Branch)
+                     .Where(item => item.OnlineUser.Id == resultList[0].Id).FirstOrDefault();
                 if (account != null)
                 {
                     return new UserInfo
@@ -29,7 +46,7 @@ namespace QuickLoanAPI.Data
                         UserId = account.OnlineUser.Id,
                         FirstName = account.FirstName,
                         LastName = account.LastName,
-                        Branch = account.Branch,
+                        Branch = account.Branch.BranchCode,
                         AccountNumber = account.Number
                     };
                 }
