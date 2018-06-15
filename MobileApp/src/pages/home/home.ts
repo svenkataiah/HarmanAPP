@@ -8,7 +8,10 @@ import { HttpClient } from '@angular/common/http';
 import { NearByPlacesProvider } from '../../providers/near-by-places/near-by-places';
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
 import { UserInfoPage } from '../user-info/user-info';
+import { Storage } from '@ionic/storage';
+
 declare var google;
+const client_url = 'http://quickloanapi.azurewebsites.net';
 // picture options
 const pictureOpts: CameraPreviewPictureOptions = {
   width: 1280,
@@ -43,7 +46,8 @@ export class HomePage {
     private nearByPlacesProvider: NearByPlacesProvider,
     private currentLocationProvider: CurrentLocationProvider,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private storage: Storage
   ) {
 
   }
@@ -92,6 +96,7 @@ export class HomePage {
     this.scanPropertyToggle = false;
     this.currentLocationProvider.getCurrentLocation()
       .then((response) => {
+        this.storage.set('latlng', response);
         if (response.coords.latitude && response.coords.longitude) {
           this.getNearByPlaces(response.coords.latitude, response.coords.longitude);
           this.getCurrentLocationAddress(response.coords.latitude, response.coords.longitude);
@@ -102,20 +107,53 @@ export class HomePage {
           this.apiError = true;
           this.apiErrorMsg = err;
           console.log(err);
+          this.loading.dismiss();
+          this.showAlert(err['PositionError']['message']);
         });
   }
 
 
   //Get Curremnt address using lat and lng
   getCurrentLocationAddress(lat, lng) {
+    var propertyLocationObject = {};
     var _this = this;
     var geocoder = new google.maps.Geocoder();
     var latLng = new google.maps.LatLng(lat, lng);
     if (geocoder) {
       geocoder.geocode({ 'latLng': latLng }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          console.log(results[0].formatted_address);
+          console.log(results[0]);
           _this.currentLocation = results[0].formatted_address;
+          for (var ac = 0; ac < results[0].address_components.length; ac++) {
+            var component = results[0].address_components[ac];
+            switch (component.types[0]) {
+              case 'street_number':
+                propertyLocationObject['address'] = component.long_name;
+                break;
+              case 'route':
+                propertyLocationObject['address1'] = component.long_name;
+                break;
+              case 'locality':
+                propertyLocationObject['city'] = component.long_name;
+                break;
+              case 'administrative_area_level_1':
+                propertyLocationObject['state'] = component.long_name;
+                break;
+              case 'country':
+                propertyLocationObject['country'] = component.long_name;
+                break;
+              case 'postal_code':
+                propertyLocationObject['zipCode'] = component.short_name;
+                break;
+              default:
+                propertyLocationObject['streetAddress'] = results[0].formatted_address;
+
+            }
+          };
+
+          console.log(propertyLocationObject);
+          _this.storage.set('propertyAddress', propertyLocationObject);
+
         }
         else {
           console.log("Geocoding failed: " + status);
@@ -123,7 +161,6 @@ export class HomePage {
       }); //geocoder.geocode()
     } else {
       this.errorMessage = 'probelm in loading address';
-
     }
   }
 
@@ -131,7 +168,9 @@ export class HomePage {
   //Get near by places
   getNearByPlaces(lat, lng) {
     //loop by places types
+    var placeTypeCount = 0;
     this.nearByPlaceType.forEach((el) => {
+      placeTypeCount++;
       this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
         .subscribe((response) => {
           console.log(response);
@@ -139,7 +178,6 @@ export class HomePage {
           //add distance to nearby location
           var count = 0;
           nearByplacesResponse.forEach((element, i) => {
-
             if (element.types[0] == el && count < 1) { // check type and take first object
               count++;
               //calculate distance
@@ -152,7 +190,7 @@ export class HomePage {
           });
           count = 0;
           this.loadingIcon = false;
-          this.loading.dismiss();
+
         },
           (error) => {
             this.errorMessage = error;
@@ -164,6 +202,9 @@ export class HomePage {
         );
     });
 
+    if (placeTypeCount > 5) {
+      this.loading.dismiss();
+    }
 
     console.log(this.nearbyLocationsStock)
     console.log(this.nearbyPlaces);
@@ -197,6 +238,7 @@ export class HomePage {
   }
 
   viewMap() {
+    this.cameraPreview.stopCamera();
     var data = {
       data: {
         nearbyPlaces: JSON.stringify(this.nearbyPlaces),
@@ -211,7 +253,6 @@ export class HomePage {
   }
 
   ionViewDidLeave() {
-    this.cameraPreview.stopCamera();
     this.scanPropertyToggle = true;
     this.nearbyPlaces = [];
   }
@@ -219,7 +260,7 @@ export class HomePage {
   showAlert(error) {
     let alert = this.alertCtrl.create({
       title: 'Api Error',
-      subTitle: this.apiErrorMsg,
+      subTitle: error,
       buttons: ['OK']
     });
     alert.present();
@@ -227,7 +268,7 @@ export class HomePage {
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Fetching nearby places...',
+      content: 'Fetching nearby places',
       spinner: 'dots'
     });
 

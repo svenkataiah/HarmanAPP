@@ -13,49 +13,94 @@
 </ion-header>
 
 <ion-content>
-  <form>
+  <form *ngIf="loanFormDetails">
 
     <ion-item-group>
       <ion-item-divider color="light">Upload Documents</ion-item-divider>
       <ion-item>
         <p>{{imageURI}}</p>
-        <button ion-button color="secondary" (click)="getImage()">Get Image</button>
-        <button ion-button color="secondary" (click)="openFiles()">Get Files</button>
+        <button ion-button color="secondary" (click)="getImage()">From Phome</button>
+        <button ion-button color="secondary" (click)="captureImage()">From Camera</button>
       </ion-item>
       <ion-item>
-        <h4>Image Preview</h4>
-        <img src="{{imageFileName}}" *ngIf="imageFileName" alt="Ionic File" width="300" />
+        <h4>Document Preview</h4>
+        <img [src]="imageData" />
+        <div class="row">
+            <button ion-button *ngIf="imageData" (click)="uploadImages()" button-center>Verify</button>
+        </div>
       </ion-item>
-      <ion-item>
-        <button ion-button (click)="uploadFile()">Upload</button>
-      </ion-item>
+
+      <ion-list class="verification">
+          <ion-item>
+            Driving License
+            <button ion-button item-end icon-left color="{{dlVerification?'secondary':'danger'}}">
+              <ion-icon name="success"></ion-icon>
+              <div *ngIf="dlVerification && loanFormDetails.stateDLNo">
+                <img src="assets/icon/success.png">
+              </div>
+              <div *ngIf="!dlVerification && !loanFormDetails.stateDLNo">
+                <img src="assets/icon/error.png">
+              </div>
+            </button>
+          </ion-item>
+          <ion-item>
+            Passport
+            <button ion-button item-end icon-left color="{{passportVerification?'secondary':'danger'}}">
+              <div *ngIf="passportVerification && loanFormDetails.passportNo">
+                <img src="assets/icon/success.png">
+              </div>
+              <div *ngIf="!passportVerification && !loanFormDetails.passportNo">
+                <img src="assets/icon/error.png">
+              </div>
+            </button>
+          </ion-item>
+        </ion-list>
+
     </ion-item-group>
+   
+
+    <ion-item-group>
+        <ion-item-divider color="light">Verification Details</ion-item-divider>
+        <ion-item>
+          <ion-label floating>Passport No</ion-label>
+          <ion-input type="text" name="passportNumber" [(ngModel)]="loanFormDetails.passportNo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Driving License</ion-label>
+          <ion-input type="text" name="dl" [(ngModel)]="loanFormDetails.stateDLNo"></ion-input>
+        </ion-item>
+        <ion-item>
+          &nbsp;
+        </ion-item>
+      </ion-item-group>
 
     <ion-item-group>
       <ion-item-divider color="light">Personal Information</ion-item-divider>
+      <!-- {{loanFormDetails.account}} {{loanFormDetails.account.addresses[0]}} -->
       <ion-item>
         <ion-label floating>Account Number</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="accountNumber" readonly [(ngModel)]="loanFormDetails.account.number"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>First Name </ion-label>
-        <ion-input type="text" name="firstName" [(ngModel)]="firstName"></ion-input>
+        <ion-input type="text" #name name="firstName" [(ngModel)]="loanFormDetails.account.firstName"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Last name</ion-label>
-        <ion-input type="text" name="lastName" [(ngModel)]="lastName"></ion-input>
+        <ion-input type="text" name="lastName" [(ngModel)]="loanFormDetails.account.lastName"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>Address</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-label floating>Address Line1</ion-label>
+         
+        <ion-input type="text" name="address" [(ngModel)]="accountAddress.streetAddress"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>SSN</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
+          <ion-label floating>Address Line2</ion-label>
+          <ion-input type="text" name="address1" [(ngModel)]="accountAddress.streetAddress1"></ion-input>
+        </ion-item>
       <ion-item>
         <ion-label floating>Account with Branch</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="branch" [(ngModel)]="loanFormDetails.account.branch.name"></ion-input>
       </ion-item>
       <ion-item>
         &nbsp;
@@ -66,27 +111,31 @@
       <ion-item-divider color="light">Information of the property</ion-item-divider>
       <ion-item>
         <ion-label floating>Address Line1</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="addressLine"  [(ngModel)]="propertyAddress.streetAddress"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Address Line2</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="addressLine1" [(ngModel)]="propertyAddress.streetAddress1"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Country</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="country" [(ngModel)]="propertyAddress.country"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>State</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="state" [(ngModel)]="propertyAddress.state"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>City</ion-label>
+        <ion-input type="text" name="city" [(ngModel)]="propertyAddress.city"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Zip</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="zip" [(ngModel)]="loanFormDetails.property.propertyAddress.zipCode"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>APN</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="apn" readonly [(ngModel)]="loanFormDetails.property.apn"></ion-input>
       </ion-item>
       <ion-item>
         &nbsp;
@@ -96,32 +145,34 @@
     <ion-item-group>
       <ion-item-divider color="light">Employment Details</ion-item-divider>
       <ion-item>
-        <ion-label floating>Name of the employer</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-label floating>Name of the Employer</ion-label>
+        <ion-input type="text" name="employerName" [(ngModel)]="loanFormDetails.employerName"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Monthly salary</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" name="salary" [(ngModel)]="loanFormDetails.monthlySalary"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Total Year Experience</ion-label>
+        <ion-input type="text" name="experience" [(ngModel)]="loanFormDetails.noofYearsExp"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Employer Phone</ion-label>
+        <ion-input type="text" name="phone" [(ngModel)]="loanFormDetails.employerPhone"></ion-input>
       </ion-item>
       <ion-item>
         &nbsp;
       </ion-item>
     </ion-item-group>
-
-    <ion-item-group>
-      <ion-item-divider color="light">Verification Details</ion-item-divider>
-      <ion-item>
-        <ion-label floating>Passport No</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Driving License</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        &nbsp;
-      </ion-item>
-    </ion-item-group>
-    <button ion-button type="submit" block>Submit</button>
+    <ion-row class="row">
+      <ion-col class="col">
+          <button ion-button type="submit" (click)="submitApplication(loanFormDetails)" block>Save</button>
+      </ion-col>
+      <ion-col class="col">
+          <button ion-button type="submit" (click)="saveApplication(loanFormDetails)" block>Submit</button>
+        </ion-col>
+    </ion-row>
+    
+    
   </form>
 </ion-content>

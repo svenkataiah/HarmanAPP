@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title text-center>Loan Details</ion-title>
+    <ion-title text-center>Loan Eligibility</ion-title>
     <ion-buttons end class="user-btn" (click)="userInfo()">
       <button ion-button icon-only>
         <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
@@ -20,52 +20,57 @@
       <img src="assets/imgs/LoanEligibility/AccountInformationDark-01.png" /> Account Info
     </ion-segment-button>
     <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')" class="segment-button">
-      <img src="assets/imgs/LoanEligibility/LoanEligibilityDark-01.png" /> Loan Eligibility
+      <img src="assets/imgs/LoanEligibility/LoanEligibilityDark-01.png" /> Loan Schedule
     </ion-segment-button>
   </ion-segment>
   
-  <ion-grid *ngIf="tabStatus=='ownerInfo'" class="owner-info">
+  <ion-grid *ngIf="tabStatus=='ownerInfo' && loanDetails" class="owner-info">
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/AccountInfo/user.png" /> Name
+        <img src="assets/imgs/AccountInfo/user.png" />
+        <span> Name </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.loanBasicInfo?.name}}
+        {{loanDetails?.account?.firstName}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/AccountInfo/accountnumber.png" />Account Number
+        <img src="assets/imgs/AccountInfo/accountnumber.png" />
+        <span> Account Number </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.loanBasicInfo?.accountNumber}}
+        {{loanDetails?.account?.number}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/AccountInfo/propertyaddress.png" /> Property Address
+        <img src="assets/imgs/AccountInfo/propertyaddress.png" />
+        <span> Property Address </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.loanBasicInfo?.propertyAddress}}
+        {{loanDetails?.property?.propertyAddress?.fullAddress}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/AccountInfo/requireddocuments.png" />Required Documents
+        <img src="assets/imgs/AccountInfo/requireddocuments.png" />
+        <span> Required Documents </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.loanBasicInfo?.requiredDocuments[0]}}
-        <br> {{loanDetails?.loanBasicInfo?.requiredDocuments[1]}}
-        <br> {{loanDetails?.loanBasicInfo?.requiredDocuments[2]}}
+        {{loanDetails?.documents[0]?.documentType}}
+        <br>  {{loanDetails?.documents[1]?.documentType}}
+        <br> {{loanDetails?.documents[2]?.documentType}}
         <br>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/AccountInfo/comments.png" />Other Comments From CU
+        <img src="assets/imgs/AccountInfo/comments.png"/>
+        <span> Comments From Bank </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.loanBasicInfo?.comments}}
+        {{loanDetails?.comments}}
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -99,12 +104,12 @@
               Interest Rate
             </ion-col>
             <ion-col class="col">
-              {{loan?.interestRate | currency:'USD':true:'4.2-2'}}
+              {{loan?.interestRate}} %
             </ion-col>
           </ion-row>
           <ion-row class="row">
             <ion-col class="col">
-              EMI Amount
+              Monthly Payment
             </ion-col>
             <ion-col class="col">
               {{loan?.emiAmount | currency:'USD':true:'4.2-2'}}
@@ -115,7 +120,7 @@
               Loan Schedule
             </ion-col>
             <ion-col class="col">
-              <a href="#" (click)="loanSchedule(loan.loanSchedule,i)">Click Here</a>
+              <a href="#" (click)="loanSchedule(loan.id,loan.loanSchedule,i,loan?.tenure)">Click Here</a>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -126,10 +131,10 @@
   <ion-grid class="basic-info" *ngIf="tabStatus=='loanTenureDetails'">
     <ion-row class="row">
       <ion-col class="col" text-center>
-        <h6>Loan Tenure {{loanTenureDetails.index+1}} </h6>
+        <h6>Loan Tenure - {{tenure}} </h6>
       </ion-col>
     </ion-row>
-    <ion-scroll scrollX="true" zoom="true">
+    <ion-scroll scrollX="true" scrollY="true" zoom="true">
       <table>
         <thead>
           <tr>
@@ -143,7 +148,7 @@
           <tr *ngFor="let loanTenure of loanTenureDetails">
             <td style="text-transform: uppercase">{{loanTenure?.tenureYear}}</td>
             <td text-right>{{loanTenure?.principalPaid | currency:'USD':true:'4.2-2'}}</td>
-            <td text-right>{{loanTenure?.interestPaid | currency:'USD':true:'4.2-2'}}</td>
+            <td text-right>{{loanTenure?.interestPaid | currency:'USD':true:'4.2-2' }}</td>
             <td text-right>{{loanTenure?.balance | currency:'USD':true:'4.2-2'}}</td>
           </tr>
         </tbody>
@@ -175,7 +180,7 @@
   <ion-toolbar>
 
     <ion-buttons text-center>
-      <button ion-button class="navigation-btn" (click)="applyLoan()">
+      <button ion-button class="navigation-btn {{loanDetails.status=='AC'?'btnDisabled':''" [disabled]="loanDetails.status=='AC'" (click)="applyLoan()">
         <span class="btn-text">Apply Loan</span>
       </button>
     </ion-buttons>

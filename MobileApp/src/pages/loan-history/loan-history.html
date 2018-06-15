@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title text-center>Loan History</ion-title>
+      <ion-buttons end class="user-btn" (click)="userInfo()">
+        <button ion-button icon-only>
+          <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>
+        <ion-item *ngFor="let details of loanHistoryDetails" (click)="itemSelected()">
+          <h2>{{details?.referenceNo}}</h2>
+          <p>{{details?.property?.propertyAddress.fullAddress}}</p>
+          <span class="pull-right">{{details?.createdDate | date:'dd MMM yyyy HH:mm aa'}}</span>
+        </ion-item>
+      </ion-list>
+  </ion-content>

@@ -4,12 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title text-center>Property Details
-      </ion-title>
-        <ion-buttons end class="user-btn" (click)="userInfo()">
-          <button ion-button icon-only>
-            <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
-          </button>
-        </ion-buttons>
+    </ion-title>
+    <ion-buttons end class="user-btn" (click)="userInfo()">
+      <button ion-button icon-only>
+        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -27,69 +27,68 @@
     </ion-segment-button>
   </ion-segment>
 
-  <ion-grid *ngIf="tabStatus=='ownerInfo'" class="owner-info">
+  <ion-grid *ngIf="tabStatus=='ownerInfo' && propertyDetails" class="owner-info">
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/real-state-seller.png" /> Owner
+        <img src="assets/imgs/OwnerInfo/real-state-seller.png" />
+        <span> Owner</span>
       </ion-col>
       <ion-col>
-        {{ownerInfo?.name}}
+        {{propertyDetails?.ownerFirstName}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/home.png" /> Property Type
+        <img src="assets/imgs/OwnerInfo/home.png" />
+        <span> Property Type</span>
       </ion-col>
       <ion-col>
-        Single Family Home
+        {{propertyDetails?.propertyType}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/calendar.png" /> Year Built
+        <img src="assets/imgs/OwnerInfo/calendar.png" />
+        <span> Year Built</span>
       </ion-col>
       <ion-col>
-        {{characteristics?.yearBuilt}}
+        {{propertyDetails?.yearBuilt}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/house-with-dollar-sign.png" /> Last Sold
+        <img src="assets/imgs/OwnerInfo/house-with-dollar-sign.png" />
+        <span> Last Sold </span>
       </ion-col>
       <ion-col>
-        $ 185,000.00
+        {{propertyDetails?.lastSold | currency:'USD':true:'4.2-2'}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/price-tag.png" /> Price Per sqft
+        <img src="assets/imgs/OwnerInfo/price-tag.png" />
+        <span> Price Per sqft </span>
       </ion-col>
       <ion-col>
-        {{dimensions?.lotAreaSquareFeet}}
+        {{propertyDetails?.pricePerSqrt | currency:'USD':true}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/style.png" /> Style
+        <img src="assets/imgs/OwnerInfo/style.png" />
+        <span> Style </span>
       </ion-col>
       <ion-col>
-        Single Family Residency
+        {{propertyDetails?.propertyStyle}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/last mortgage.png" />Last Mortgaged
+        <img src="assets/imgs/OwnerInfo/last mortgage.png" />
+        <span> Last Mortgaged </span>
       </ion-col>
       <ion-col>
-        -
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col class="heading">
-        <img src="assets/imgs/OwnerInfo/other comment.png" /> Other Comments
-      </ion-col>
-      <ion-col>
-        -
+        {{propertyDetails?.lastMortgaged | currency:'USD':true:'4.2-2'}}
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -114,31 +113,34 @@
 
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223515M-1524302078.jpeg"
-        />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC1.jpg')" src="http://virtiledge.com/gallery/POC1.jpg" />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223501O-1524306077.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223501O-1524306077.jpeg"
-        />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC2.jpg')" src="http://virtiledge.com/gallery/POC2.jpg" />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223521O-1524302014.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223521O-1524302014.jpeg"
-        />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC3.jpg')" src="http://virtiledge.com/gallery/POC3.jpg" />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223557O-1524302028.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223557O-1524302028.jpeg"
-        />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC4.jpg')" src="http://virtiledge.com/gallery/POC4.jpg" />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('https://mediacdn.99acres.com/6261/3/125223509O-1524302071.jpeg')" src="https://mediacdn.99acres.com/6261/3/125223509O-1524302071.jpeg"
-        />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC5.jpg')" src="http://virtiledge.com/gallery/POC5.jpg" />
       </ion-col>
       <ion-col>
-        &nbsp;
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC6.jpg')" src="http://virtiledge.com/gallery/POC6.jpg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC7.jpg')" src="http://virtiledge.com/gallery/POC7.jpg" />
+      </ion-col>
+      <ion-col>
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC8.jpg')" src="http://virtiledge.com/gallery/POC8.jpg" />
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -149,7 +151,8 @@
 <ion-footer>
   <ion-toolbar *ngIf="tabStatus=='gallery' || tabStatus=='ownerInfo'">
     <ion-buttons text-center>
-      <button ion-button class="navigation-btn" *ngIf="!interested" (click)="showConfirm()">
+      <button ion-button class="navigation-btn {{interestedBtn?'btnDisabled':''}}" *ngIf="!interested" [disabled]="interestedBtn"
+        (click)="showConfirm()">
         <span class="btn-text"> Interested In Property ? </span>
       </button>
     </ion-buttons>
@@ -161,25 +164,25 @@
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/BEDROOMS.png" />
           </div>
-          <div class="total"> 02</div>
+          <div class="total"> {{propertyDetails?.bedRoom}}</div>
         </ion-col>
         <ion-col class="property-info">
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/bath.png" />
           </div>
-          <div class="total"> 03</div>
+          <div class="total"> {{propertyDetails?.bathRoom}}</div>
         </ion-col>
         <ion-col class="property-info">
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/squarefeet.png" />
           </div>
-          <div class="total"> {{dimensions?.lotAreaSquareFeet}}</div>
+          <div class="total"> {{propertyDetails?.pricePerSqrt}}</div>
         </ion-col>
         <ion-col class="property-info">
           <div class="icon">
             <img src="assets/imgs/PropertyDetails/sqftlot.png" />
           </div>
-          <div class="total">5000</div>
+          <div class="total">{{propertyDetails?.lotAreaSquareFeet}}</div>
         </ion-col>
       </ion-row>
     </ion-grid>

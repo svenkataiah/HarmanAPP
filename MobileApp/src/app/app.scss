@@ -50,7 +50,7 @@
   .button,.navigation-btn{
     width: auto;
     color: #f3f1f1;
-    background-color: #2ec95c;
+    background-color: #0da8e4;
     text-align: center;
     margin: 0px auto;
 }
@@ -95,17 +95,20 @@ box-shadow: inset 10px 10px 120px -37px rgba(87,87,87,1);
 
 .loading-md .loading-wrapper{
   padding: 10px;
-  color: #2ec95c;
+  color: #0da8e4;
   //background-color: #2ec95c;
 }
 
 .loading-md .spinner-dots circle{
-  stroke: #2ec95c;
+  stroke: #0da8e4;
+}
+.loading-md .spinner-dots circle {
+  fill: #0da8e4;
 }
 
 ion-header{
   .toolbar-background{
-    background: #f27b35;
+    background: #006499;
   }
   .toolbar-title {
     color: #fff;
@@ -113,5 +116,20 @@ ion-header{
   .bar-button-default, .bar-button-clear-default, .bar-button-default{
     color: #fff;
   }
+}
+
+a {
+  color: #0da8e4;
+}
+
+.btnDisabled{
+  background: #b2b2b2;
+   padding: 0 5px;
+    border-radius: 2px;
+    height: 32px;
+    border: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
