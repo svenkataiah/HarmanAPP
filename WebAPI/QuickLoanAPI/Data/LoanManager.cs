@@ -117,7 +117,7 @@ namespace QuickLoanAPI.Data
 
             return refNumber;
         }
-        public string UpdateLoanRequest(QuickHomeLoanAPI.Model.LoanApplication loanApplication)
+        public string UpdateLoanRequest(QuickHomeLoanAPI.Model.LoanApplication loanApplication, bool isSave)
         {
             var loan = _quickLoanDbContext.LoanApplications
                 .Include(l => l.Address)
@@ -126,6 +126,7 @@ namespace QuickLoanAPI.Data
                 .Include(l => l.LoanOptions)
                 .Include(l => l.Documents)
                 .Include(l => l.Account)
+                .Include(l => l.AssignedTo)
                 .Include(l => l.Account.OnlineUser)
                 .Where(item => item.ReferenceNo == loanApplication.ReferenceNo).FirstOrDefault();
 
@@ -160,32 +161,46 @@ namespace QuickLoanAPI.Data
             {
                 loanOption.IsSelected = true;
             }
-            loan.Status = "AC";
+            if (!isSave)
+            {
+                loan.Status = "AC";
+            }
             _quickLoanDbContext.SaveChanges();
 
             var femSettings = _configuration.GetSection("fcmSettings");
-            var serverKey = femSettings["userServerKey"];
-            var senderId = femSettings["userSenderID"];
+            var serverKey = femSettings["bankerServerKey"];
+            var senderId = femSettings["bankerSenderID"];
             var webUrl = femSettings["webAddress"];
-            var message = "We have received your appraosal application and the mortgage expert has been notified.";
+            var message = "Loan Application has been initiated by "+ loan.Account.FirstName+" "+loan.Account.LastName+". RefId:" + loan.ReferenceNo;
             var notification = new NotificationManager();
-            notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
+            if (isSave)
+            {
+                notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.AssignedTo.NotificationRegId, message);
+            }
+            else
+            {
+                serverKey = femSettings["userServerKey"];
+                senderId = femSettings["userSenderID"];
+                message = "We have received your appraosal application and the mortgage expert has been notified.";
+                notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
 
-            serverKey = femSettings["bankerServerKey"];
-            senderId = femSettings["bankerSenderID"];
-            message = "A new Appraisal application has been added to your queue. RefId:" + loan.ReferenceNo;
-            var receiver = _quickLoanDbContext.Users.Where(u => u.UserType == 1).FirstOrDefault();
-            notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, receiver.NotificationRegId, message);
-
+                serverKey = femSettings["bankerServerKey"];
+                senderId = femSettings["bankerSenderID"];
+                message = "A new Appraisal application has been added to your queue. RefId:" + loan.ReferenceNo;
+                notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.AssignedTo.NotificationRegId, message);
+            }
             return loan.ReferenceNo;
         }
         public Model.DbEntity.LoanApplication GetLoanDetails(string loanRefId)
         {
             var loanRequest = (_quickLoanDbContext.LoanApplications
+                .Include( loan => loan.Address)
                  .Include(loan => loan.LoanOptions)
                 .Include(loan => loan.Property)
                 .Include(loan => loan.Documents)
                 .Include(loan => loan.Account)
+                  .Include(loan => loan.Account.Branch)
+                 .Include(loan => loan.Account.Addresses)
                  .Include(loan => loan.Property.PropertyAddress)
                  .Where(loan => loan.ReferenceNo == loanRefId)).FirstOrDefault();
 

@@ -49,11 +49,11 @@ namespace QuickHomeLoanAPI.Controllers
             return Ok(loan);
         }
         // POST api/loan
-        [HttpPost("update")]
-        public IActionResult UpdateLoanRequest([FromBody]LoanApplication loanApplication)
+        [HttpPost("update/{isSave}")]
+        public IActionResult UpdateLoanRequest(bool isSave, [FromBody]LoanApplication loanApplication)
         {
             var loanMgr = new LoanManager(_context, _configuration);
-            return Ok(new { refNo = loanMgr.UpdateLoanRequest(loanApplication) });
+            return Ok(new { refNo = loanMgr.UpdateLoanRequest(loanApplication, isSave) });
         }
         // POST api/loan
         [HttpPost("create")]
