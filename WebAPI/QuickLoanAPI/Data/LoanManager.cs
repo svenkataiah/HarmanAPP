@@ -101,7 +101,8 @@ namespace QuickLoanAPI.Data
                 CreatedDate = DateTime.UtcNow,
                 AssignedTo = receiver,
                 AssignedBranch = receiverBranch.Branch.Name,
-                Status = "LU"
+                Status = "LU",
+                Comments= "Yor are eligible for the loan."
             };
             _quickLoanDbContext.LoanApplications.Add(loanApplication);
             _quickLoanDbContext.SaveChanges();
@@ -181,7 +182,7 @@ namespace QuickLoanAPI.Data
             {
                 serverKey = femSettings["userServerKey"];
                 senderId = femSettings["userSenderID"];
-                message = "We have received your appraosal application and the mortgage expert has been notified.";
+                message = "We have received your appraisal application and the mortgage expert has been notified.";
                 notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
 
                 serverKey = femSettings["bankerServerKey"];
@@ -207,7 +208,7 @@ namespace QuickLoanAPI.Data
             loanRequest.LoanOptions.ForEach(lo =>
            {
                lo.LoanSchedule = _quickLoanDbContext.LoanSchedules
-               .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
+               .Where(ls => ls.LoanOptionsId == lo.Id).OrderBy(lo1 => lo1.LoanOptionsId).ThenBy(lo2 => lo2.TenureYear).ToList();
            });
             return loanRequest;
         }

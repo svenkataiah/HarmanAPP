@@ -11,12 +11,12 @@ namespace QuickLoanAPI.Data
             {
                 OwnerAddress = new Address
                 {
-                    FullAddress= "43 Mosely Ave, Staten Island, NY 10312",
-                    City = "Staten Island",
-                    State = "NY",
-                    ZipCode = "10312",
-                    StreetAddress = "43 Mosely Ave",
-                    StreetAddress1 = string.Empty
+                    FullAddress= "856 Yeshwanthpur Link Road, Opp to cash and carry, Bangalore, Karnataka, India - 560022",
+                    City = "Bangalore",
+                    State = "Karnataka",
+                    ZipCode = "560022",
+                    StreetAddress = "856 Yeshwanthpur Link Road",
+                    StreetAddress1 = "Opp to cash and carry"
                 },
                 PropertyAddress = address,
                 OwnerFirstName = "MATHEW",
@@ -24,9 +24,9 @@ namespace QuickLoanAPI.Data
                 OwnerPhone = "6986986986",
                 APN = "AKJHU8656876",
                 NoOfStories = "2",
-                YearBuilt = "2003",
+                YearBuilt = "2010",
                 LotAreaAcres = "0.1584",
-                LotAreaSquareFeet = "4500",
+                LotAreaSquareFeet = "2450",
                 LotAreaDepth = "",
                 LotAreaWidth = "",
                 AssessedValue = "97898",
@@ -38,12 +38,12 @@ namespace QuickLoanAPI.Data
                 TaxArea = "TX",
                 TotalTaxableValue = "879658",
                 PropertyType ="Single Family Home",
-                LastSold = "780000",
-                PricePerSqrt= "222",
+                LastSold = "10000000",
+                PricePerSqrt= "6122",
                 PropertyStyle = "Modern wooden building",
-                LastMortgaged = "670000",
-                BedRoom = 3,
-                BathRoom = 2
+                LastMortgaged = "6700000",
+                BedRoom = 4,
+                BathRoom = 4
             };
         }
     }
