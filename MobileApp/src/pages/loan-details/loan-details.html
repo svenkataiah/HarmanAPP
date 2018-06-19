@@ -149,25 +149,39 @@
             <td style="text-transform: uppercase">{{loanTenure?.tenureYear}}</td>
             <td text-right>{{loanTenure?.principalPaid | currency:'INR':true:'4.2-2'}}</td>
             <td text-right>{{loanTenure?.interestPaid | currency:'INR':true:'4.2-2' }}</td>
-            <td text-right>{{loanTenure?.balance | currency:'INR':true:'4.2-2'}}</td>
+            <td text-right *ngIf="loanTenure?.balance>0">{{loanTenure?.balance | currency:'INR':true:'4.2-2'}}</td>
+            <td text-right *ngIf="loanTenure?.balance==0"> 0 </td>
           </tr>
           <tr>
-            <th></th>
+            <th>Total</th>
             <th text-right>{{loanTenureDetails?.principalPaidTotal | currency:'INR':true:'4.2-2'}}</th>
             <th text-right>{{loanTenureDetails?.interestPaidTotal | currency:'INR':true:'4.2-2'}}</th>
-            <th text-right></th>
+            <th text-right>  </th>
           </tr>
         </tbody>
         <tfoot>
-
+<!-- 
           <tr>
-            <th colspan="3" text-left>YEARLY TOTAL</th>
-            <th text-right>{{loanTenureDetails?.yearlyTotal | currency:'INR':true:'4.2-2'}}</th>
+            <th colspan="2" text-left>Yearly Payment</th>
+            <th colspan="2">{{loanTenureDetails?.yearlyTotal | currency:'INR':true:'4.2-2'}}</th>
+          </tr> -->
+          <tr>
+            <th colspan="4" text-left>&nbsp;</th>
           </tr>
-
+          <tr>
+            <th colspan="4" text-left>&nbsp;</th>
+          </tr>
         </tfoot>
       </table>
     </ion-scroll>
+  </ion-grid>
+
+  <ion-grid *ngIf="tabStatus=='loanTenureDetails'">
+    <ion-row class="row">
+      <ion-col class="col" text-left>
+        &nbsp;
+      </ion-col>
+    </ion-row>
   </ion-grid>
 
   <!-- <ion-grid *ngIf="tabStatus=='loanTenureDetails'">

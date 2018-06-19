@@ -54,7 +54,7 @@ export class LoginPage {
           setTimeout(() => {
             this.loading.dismiss();
             this.navCtrl.setRoot(HomePage);
-          }, 3000);
+          }, 1000);
         } else {
           this.loading.dismiss();
           this.loginBtn = false;

@@ -62,20 +62,17 @@ export class LoanDetailsPage {
     var interestPaidTotal = 0;
     var balanceTotal = 0;
     for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      principalPaidTotal = principalPaidTotal + parseInt(loanTenureArrayObject[i].principalPaid);
+      principalPaidTotal = principalPaidTotal + parseFloat(loanTenureArrayObject[i].principalPaid);
     };
     for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      interestPaidTotal = interestPaidTotal + loanTenureArrayObject[i].interestPaid;
+      interestPaidTotal = interestPaidTotal + parseFloat(loanTenureArrayObject[i].interestPaid);
     };
-    for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      balanceTotal = balanceTotal + parseInt(loanTenureArrayObject[i].balance);
-    };
-    var yearlyTotal = principalPaidTotal + interestPaidTotal + balanceTotal;
+
+    var yearlyTotal = principalPaidTotal + interestPaidTotal -loanTenureArrayObject[0].principalPaid;
     this.loanTenureDetails = loanTenureArrayObject;
     this.loanTenureDetails.index = index;
     this.loanTenureDetails.principalPaidTotal = principalPaidTotal;
     this.loanTenureDetails.interestPaidTotal = interestPaidTotal;
-    this.loanTenureDetails.balanceTotal = balanceTotal;
     this.loanTenureDetails.yearlyTotal = yearlyTotal;
     this.tabStatus = 'loanTenureDetails';
   }

@@ -70,7 +70,7 @@ export class PropertyDetailsPage {
           setTimeout(() => {
             this.propertyDetails = response;
             this.loading.dismiss();
-          }, 4000);
+          }, 2000);
         });
 
       //this.tab.nativeElement.click();
@@ -115,7 +115,7 @@ export class PropertyDetailsPage {
   showAlert() {
     let alert = this.alertCtrl.create({
       title: '',
-      subTitle: 'Thank You for your Interest. You will recieve a notification shortly',
+      subTitle: 'Thank you for your interest. You will recieve a notification shortly',
       buttons: ['OK']
     });
     alert.present();
@@ -142,7 +142,7 @@ export class PropertyDetailsPage {
               this.registerNotification();
               this.loading.dismiss();
               this.navCtrl.setRoot(this.propertyDetails);
-            }, 4000);
+            }, 2000);
           }
         }
       ]

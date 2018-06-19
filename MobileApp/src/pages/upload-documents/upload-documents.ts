@@ -70,6 +70,20 @@ export class UploadDocumentsPage {
           console.log(response['account']['addresses'][0]);
           this.accountAddress = response['account']['addresses'][0];
           this.propertyAddress = response['property']['propertyAddress'];
+          // this.propertyAddress.streetAddress = this.propertyAddress.split(',')[0];
+          //this.propertyAddress.streetAddress1 = this.propertyAddress.split(',')[1];
+          var paddress = this.propertyAddress['fullAddress'];
+          var paddr = paddress.split(",");
+          if (paddr[0] && paddr[1]) {
+            this.propertyAddress.streetAddress = paddr[0] + ", " + paddr[1];
+          }
+          if (paddr[2]) {
+            this.propertyAddress.streetAddress1 = paddr[2];
+          }
+          if (paddr[3]) {
+            this.propertyAddress.streetAddress1 = this.propertyAddress.streetAddress1 +", "+ paddr[3];
+          }
+
           console.log(this.propertyAddress);
           this.loading.dismiss();
         }, 2000);
@@ -79,9 +93,9 @@ export class UploadDocumentsPage {
   submitApplication(data) {
     data.selectedLoanOption = this.selectedLoanOption;
     data.propertyAddress = data.property.propertyAddress;
-  
-    delete data.property;
-    delete data.loanOptions;
+
+    //delete data.property;
+    //delete data.loanOptions;
 
 
 
@@ -104,17 +118,19 @@ export class UploadDocumentsPage {
   saveApplication(data) {
     data.selectedLoanOption = this.selectedLoanOption;
     data.propertyAddress = data.property.propertyAddress;
-  
-    delete data.property;
-    delete data.loanOptions;
 
-    this.presentLoadingDefault('Submiting the application');
+
+
+    //delete data.property;
+    //delete data.loanOptions;
+
+    this.presentLoadingDefault('Saving the application');
     this.http.post(client_url + "/api/loan/update/true", data)
       .subscribe((response) => {
         console.log(response);
         setTimeout(() => {
           this.loading.dismiss();
-         // this.navCtrl.setRoot(HomePage);
+          // this.navCtrl.setRoot(HomePage);
         }, 2000);
       },
         (err) => {
@@ -226,11 +242,11 @@ export class UploadDocumentsPage {
     var name = this.loanFormDetails.account.firstName.toString().toLowerCase().replace(/[^a-zA-Z ]/g, "");
     var document_status = false;
     /****** DL verfification  *******/
-    console.log("dl name "+name)
+    console.log("dl name " + name)
     var dl_verify1 = parsedText.toString().search('driving');
     var dl_verify2 = parsedText.toString().search(name);
     var pass_verify1 = parsedText.toString().search('passport');
-    var pass_verify2 = parsedText.toString().search(name);
+    var pass_verify2 = parsedText.toString().replace(/\s+/, "").search(name);
 
     if (dl_verify1 != -1) {
       if (dl_verify2 != -1) {
@@ -272,9 +288,9 @@ export class UploadDocumentsPage {
           if (str.length == 7) {
             if (!isNaN(str)) {
               var firstLetter = element
-              this.loanFormDetails.passportNo = element[0]+' '+str;
+              this.loanFormDetails.passportNo = element[0].toUpperCase() + ' ' + str;
               this.loanFormDetails.documents[1]['path'] = filePath;
-              this.loanFormDetails.documents[1]['referenceNumber'] = element[0]+' '+str;
+              this.loanFormDetails.documents[1]['referenceNumber'] = element[0] + ' ' + str;
             }
           }
         });
