@@ -208,7 +208,7 @@ namespace QuickLoanAPI.Data
             loanRequest.LoanOptions.ForEach(lo =>
            {
                lo.LoanSchedule = _quickLoanDbContext.LoanSchedules
-               .Where(ls => ls.LoanOptionsId == lo.Id).ToList();
+               .Where(ls => ls.LoanOptionsId == lo.Id).OrderBy(lo1 => lo1.LoanOptionsId).ThenBy(lo2 => lo2.TenureYear).ToList();
            });
             return loanRequest;
         }
