@@ -23,7 +23,7 @@ export class NotificationsPage {
   ) {
   }
 
-  
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PropertyDetailsPage');
@@ -33,8 +33,14 @@ export class NotificationsPage {
         this.http.get(client_url + "/api/loan/history/" + userId + "/true")
           .subscribe((response) => {
             console.log(response);
-            this.notificationsDetails = response;
             this.loading.dismiss();
+            this.notificationsDetails = response;
+            this.notificationsDetails.forEach(element => {
+              if (element.createdDate) {
+                element.createdDate = new Date(element.createdDate.replace('T', ' ') + ' UTC').toString();
+              }
+            });
+
           });
       });
   }

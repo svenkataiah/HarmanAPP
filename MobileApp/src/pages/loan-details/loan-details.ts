@@ -20,7 +20,7 @@ export class LoanDetailsPage {
   loading: any;
   referenceNo: any;
   loanOptionId: any;
-  tenure:any;
+  tenure: any;
 
   constructor(
     public navCtrl: NavController,
@@ -55,7 +55,7 @@ export class LoanDetailsPage {
       this.tabStatus = 'gallery'
   }
 
-  loanSchedule(loanOptionId, loanTenureArrayObject, index,tenure) {
+  loanSchedule(loanOptionId, loanTenureArrayObject, index, tenure) {
     this.loanOptionId = loanOptionId;
     this.tenure = tenure;
     var principalPaidTotal = 0;
@@ -93,7 +93,8 @@ export class LoanDetailsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PropertyDetailsPage');
-
+    let el = document.getElementById("loantab") as HTMLElement;
+    el.click();
   }
 
   getLoanDetails(referenceNo) {

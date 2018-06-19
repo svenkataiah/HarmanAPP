@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { UserInfoPage } from '../user-info/user-info';
@@ -32,6 +32,8 @@ export class PropertyDetailsPage {
   propertyAddress: any;
   loading: any;
 
+  @ViewChild('tab') tab: ElementRef;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -55,6 +57,7 @@ export class PropertyDetailsPage {
   }
 
   ionViewDidLoad() {
+
     console.log('ionViewDidLoad PropertyDetailsPage');
     this.storage.get('propertyAddress').then((paddress) => {
       console.log("property address");
@@ -68,8 +71,12 @@ export class PropertyDetailsPage {
             this.propertyDetails = response;
             this.loading.dismiss();
           }, 4000);
-        })
+        });
 
+      //this.tab.nativeElement.click();
+
+      let el = document.getElementById("tab") as HTMLElement;
+      el.click();
     });
   }
 

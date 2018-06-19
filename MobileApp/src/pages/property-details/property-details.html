@@ -16,7 +16,7 @@
 <ion-content>
   <!-- Segment buttons with icons -->
   <ion-segment [(ngModel)]="icons">
-    <ion-segment-button value="camera" (click)="switchTabs('ownerInfo')" class="segment-button segment-activated">
+    <ion-segment-button #tab id="tab" value="camera" (click)="switchTabs('ownerInfo')" class="segment-button segment-activated">
       <img src="assets/imgs/OwnerInfo/owner.png" /> Owner
     </ion-segment-button>
     <ion-segment-button value="bookmark" (click)="switchTabs('basicInfo')">
@@ -61,7 +61,7 @@
         <span> Last Sold </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.lastSold | currency:'USD':true:'4.2-2'}}
+        {{propertyDetails?.lastSold | currency:'INR':true:'4.2-2'}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -70,7 +70,7 @@
         <span> Price Per sqft </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.pricePerSqrt | currency:'USD':true}}
+        {{propertyDetails?.pricePerSqrt | currency:'INR':true}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -88,7 +88,7 @@
         <span> Last Mortgaged </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.lastMortgaged | currency:'USD':true:'4.2-2'}}
+        {{propertyDetails?.lastMortgaged | currency:'INR':true:'4.2-2'}}
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -113,34 +113,32 @@
 
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC1.jpg')" src="http://virtiledge.com/gallery/POC1.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property1.jpg')" src="http://virtiledge.com/gallery/property1.jpg"
+        />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC2.jpg')" src="http://virtiledge.com/gallery/POC2.jpg" />
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC3.jpg')" src="http://virtiledge.com/gallery/POC3.jpg" />
-      </ion-col>
-      <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC4.jpg')" src="http://virtiledge.com/gallery/POC4.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property2.jpg')" src="http://virtiledge.com/gallery/property2.jpg"
+        />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC5.jpg')" src="http://virtiledge.com/gallery/POC5.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property3.jpg')" src="http://virtiledge.com/gallery/property3.jpg"
+        />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC6.jpg')" src="http://virtiledge.com/gallery/POC6.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property4.jpg')" src="http://virtiledge.com/gallery/property4.jpg"
+        />
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC7.jpg')" src="http://virtiledge.com/gallery/POC7.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property5.jpg')" src="http://virtiledge.com/gallery/property5.jpg"
+        />
       </ion-col>
       <ion-col>
-        <img (click)="viewPhoto('http://virtiledge.com/gallery/POC8.jpg')" src="http://virtiledge.com/gallery/POC8.jpg" />
+        <img (click)="viewPhoto('http://virtiledge.com/gallery/property6.jpg')" src="http://virtiledge.com/gallery/property6.jpg"
+        />
       </ion-col>
     </ion-row>
   </ion-grid>

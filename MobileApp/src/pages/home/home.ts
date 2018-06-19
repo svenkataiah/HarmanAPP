@@ -124,6 +124,7 @@ export class HomePage {
         if (status == google.maps.GeocoderStatus.OK) {
           console.log(results[0]);
           _this.currentLocation = results[0].formatted_address;
+          propertyLocationObject['fullAddress'] = _this.currentLocation;
           for (var ac = 0; ac < results[0].address_components.length; ac++) {
             var component = results[0].address_components[ac];
             switch (component.types[0]) {

@@ -22,9 +22,9 @@ import { LoanHistoryPage } from '../pages/loan-history/loan-history';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = UploadDocumentsPage;
+  rootPage: any = LoginPage;
 
-  pages: Array<{ title: string, component: any }>;
+  pages: Array<{ title: string, icon: string, component: any }>;
 
   constructor(
     public platform: Platform,
@@ -39,10 +39,10 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Scan Property', component: HomePage },
-      { title: 'Notifications', component: NotificationsPage },
-      { title: 'Loan History', component: LoanHistoryPage },
-      { title: 'Logout', component: LoginPage },
+      { title: 'Scan Property', icon: '', component: HomePage },
+      { title: 'Notifications', icon: '', component: NotificationsPage },
+      { title: 'Loan History', icon: '', component: LoanHistoryPage },
+      { title: 'Logout', icon: '', component: LoginPage },
 
 
     ];

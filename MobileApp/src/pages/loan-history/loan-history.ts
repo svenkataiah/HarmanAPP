@@ -35,6 +35,12 @@ export class LoanHistoryPage {
             console.log(response);
             this.loanHistoryDetails = response;
             this.loading.dismiss();
+
+            this.loanHistoryDetails.forEach(element => {
+              if (element.createdDate) {
+                element.createdDate = new Date(element.createdDate.replace('T', ' ') + ' UTC').toString();
+              }
+            });
           });
       });
   }
@@ -45,7 +51,7 @@ export class LoanHistoryPage {
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Fetching Notifications List',
+      content: 'Fetching loan history list',
       spinner: 'dots',
       showBackdrop: false
     });

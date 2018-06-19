@@ -35,8 +35,8 @@ export class UploadDocumentsPage {
   dlVerification: any = true;
   passportVerification: any = true;
   accountAddress: any;
-
   propertyAddress: any;
+  documents: any = [];
 
   constructor(
     public navCtrl: NavController,
@@ -54,7 +54,7 @@ export class UploadDocumentsPage {
     this.referenceNo = this.navParams.get('data').referenceNo;
     this.selectedLoanOption = this.navParams.get('data').selectedLoanOption;
     //this.referenceNo = 'BR0001HL00023';
-    //this.selectedLoanOption = 67;
+    //this.selectedLoanOption = 127;
   }
 
 
@@ -79,9 +79,12 @@ export class UploadDocumentsPage {
   submitApplication(data) {
     data.selectedLoanOption = this.selectedLoanOption;
     data.propertyAddress = data.property.propertyAddress;
-    data = JSON.stringify(data);
+  
     delete data.property;
     delete data.loanOptions;
+
+
+
     this.presentLoadingDefault('Submiting the application');
     this.http.post(client_url + "/api/loan/update/false", data)
       .subscribe((response) => {
@@ -99,13 +102,19 @@ export class UploadDocumentsPage {
   }
 
   saveApplication(data) {
+    data.selectedLoanOption = this.selectedLoanOption;
+    data.propertyAddress = data.property.propertyAddress;
+  
+    delete data.property;
+    delete data.loanOptions;
+
     this.presentLoadingDefault('Submiting the application');
     this.http.post(client_url + "/api/loan/update/true", data)
       .subscribe((response) => {
         console.log(response);
         setTimeout(() => {
           this.loading.dismiss();
-          this.navCtrl.setRoot(HomePage);
+         // this.navCtrl.setRoot(HomePage);
         }, 2000);
       },
         (err) => {
@@ -178,7 +187,7 @@ export class UploadDocumentsPage {
       if (this.loading.dismiss()) {
         this.loading.dismiss();
       }
-    }, 40000);
+    }, 80000);
 
     var path = "http://virtiledge.com/admin/" + file['image_url'] + '.jpg';
     //this.http.get("https://api.ocr.space/parse/imageurl?apikey=273ed2d3bf88957&url=https://assets.thaivisa.com/forum/uploads/monthly_12_2015/post-250519-0-04774200-1449916274_thumb.jpg")
@@ -193,7 +202,7 @@ export class UploadDocumentsPage {
             console.log(res['ParsedResults'][0]['ParsedText']);
             this.OCRParseText = res['ParsedResults'][0]['ParsedText'];
 
-            this.verifyDocument();
+            this.verifyDocument(path);
           } else {
             this.showAlert(res['ErrorMessage'][0]);
             this.loading.dismiss();
@@ -210,26 +219,35 @@ export class UploadDocumentsPage {
         });
   }
 
-  verifyDocument() {
+  verifyDocument(filePath) {
     var parsedText = this.OCRParseText.toString().toLowerCase();
     console.log(parsedText);
 
     var name = this.loanFormDetails.account.firstName.toString().toLowerCase().replace(/[^a-zA-Z ]/g, "");
     var document_status = false;
     /****** DL verfification  *******/
-    var dl_verify1 = parsedText.toString().search('driver');
+    console.log("dl name "+name)
+    var dl_verify1 = parsedText.toString().search('driving');
     var dl_verify2 = parsedText.toString().search(name);
+    var pass_verify1 = parsedText.toString().search('passport');
+    var pass_verify2 = parsedText.toString().search(name);
+
     if (dl_verify1 != -1) {
       if (dl_verify2 != -1) {
         console.log("DL verified")
         this.dlVerification = true;
         //this.findDlNumber(parsedText);
         var array = parsedText.split("\n");
+        console.log(array);
         array.forEach(element => {
-          var str = element.replace(/ /g, '');
-          if (str.length == 10) {
+          var str = element.replace(/[^0-9]/g, "");
+          console.log(str);
+          console.log(str.length);
+          if (str.length == 9) {
             if (!isNaN(str)) {
               this.loanFormDetails.stateDLNo = str;
+              this.loanFormDetails.documents[0]['path'] = filePath;
+              this.loanFormDetails.documents[0]['referenceNumber'] = str;
             }
           }
         });
@@ -240,29 +258,23 @@ export class UploadDocumentsPage {
         this.showAlert('Failed to verify document.Please try again');
         console.log("invalid DL");
       }
-    } else {
-      //this.dlVerification = false;
-      // document_status = true;
-      this.showAlert('Kindly upload the document again');
     }
-
-
-    /****** Passport verfification  *******/
-    var pass_verify1 = parsedText.toString().search('passport');
-    var pass_verify2 = parsedText.toString().search(name);
-    console.log("p1 " + pass_verify1);
-    console.log("p2 " + pass_verify2);
-    if (pass_verify1 != -1) {
+    else if (pass_verify1 != -1) {
       if (pass_verify2 != -1) {
         console.log("Passport verified")
         this.passportVerification = true;
         //this.findDlNumber(parsedText);
         var array = parsedText.split("\n");
         array.forEach(element => {
-          var str = element.replace(/ /g, '');
-          if (str.length == 10) {
+          var str = element.replace(/[^0-9]/g, "");
+          console.log(str);
+          console.log(str.length);
+          if (str.length == 7) {
             if (!isNaN(str)) {
-              this.loanFormDetails.passportNo = str;
+              var firstLetter = element
+              this.loanFormDetails.passportNo = element[0]+' '+str;
+              this.loanFormDetails.documents[1]['path'] = filePath;
+              this.loanFormDetails.documents[1]['referenceNumber'] = element[0]+' '+str;
             }
           }
         });
@@ -273,11 +285,10 @@ export class UploadDocumentsPage {
         this.showAlert('Failed to verify passport.Please try again.');
         console.log("invalid Passport");
       }
-    } else {
-      //this.passportVerification = false;
+    }
+    else {
       this.showAlert('Kindly upload the document again');
     }
-
     this.loading.dismiss();
   }
 
@@ -321,7 +332,7 @@ export class UploadDocumentsPage {
 
   showAlert(content) {
     let alert = this.alertCtrl.create({
-      title: 'Something went wrong',
+      title: '',
       subTitle: content,
       buttons: ['OK']
     });
