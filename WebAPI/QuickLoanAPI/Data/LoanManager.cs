@@ -182,7 +182,7 @@ namespace QuickLoanAPI.Data
             {
                 serverKey = femSettings["userServerKey"];
                 senderId = femSettings["userSenderID"];
-                message = "We have received your appraosal application and the mortgage expert has been notified.";
+                message = "We have received your appraisal application and the mortgage expert has been notified.";
                 notification.SendNotificationFromFirebaseCloud(webUrl, serverKey, senderId, loan.Account.OnlineUser.NotificationRegId, message);
 
                 serverKey = femSettings["bankerServerKey"];
