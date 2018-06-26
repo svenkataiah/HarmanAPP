@@ -40,7 +40,7 @@
         <span> Account Number </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.account?.number}}
+        {{loanDetails?.account?.number | maskNumber}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -70,7 +70,8 @@
         <span> Comments From Bank </span>
       </ion-col>
       <ion-col>
-        {{loanDetails?.comments}}
+        <!-- {{loanDetails?.comments}} -->
+        You are eligible for loan
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -96,7 +97,7 @@
               Maximun Loan
             </ion-col>
             <ion-col class="col-md-4">
-              {{loan?.loanAmount | currency:'INR':true:'4.2-2'}}
+              {{loan?.loanAmount | customCurrency}}
             </ion-col>
           </ion-row>
           <ion-row class="row">
@@ -112,7 +113,7 @@
               Monthly Payment
             </ion-col>
             <ion-col class="col">
-              {{loan?.emiAmount | currency:'INR':true:'4.2-2'}}
+              {{loan?.emiAmount | customCurrency}}
             </ion-col>
           </ion-row>
           <ion-row class="row">
@@ -147,15 +148,15 @@
         <tbody>
           <tr *ngFor="let loanTenure of loanTenureDetails">
             <td style="text-transform: uppercase">{{loanTenure?.tenureYear}}</td>
-            <td text-right>{{loanTenure?.principalPaid | currency:'INR':true:'4.2-2'}}</td>
-            <td text-right>{{loanTenure?.interestPaid | currency:'INR':true:'4.2-2' }}</td>
-            <td text-right *ngIf="loanTenure?.balance>0">{{loanTenure?.balance | currency:'INR':true:'4.2-2'}}</td>
+            <td text-right>{{loanTenure?.principalPaid | customCurrency}}</td>
+            <td text-right>{{loanTenure?.interestPaid | customCurrency }}</td>
+            <td text-right *ngIf="loanTenure?.balance>0">{{loanTenure?.balance | customCurrency}}</td>
             <td text-right *ngIf="loanTenure?.balance==0"> 0 </td>
           </tr>
           <tr>
             <th>Total</th>
-            <th text-right>{{loanTenureDetails?.principalPaidTotal | currency:'INR':true:'4.2-2'}}</th>
-            <th text-right>{{loanTenureDetails?.interestPaidTotal | currency:'INR':true:'4.2-2'}}</th>
+            <th text-right>{{loanTenureDetails?.principalPaidTotal | customCurrency}}</th>
+            <th text-right>{{loanTenureDetails?.interestPaidTotal | customCurrency}}</th>
             <th text-right>  </th>
           </tr>
         </tbody>
@@ -163,7 +164,7 @@
 <!-- 
           <tr>
             <th colspan="2" text-left>Yearly Payment</th>
-            <th colspan="2">{{loanTenureDetails?.yearlyTotal | currency:'INR':true:'4.2-2'}}</th>
+            <th colspan="2">{{loanTenureDetails?.yearlyTotal | customCurrency}}</th>
           </tr> -->
           <tr>
             <th colspan="4" text-left>&nbsp;</th>
@@ -190,7 +191,7 @@
         <h6>YEARLY TOTAL</h6>
       </ion-col>
       <ion-col class="col" text-right>
-        <h5>{{loanTenureDetails?.yearlyTotal | currency:'INR':true:'4.2-2'}}</h5>
+        <h5>{{loanTenureDetails?.yearlyTotal | customCurrency}}</h5>
       </ion-col>
     </ion-row>
   </ion-grid> -->

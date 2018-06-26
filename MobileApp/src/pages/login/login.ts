@@ -84,7 +84,7 @@ export class LoginPage {
 
   showAlert() {
     let alert = this.alertCtrl.create({
-      title: 'Login Failed!',
+      title: '',
       subTitle: 'Invalid Username or Password',
       buttons: ['OK']
     });

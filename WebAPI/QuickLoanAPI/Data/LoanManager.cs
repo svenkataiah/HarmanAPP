@@ -195,7 +195,7 @@ namespace QuickLoanAPI.Data
         public Model.DbEntity.LoanApplication GetLoanDetails(string loanRefId)
         {
             var loanRequest = (_quickLoanDbContext.LoanApplications
-                .Include( loan => loan.Address)
+                .Include(loan => loan.Address)
                  .Include(loan => loan.LoanOptions)
                 .Include(loan => loan.Property)
                 .Include(loan => loan.Documents)

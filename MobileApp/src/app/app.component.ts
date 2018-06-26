@@ -15,6 +15,8 @@ import { Storage } from '@ionic/storage';
 import { LoanDetailsPage } from '../pages/loan-details/loan-details';
 import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
 import { LoanHistoryPage } from '../pages/loan-history/loan-history';
+import { SettingsProvider } from '../providers/settings/settings';
+import { SettingsPage } from '../pages/settings/settings';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,6 +25,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPage;
+  selectedTheme: String;
 
   pages: Array<{ title: string, icon: string, component: any }>;
 
@@ -32,8 +35,10 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private push: Push,
     private http: HttpClient,
-    private storage: Storage
+    private storage: Storage,
+    private settings: SettingsProvider
   ) {
+    this.settings.getActiveTheme().subscribe(val => this.selectedTheme = val);
     this.pushNotification();
     this.initializeApp();
 
@@ -42,9 +47,8 @@ export class MyApp {
       { title: 'Scan Property', icon: '', component: HomePage },
       { title: 'Notifications', icon: '', component: NotificationsPage },
       { title: 'Loan History', icon: '', component: LoanHistoryPage },
+      //{ title: 'Settings', icon: '', component: SettingsPage },
       { title: 'Logout', icon: '', component: LoginPage },
-
-
     ];
   }
 
