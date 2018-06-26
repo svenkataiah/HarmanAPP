@@ -33,6 +33,10 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
 import { LoanHistoryPage } from '../pages/loan-history/loan-history';
 import { ModalPage } from '../pages/modal/modal';
+import { MaskNumberPipe } from '../pipes/mask-number/mask-number';
+import { CustomCurrencyPipe } from '../pipes/custom-currency/custom-currency';
+import { SettingsProvider } from '../providers/settings/settings';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,10 @@ import { ModalPage } from '../pages/modal/modal';
     LoanDetailsPage,
     UploadDocumentsPage,
     LoanHistoryPage,
-    ModalPage
+    ModalPage,
+    MaskNumberPipe,
+    CustomCurrencyPipe,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -72,7 +79,8 @@ import { ModalPage } from '../pages/modal/modal';
     LoanDetailsPage,
     UploadDocumentsPage,
     LoanHistoryPage,
-    ModalPage
+    ModalPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,
@@ -88,7 +96,8 @@ import { ModalPage } from '../pages/modal/modal';
     FileTransferObject,
     File,
     Camera,
-    FileChooser
+    FileChooser,
+    SettingsProvider
   ]
 })
 export class AppModule { }

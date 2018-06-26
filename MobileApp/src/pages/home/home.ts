@@ -9,6 +9,7 @@ import { NearByPlacesProvider } from '../../providers/near-by-places/near-by-pla
 import { CurrentLocationProvider } from '../../providers/current-location/current-location';
 import { UserInfoPage } from '../user-info/user-info';
 import { Storage } from '@ionic/storage';
+import { SettingsProvider } from '../../providers/settings/settings';
 
 declare var google;
 const client_url = 'http://quickloanapi.azurewebsites.net';
@@ -37,7 +38,6 @@ export class HomePage {
   apiErrorMsg: any;
   apiError: any = false;
 
-
   constructor(
     public navCtrl: NavController,
     private cameraPreview: CameraPreview,
@@ -47,9 +47,10 @@ export class HomePage {
     private currentLocationProvider: CurrentLocationProvider,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    private storage: Storage
+    private storage: Storage,
+    private settings: SettingsProvider
   ) {
-
+   
   }
 
   ngOnInit() {
@@ -64,7 +65,6 @@ export class HomePage {
 
     this.getCurrentLocation();
   }
-
 
   previewCamera() {
     //this.navCtrl.push(ScanPropertyPage)
@@ -116,15 +116,15 @@ export class HomePage {
   //Get Curremnt address using lat and lng
   getCurrentLocationAddress(lat, lng) {
     var propertyLocationObject = {};
-    var _this = this;
+    var current = this;
     var geocoder = new google.maps.Geocoder();
     var latLng = new google.maps.LatLng(lat, lng);
     if (geocoder) {
       geocoder.geocode({ 'latLng': latLng }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           console.log(results[0]);
-          _this.currentLocation = results[0].formatted_address;
-          propertyLocationObject['fullAddress'] = _this.currentLocation;
+          current.currentLocation = results[0].formatted_address;
+          propertyLocationObject['fullAddress'] = current.currentLocation;
           for (var ac = 0; ac < results[0].address_components.length; ac++) {
             var component = results[0].address_components[ac];
             switch (component.types[0]) {
@@ -153,7 +153,7 @@ export class HomePage {
           };
 
           console.log(propertyLocationObject);
-          _this.storage.set('propertyAddress', propertyLocationObject);
+          current.storage.set('propertyAddress', propertyLocationObject);
 
         }
         else {

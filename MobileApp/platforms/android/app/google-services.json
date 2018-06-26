@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "623706415166",
+    "firebase_url": "https://easy-loan-8052d.firebaseio.com",
+    "project_id": "easy-loan-8052d",
+    "storage_bucket": "easy-loan-8052d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623706415166:android:ee4c8bbaa94621a7",
+        "android_client_info": {
+          "package_name": "com.easyhomeloan.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623706415166-0og3dphgtkcg6f930j1mgeiu013jne95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3sh9HcLAuQXpAGgZ17tq6BmKrH19JLPE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

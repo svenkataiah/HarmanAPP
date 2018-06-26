@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center>Settings</ion-title>
+    <ion-buttons end class="user-btn" (click)="userInfo()">
+      <button ion-button icon-only>
+        <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <p text-center>I shine at night and glow at day.</p>
+  <button ion-button full icon-left (click)="toggleAppTheme()">
+    <ion-icon  name="bulb"></ion-icon>Toggle Theme
+  </button>
+
+</ion-content>

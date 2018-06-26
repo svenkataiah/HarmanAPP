@@ -68,11 +68,11 @@ export class LoanDetailsPage {
       interestPaidTotal = interestPaidTotal + parseFloat(loanTenureArrayObject[i].interestPaid);
     };
 
-    var yearlyTotal = principalPaidTotal + interestPaidTotal -loanTenureArrayObject[0].principalPaid;
+    var yearlyTotal = (principalPaidTotal + interestPaidTotal -loanTenureArrayObject[0].principalPaid).toFixed(2);
     this.loanTenureDetails = loanTenureArrayObject;
     this.loanTenureDetails.index = index;
-    this.loanTenureDetails.principalPaidTotal = principalPaidTotal;
-    this.loanTenureDetails.interestPaidTotal = interestPaidTotal;
+    this.loanTenureDetails.principalPaidTotal = principalPaidTotal.toFixed(2);;
+    this.loanTenureDetails.interestPaidTotal = interestPaidTotal.toFixed(2);;
     this.loanTenureDetails.yearlyTotal = yearlyTotal;
     this.tabStatus = 'loanTenureDetails';
   }

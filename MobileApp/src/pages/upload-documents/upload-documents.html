@@ -79,7 +79,8 @@
       <!-- {{loanFormDetails.account}} {{loanFormDetails.account.addresses[0]}} -->
       <ion-item>
         <ion-label floating>Account Number</ion-label>
-        <ion-input type="text" name="accountNumber" readonly [(ngModel)]="loanFormDetails.account.number"></ion-input>
+        <ion-input type="text" name="accountNumber" readonly value="{{ loanFormDetails.account.number | maskNumber }}"></ion-input>
+         <ion-input type="hidden" name="accountNumber" readonly [(ngModel)]="loanFormDetails.account.number"></ion-input>
       </ion-item>
       <ion-item class="{{!dlVerification && !loanFormDetails.stateDLNo || !passportVerification && !loanFormDetails.passportNo?'item-input item-label-floating ng-untouched input-has-focus item-input-has-focus item-focus':'item item-block item-md item-input item-label-floating ng-untouched ng-pristine ng-valid input-has-value item-input-has-value'}}">
         <ion-label floating>First Name </ion-label>

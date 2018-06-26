@@ -61,7 +61,7 @@
         <span> Last Sold </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.lastSold | currency:'INR':true:'4.2-2'}}
+        {{propertyDetails?.lastSold | customCurrency}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -70,7 +70,7 @@
         <span> Price Per sqft </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.pricePerSqrt | currency:'INR':true}}
+        {{propertyDetails?.pricePerSqrt | customCurrency}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -88,7 +88,7 @@
         <span> Last Mortgaged </span>
       </ion-col>
       <ion-col>
-        {{propertyDetails?.lastMortgaged | currency:'INR':true:'4.2-2'}}
+        {{propertyDetails?.lastMortgaged | customCurrency}}
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -149,7 +149,7 @@
 <ion-footer>
   <ion-toolbar *ngIf="tabStatus=='gallery' || tabStatus=='ownerInfo'">
     <ion-buttons text-center>
-      <button ion-button class="navigation-btn {{interestedBtn?'btnDisabled':''}}" *ngIf="!interested" [disabled]="interestedBtn"
+      <button ion-button class="navigation-btn {{interestedBtn?'btnDisabled':'navigation-btn'}}" *ngIf="!interested" [disabled]="interestedBtn"
         (click)="showConfirm()">
         <span class="btn-text"> Interested In Property ? </span>
       </button>

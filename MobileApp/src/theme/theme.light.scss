@@ -1,0 +1,54 @@
+
+.light-theme {
+//   ion-content {
+//     background-color: #fff;
+//   }
+ 
+  .button,.navigation-btn{
+    width: auto;
+    color: #f3f1f1;
+    background-color: #ff8080;
+    text-align: center;
+    margin: 0px auto;
+}
+
+.toolbar-background{
+    background: #ff6666;
+}
+
+.footer{
+    .toolbar-background{
+        background: #fff;
+      } 
+  }
+  .toolbar-title {
+    color: #fff;
+  }
+  .bar-button-default, .bar-button-clear-default, .bar-button-default{
+    color: #fff;
+  }
+
+  
+h2.alert-title{
+color: #ff6666 !important;
+border-bottom: 1px solid #ff6666 !important;
+line-height: 0.2 !important;
+}
+a {
+color: #ff8080;
+}
+
+
+.loading-md .loading-wrapper{
+padding: 10px;
+color: #ff8080;
+//background-color: #2ec95c;
+}
+
+.loading-md .spinner-dots circle{
+stroke: #ff8080;
+}
+.loading-md .spinner-dots circle {
+fill: #ff8080;
+}
+}
