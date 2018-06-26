@@ -9,6 +9,9 @@ import { MenusPage } from '../../pages/menus/menus';
 import { HomePage } from '../home/home';
 import { SignupPage } from '../signup/signup';
 import { LoanDetailsPage } from '../loan-details/loan-details';
+import { Storage } from '@ionic/storage';
+
+const client_url = 'http://quickloanapi.azurewebsites.net';
 
 @IonicPage()
 @Component({
@@ -22,6 +25,7 @@ export class LoginPage {
   loginUser: any;
   loginBtn: any = false;
   loading: any;
+  userId: any;
 
   constructor(
     public navCtrl: NavController,
@@ -29,7 +33,8 @@ export class LoginPage {
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
     private http: HttpClient,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private storage: Storage,
   ) {
   }
 
@@ -40,16 +45,18 @@ export class LoginPage {
   login() {
     this.loginBtn = true;
     this.presentLoadingDefault();
-    this.http.get("http://quickhomeloanapi.azurewebsites.net/api/auth/" + this.username + "/" + this.password)
+    this.http.get(client_url+"/api/auth/" + this.username + "/" + this.password)
       .subscribe((response) => {
-        console.log(response);
         if (response['isAuthenticated']) {
-          //this.presentToast();
+          this.userId = response['userId'];
+          this.setSessionData(response);
+          this.postDeviceRegisterId();
           setTimeout(() => {
             this.loading.dismiss();
             this.navCtrl.setRoot(HomePage);
-          }, 3000);
+          }, 1000);
         } else {
+          this.loading.dismiss();
           this.loginBtn = false;
           this.username = '';
           this.password = '';
@@ -58,24 +65,22 @@ export class LoginPage {
       })
   }
 
+  setSessionData(response) {
+    this.storage.set('userId', response['userId']);
+  }
+  postDeviceRegisterId() {
+     this.storage.get('registrationId')
+      .then((regid) => {
+        this.http.post(client_url+"/api/auth/register", { registrationId: regid, userId: this.userId })
+          .subscribe((res) => {
+            console.log(res);
+          })
+      })
+  }
+
   signup() {
     this.navCtrl.push(SignupPage);
   }
-
-  presentToast() {
-    let toast = this.toastCtrl.create({
-      message: 'Authenticating...',
-      duration: 3000,
-      position: 'top'
-    });
-
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
-
-    toast.present();
-  }
-
 
   showAlert() {
     let alert = this.alertCtrl.create({
@@ -88,7 +93,7 @@ export class LoginPage {
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Athenticating login...',
+      content: 'Authenticating',
       showBackdrop: false,
       spinner: 'dots'
     });

@@ -8,11 +8,12 @@ const client_url = 'http://quickloanapi.azurewebsites.net';
 
 @IonicPage()
 @Component({
-  selector: 'page-notifications',
-  templateUrl: 'notifications.html',
+  selector: 'page-loan-history',
+  templateUrl: 'loan-history.html',
 })
-export class NotificationsPage {
-  notificationsDetails: any;
+export class LoanHistoryPage {
+
+  loanHistoryDetails: any;
   loading: any;
   constructor(
     public navCtrl: NavController,
@@ -24,40 +25,33 @@ export class NotificationsPage {
   }
 
 
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad PropertyDetailsPage');
     this.presentLoadingDefault();
     this.storage.get('userId')
       .then((userId) => {
-        this.http.get(client_url + "/api/loan/history/" + userId + "/true")
+        this.http.get(client_url + "/api/loan/history/" + userId + "/false")
           .subscribe((response) => {
             console.log(response);
+            this.loanHistoryDetails = response;
             this.loading.dismiss();
-            this.notificationsDetails = response;
-            this.notificationsDetails.forEach(element => {
+
+            this.loanHistoryDetails.forEach(element => {
               if (element.createdDate) {
                 element.createdDate = new Date(element.createdDate.replace('T', ' ') + ' UTC').toString();
               }
             });
-
           });
       });
   }
 
-  itemSelected(referenceNo) {
-    var data = {
-      data: {
-        referenceNo: referenceNo
-      }
-    }
-    this.navCtrl.push(LoanDetailsPage, data);
+  itemSelected() {
   }
 
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Fetching Notifications List',
+      content: 'Fetching loan history list',
       spinner: 'dots',
       showBackdrop: false
     });

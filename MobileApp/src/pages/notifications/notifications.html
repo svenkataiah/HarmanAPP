@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title text-center>Notifications</ion-title>
-    <ion-buttons end class="user-btn" (click)="userInfo()">
+    <ion-buttons end class="user-btn">
       <button ion-button icon-only>
         <ion-icon name="person" ios="ios-person" md="md-person"></ion-icon>
       </button>
@@ -13,10 +13,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-      <ion-item *ngFor="let details of notificationsDetails" (click)="itemSelected(item)">
-        <h2>{{details?.notification?.title}}</h2>
-        <p>{{details?.notification?.message}}</p>
+  <!-- <ion-list>
+      <ion-item *ngFor="let details of notificationsDetails" (click)="itemSelected(details?.referenceNo)">
+        <h2>{{details?.referenceNo}}</h2>
+        <p>{{details?.property?.propertyAddress.fullAddress}}</p>
+        <span class="pull-right">{{details?.createdDate | date:'dd MMM yyyy HH:mm aa'}}</span>
       </ion-item>
-    </ion-list>
+    </ion-list> -->
+
+
+  <ion-list class="notification-list">
+
+    <ion-item *ngFor="let details of notificationsDetails" (click)="itemSelected(details?.referenceNo)">
+      <ion-avatar item-start>
+        <img src="assets/icon/bank.png">
+      </ion-avatar>
+      <h2>{{details?.referenceNo}} - Eligible for loan</h2>
+      <p>{{details?.property?.propertyAddress.fullAddress}}</p>
+      <div text-right>
+        <ion-note item-end>{{details?.createdDate | date:'dd MMM yyyy HH:mm aa'}}</ion-note>
+      </div>
+
+    </ion-item>
+
+  </ion-list>
+
 </ion-content>

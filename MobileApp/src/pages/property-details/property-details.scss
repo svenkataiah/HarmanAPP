@@ -4,7 +4,13 @@ page-property-details {
         font-weight: 500;
         img{
             width: 15px;
-            margin-right: 5px;
+            position: absolute;
+            top: 13px;
+        }
+        span{
+            margin-left: 20px;
+            font-weight: bold;
+            display: block;
         }
     }
     ion-content{
@@ -91,4 +97,7 @@ page-property-details {
         padding-bottom: 6px;
         border-bottom: 1px solid;
     }
+
+   
+   
 }

@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { LoadingController, ToastController } from 'ionic-angular';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { AlertController } from 'ionic-angular';
+import { FileTransfer, FileUploadOptions, FileTransferObject, } from '@ionic-native/file-transfer';
+import { Camera, CameraOptions, MediaType } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
+import { HomePage } from '../home/home';
+import { ModalController } from 'ionic-angular';
+import { ModalPage } from '../modal/modal';
+const client_url = 'http://quickloanapi.azurewebsites.net';
 
 @IonicPage()
 @Component({
@@ -13,24 +19,125 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UploadDocumentsPage {
 
+  @ViewChild('name') name: ElementRef;
+
   imageURI: any;
   imageFileName: any;
   firstName: any;
   lastName: any;
   OCRParseText: any;
+  imageData: any;
+  loading: any;
+  loanFormDetails: any;
+  referenceNo: any;
+  userId: any;
+  selectedLoanOption: any;
+  dlVerification: any = true;
+  passportVerification: any = true;
+  accountAddress: any;
+  propertyAddress: any;
+  documents: any = [];
 
   constructor(
     public navCtrl: NavController,
+    public navParams: NavParams,
     private transfer: FileTransfer,
     private camera: Camera,
     public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     private fileChooser: FileChooser,
-    private http: HttpClient
+    private http: HttpClient,
+    private storage: Storage,
+    public modalCtrl: ModalController,
   ) {
-    this.firstName = "Santhosh";
-    this.lastName = "Venkataiah";
-    this.getOCRData();
+    this.referenceNo = this.navParams.get('data').referenceNo;
+    this.selectedLoanOption = this.navParams.get('data').selectedLoanOption;
+    //this.referenceNo = 'BR0001HL00023';
+    //this.selectedLoanOption = 127;
+  }
+
+
+  ionViewDidLoad() {
+    this.presentLoadingDefault('Loading application form');
+    this.http.get(client_url + "/api/loan/details/" + this.referenceNo + "/true")
+      .subscribe((response) => {
+        console.log(response);
+
+        setTimeout(() => {
+          this.loanFormDetails = response;
+          console.log(response['account']['addresses']);
+          console.log(response['account']['addresses'][0]);
+          this.accountAddress = response['account']['addresses'][0];
+          this.propertyAddress = response['property']['propertyAddress'];
+          // this.propertyAddress.streetAddress = this.propertyAddress.split(',')[0];
+          //this.propertyAddress.streetAddress1 = this.propertyAddress.split(',')[1];
+          var paddress = this.propertyAddress['fullAddress'];
+          var paddr = paddress.split(",");
+          if (paddr[0] && paddr[1]) {
+            this.propertyAddress.streetAddress = paddr[0] + ", " + paddr[1];
+          }
+          if (paddr[2]) {
+            this.propertyAddress.streetAddress1 = paddr[2];
+          }
+          if (paddr[3]) {
+            this.propertyAddress.streetAddress1 = this.propertyAddress.streetAddress1 +", "+ paddr[3];
+          }
+
+          console.log(this.propertyAddress);
+          this.loading.dismiss();
+        }, 2000);
+      })
+  }
+
+  submitApplication(data) {
+    data.selectedLoanOption = this.selectedLoanOption;
+    data.propertyAddress = data.property.propertyAddress;
+
+    //delete data.property;
+    //delete data.loanOptions;
+
+
+
+    this.presentLoadingDefault('Submiting the application');
+    this.http.post(client_url + "/api/loan/update/false", data)
+      .subscribe((response) => {
+        console.log(response);
+        setTimeout(() => {
+          this.loading.dismiss();
+          this.navCtrl.setRoot(HomePage);
+        }, 2000);
+      },
+        (err) => {
+          this.loading.dismiss();
+          console.log(err);
+        }
+      )
+  }
+
+  saveApplication(data) {
+    data.selectedLoanOption = this.selectedLoanOption;
+    data.propertyAddress = data.property.propertyAddress;
+
+
+
+    //delete data.property;
+    //delete data.loanOptions;
+
+    this.presentLoadingDefault('Saving the application');
+    this.http.post(client_url + "/api/loan/update/true", data)
+      .subscribe((response) => {
+        console.log(response);
+        setTimeout(() => {
+          this.loading.dismiss();
+          // this.navCtrl.setRoot(HomePage);
+        }, 2000);
+      },
+        (err) => {
+          this.loading.dismiss();
+          console.log(err);
+        }
+      )
   }
 
   openFiles() {
@@ -42,69 +149,172 @@ export class UploadDocumentsPage {
   getImage() {
     const options: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     }
-
     this.camera.getPicture(options).then((imageData) => {
-      this.imageURI = imageData;
+      console.log(imageData);
+      this.imageData = 'data:image/jpeg;base64,' + imageData;
+      //this.imageURI = imageData+".jpg";
     }, (err) => {
       console.log(err);
       this.presentToast(err);
     });
   }
 
-  uploadFile() {
-    this.getOCRData();
-    let loader = this.loadingCtrl.create({
-      content: "Uploading..."
-    });
-    loader.present();
-    const fileTransfer: FileTransferObject = this.transfer.create();
-
-    let options: FileUploadOptions = {
-      fileKey: 'ionicfile',
-      fileName: 'ionicfile',
-      chunkedMode: false,
-      mimeType: "image/jpeg",
-      headers: {}
+  captureImage() {
+    const options: CameraOptions = {
+      quality: 40,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
     }
-    
-
-    fileTransfer.upload(this.imageURI, 'http://virtiledge.com/admin/alexa.php', options)
-      .then((data) => {
-        console.log(data);
-        console.log(data + " Uploaded Successfully");
-        this.imageFileName = "http://192.168.0.7:8080/static/images/ionicfile.jpg"
-        loader.dismiss();
-        this.presentToast("Image uploaded successfully");
-      }, (err) => {
-        console.log(err);
-        loader.dismiss();
-        this.presentToast(err);
-      });
+    this.camera.getPicture(options).then((imageData) => {
+      console.log(imageData);
+      this.imageData = 'data:image/jpeg;base64,' + imageData;
+      //this.imageURI = imageData+".jpg";
+    }, (err) => {
+      console.log(err);
+      this.loading.dismiss();
+      this.presentToast(err);
+    });
   }
 
-  getOCRData() {
-    console.log("OCR");
-    this.http.get("https://api.ocr.space/parse/imageurl?apikey=273ed2d3bf88957&url=https://assets.thaivisa.com/forum/uploads/monthly_12_2015/post-250519-0-04774200-1449916274_thumb.jpg")
-      .subscribe((res) => {
-        console.log(res);
-        console.log(res['ParsedResults']);
-        console.log(res['ParsedResults'][0]);
-        console.log(res['ParsedResults'][0]['ParsedText']);
-        this.OCRParseText = res['ParsedResults'][0]['ParsedText'];
+  uploadImages() {
+    this.presentLoadingDefault('Verifying document');
+    var data = new FormData();
+    data.append('file', this.imageData);
+    this.http.post('http://virtiledge.com/admin/file_upload.php', data)
+      .subscribe((response) => {
+        console.log(response);
+        this.getOCRData(response);
+      }, (err) => {
+        console.log(err);
+        this.loading.dismiss();
+      })
+  }
 
-        this.verifyDocument();
+  getOCRData(file) {
+    console.log("OCR");
+
+    setTimeout(() => {
+      if (this.loading.dismiss()) {
+        this.loading.dismiss();
+      }
+    }, 80000);
+
+    var path = "http://virtiledge.com/admin/" + file['image_url'] + '.jpg';
+    //this.http.get("https://api.ocr.space/parse/imageurl?apikey=273ed2d3bf88957&url=https://assets.thaivisa.com/forum/uploads/monthly_12_2015/post-250519-0-04774200-1449916274_thumb.jpg")
+    this.http.get("https://api.ocr.space/parse/imageurl?apikey=273ed2d3bf88957&url=" + path)
+      .subscribe((res) => {
+        this.storage.set('ocr', res['ParsedResults']);
+        console.log(res);
+        if (res) {
+          if (res['ParsedResults'] != null) {
+            console.log(res['ParsedResults']);
+            console.log(res['ParsedResults'][0]);
+            console.log(res['ParsedResults'][0]['ParsedText']);
+            this.OCRParseText = res['ParsedResults'][0]['ParsedText'];
+
+            this.verifyDocument(path);
+          } else {
+            this.showAlert(res['ErrorMessage'][0]);
+            this.loading.dismiss();
+          }
+        } else {
+          this.loading.dismiss();
+          this.showAlert('OCR failed to detect text.Please try again');
+        }
       },
         (err) => {
+          this.loading.dismiss();
           console.log(err);
+
         });
   }
 
-  verifyDocument(){
-    var parsedText = this.OCRParseText.split("\n");
+  verifyDocument(filePath) {
+    var parsedText = this.OCRParseText.toString().toLowerCase();
     console.log(parsedText);
+
+    var name = this.loanFormDetails.account.firstName.toString().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+    var document_status = false;
+    /****** DL verfification  *******/
+    console.log("dl name " + name)
+    var dl_verify1 = parsedText.toString().search('driving');
+    var dl_verify2 = parsedText.toString().search(name);
+    var pass_verify1 = parsedText.toString().search('passport');
+    var pass_verify2 = parsedText.toString().replace(/\s+/, "").search(name);
+
+    if (dl_verify1 != -1) {
+      if (dl_verify2 != -1) {
+        console.log("DL verified")
+        this.dlVerification = true;
+        //this.findDlNumber(parsedText);
+        var array = parsedText.split("\n");
+        console.log(array);
+        array.forEach(element => {
+          var str = element.replace(/[^0-9]/g, "");
+          console.log(str);
+          console.log(str.length);
+          if (str.length == 9) {
+            if (!isNaN(str)) {
+              this.loanFormDetails.stateDLNo = str;
+              this.loanFormDetails.documents[0]['path'] = filePath;
+              this.loanFormDetails.documents[0]['referenceNumber'] = str;
+            }
+          }
+        });
+        console.log(array);
+      } else {
+        this.dlVerification = false;
+        //this.name.nativeElement.focus();
+        this.showAlert('Failed to verify document.Please try again');
+        console.log("invalid DL");
+      }
+    }
+    else if (pass_verify1 != -1) {
+      if (pass_verify2 != -1) {
+        console.log("Passport verified")
+        this.passportVerification = true;
+        //this.findDlNumber(parsedText);
+        var array = parsedText.split("\n");
+        array.forEach(element => {
+          var str = element.replace(/[^0-9]/g, "");
+          console.log(str);
+          console.log(str.length);
+          if (str.length == 7) {
+            if (!isNaN(str)) {
+              var firstLetter = element
+              this.loanFormDetails.passportNo = element[0].toUpperCase() + ' ' + str;
+              this.loanFormDetails.documents[1]['path'] = filePath;
+              this.loanFormDetails.documents[1]['referenceNumber'] = element[0] + ' ' + str;
+            }
+          }
+        });
+        console.log(array);
+      } else {
+        this.passportVerification = false;
+        // this.name.nativeElement.focus();
+        this.showAlert('Failed to verify passport.Please try again.');
+        console.log("invalid Passport");
+      }
+    }
+    else {
+      this.showAlert('Kindly upload the document again');
+    }
+    this.loading.dismiss();
+  }
+
+  findDlNumber(str) {
+    var serach = str.search('Customer');
+    var n = parseInt(serach) + 35;
+    str = str.slice(serach, n);
+    str = str.replace(/^\D+/g, '');
+    str = str.slice(0, 11);
+    return str;
   }
 
   presentToast(msg) {
@@ -121,8 +331,28 @@ export class UploadDocumentsPage {
     toast.present();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad UploadDocumentsPage');
+  presentLoadingDefault(content) {
+    this.loading = this.loadingCtrl.create({
+      content: content,
+      spinner: 'dots',
+      showBackdrop: false
+    });
+
+    this.loading.present();
+  }
+
+  presentModal() {
+    const modal = this.modalCtrl.create(ModalPage);
+    modal.present();
+  }
+
+  showAlert(content) {
+    let alert = this.alertCtrl.create({
+      title: '',
+      subTitle: content,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 

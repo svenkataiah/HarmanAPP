@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { ScanPropertyPage } from '../scan-property/scan-property';
 import { UserInfoPage } from '../user-info/user-info';
@@ -8,6 +8,8 @@ import { JSONP_ERR_WRONG_RESPONSE_TYPE } from '@angular/common/http/src/jsonp';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
 import { LoanDetailsPage } from '../loan-details/loan-details';
+
+const client_url = 'http://quickloanapi.azurewebsites.net';
 
 @IonicPage()
 @Component({
@@ -26,7 +28,11 @@ export class PropertyDetailsPage {
   interested: any;
   interestedBtn: any = false;
   registrationId: any;
+  userId: any;
+  propertyAddress: any;
   loading: any;
+
+  @ViewChild('tab') tab: ElementRef;
 
   constructor(
     public navCtrl: NavController,
@@ -44,25 +50,34 @@ export class PropertyDetailsPage {
     storage.get('registrationId').then((val) => {
       this.registrationId = val;
     });
+    storage.get('userId').then((val) => {
+      this.userId = val;
+    });
+
   }
 
   ionViewDidLoad() {
+
     console.log('ionViewDidLoad PropertyDetailsPage');
-    this.http.get("http://quickhomeloanapi.azurewebsites.net/api/property")
-      .subscribe((response) => {
-        console.log(response);
-        this.presentLoadingDefault('Fetching property information from DTDB...');
-        setTimeout(() => {
+    this.storage.get('propertyAddress').then((paddress) => {
+      console.log("property address");
+      console.log(paddress);
+      this.propertyAddress = paddress;
+      this.http.post(client_url + "/api/property/details", { address: paddress })
+        .subscribe((response) => {
+          console.log(response);
+          this.presentLoadingDefault('Fetching property details');
+          setTimeout(() => {
+            this.propertyDetails = response;
+            this.loading.dismiss();
+          }, 2000);
+        });
 
-          this.propertyDetails = response['propertyValues'];
-          this.ownerInfo = response['ownerInfo']
-          this.characteristics = response['characteristics']
-          this.dimensions = response['dimensions'];
-          this.loading.dismiss();
+      //this.tab.nativeElement.click();
 
-        }, 4000);
-
-      })
+      let el = document.getElementById("tab") as HTMLElement;
+      el.click();
+    });
   }
 
   switchTabs(status) {
@@ -74,14 +89,14 @@ export class PropertyDetailsPage {
       this.tabStatus = 'gallery'
   }
 
+
   registerNotification() {
-    this.http.get("http://virtiledge.com/fcm/?registrationid=" + this.registrationId)
-      //this.http.post("http://quickhomeloanapi.azurewebsites.net/api/loan", { RegistrationId: this.registrationId })
+    //this.http.get("http://virtiledge.com/fcm/?registrationid=" + this.registrationId)
+    this.http.post(client_url + "/api/loan/create", { userId: this.userId, address: this.propertyAddress })
       .subscribe((response) => {
         this.showAlert();
         console.log(response);
-        this.interested = response;
-        this.interestedBtn = true;
+        // this.interested = response;
       })
   }
 
@@ -100,7 +115,7 @@ export class PropertyDetailsPage {
   showAlert() {
     let alert = this.alertCtrl.create({
       title: '',
-      subTitle: 'Thank You for your Interest. You will recieve a notification shortly',
+      subTitle: 'Thank you for your interest. You will recieve a notification shortly',
       buttons: ['OK']
     });
     alert.present();
@@ -121,12 +136,13 @@ export class PropertyDetailsPage {
           text: 'Yes, Check for Eligibility',
           handler: () => {
             console.log('Agree clicked');
-            this.presentLoadingDefault('Property information is being sent to the financial institution...');
+            this.interestedBtn = true;
+            this.presentLoadingDefault('Property information is being sent to the financial institution');
             setTimeout(() => {
               this.registerNotification();
               this.loading.dismiss();
               this.navCtrl.setRoot(this.propertyDetails);
-            }, 5000);
+            }, 2000);
           }
         }
       ]
@@ -134,18 +150,12 @@ export class PropertyDetailsPage {
     confirm.present();
   }
 
-
   presentLoadingDefault(content) {
     this.loading = this.loadingCtrl.create({
       content: content,
       spinner: 'dots'
     });
-
     this.loading.present();
-  }
-
-  ionViewWillLeave() {
-    this.loading.dismiss();
   }
 
 }

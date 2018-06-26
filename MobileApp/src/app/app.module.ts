@@ -31,6 +31,8 @@ import { File } from '@ionic-native/file';
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
+import { LoanHistoryPage } from '../pages/loan-history/loan-history';
+import { ModalPage } from '../pages/modal/modal';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents'
     SignupPage,
     NotificationsPage,
     LoanDetailsPage,
-    UploadDocumentsPage
+    UploadDocumentsPage,
+    LoanHistoryPage,
+    ModalPage
   ],
   imports: [
     BrowserModule,
@@ -66,12 +70,14 @@ import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents'
     SignupPage,
     NotificationsPage,
     LoanDetailsPage,
-    UploadDocumentsPage
+    UploadDocumentsPage,
+    LoanHistoryPage,
+    ModalPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     Geolocation,
     CameraPreview,
     NearByPlacesProvider,
@@ -85,4 +91,4 @@ import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents'
     FileChooser
   ]
 })
-export class AppModule {}
+export class AppModule { }

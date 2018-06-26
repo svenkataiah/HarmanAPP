@@ -8,9 +8,7 @@ page-loan-details {
             }
         } 
     }
-    a {
-        color: #32db64;
-    }
+   
     
     .card-header {
         font-size: 1.6rem;
@@ -31,7 +29,13 @@ page-loan-details {
         font-weight: 500;
         img{
             width: 15px;
-            margin-right: 5px;
+            position: absolute;
+            top: 13px;
+        }
+        span{
+            margin-left: 20px;
+            font-weight: bold;
+            display: block;
         }
     }
 
@@ -86,7 +90,7 @@ page-loan-details {
 		text-align: left; 
     }
     ion-scroll[scrollX] {
-        min-height: 30rem;
+        min-height: 60rem;
     }
 
     .activate{

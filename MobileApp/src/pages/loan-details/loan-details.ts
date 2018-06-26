@@ -3,6 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { HttpClient } from '@angular/common/http';
 import { SuccessPage } from '../success/success';
 import { UploadDocumentsPage } from '../upload-documents/upload-documents';
+import { Storage } from '@ionic/storage';
+
+const client_url = 'http://quickloanapi.azurewebsites.net';
 
 @IonicPage()
 @Component({
@@ -15,12 +18,32 @@ export class LoanDetailsPage {
   loanDetails: any;
   loanTenureDetails: any;
   loading: any;
+  referenceNo: any;
+  loanOptionId: any;
+  tenure: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private http: HttpClient,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private storage: Storage
   ) {
+    if (this.navParams.get('data')) {
+      this.referenceNo = this.navParams.get('data').referenceNo;
+      this.presentLoadingDefault();
+      this.getLoanDetails(this.referenceNo);
+    } else {
+      storage.get('userId').then((userId) => {
+        this.presentLoadingDefault();
+        this.http.get(client_url + "/api/loan/latestRefNo/" + userId)
+          .subscribe((response) => {
+            this.referenceNo = response['refNo'];
+            this.getLoanDetails(response['refNo']);
+          });
+      });
+
+    }
   }
 
   switchTabs(status) {
@@ -32,59 +55,69 @@ export class LoanDetailsPage {
       this.tabStatus = 'gallery'
   }
 
-  loanSchedule(loanTenureArrayObject, index) {
+  loanSchedule(loanOptionId, loanTenureArrayObject, index, tenure) {
+    this.loanOptionId = loanOptionId;
+    this.tenure = tenure;
     var principalPaidTotal = 0;
     var interestPaidTotal = 0;
     var balanceTotal = 0;
     for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      principalPaidTotal = principalPaidTotal + parseInt(loanTenureArrayObject[i].principalPaid);
+      principalPaidTotal = principalPaidTotal + parseFloat(loanTenureArrayObject[i].principalPaid);
     };
     for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      interestPaidTotal = interestPaidTotal + parseInt(loanTenureArrayObject[i].interestPaid);
+      interestPaidTotal = interestPaidTotal + parseFloat(loanTenureArrayObject[i].interestPaid);
     };
-    for (var i = 0; i < loanTenureArrayObject.length; i++) {
-      balanceTotal = balanceTotal + parseInt(loanTenureArrayObject[i].balance);
-    };
-    var yearlyTotal = principalPaidTotal + interestPaidTotal + balanceTotal;
+
+    var yearlyTotal = principalPaidTotal + interestPaidTotal -loanTenureArrayObject[0].principalPaid;
     this.loanTenureDetails = loanTenureArrayObject;
     this.loanTenureDetails.index = index;
     this.loanTenureDetails.principalPaidTotal = principalPaidTotal;
     this.loanTenureDetails.interestPaidTotal = interestPaidTotal;
-    this.loanTenureDetails.balanceTotal = balanceTotal;
     this.loanTenureDetails.yearlyTotal = yearlyTotal;
     this.tabStatus = 'loanTenureDetails';
-
   }
 
   applyLoan() {
-    this.navCtrl.push(UploadDocumentsPage);
+    console.log(this.loanOptionId);
+    var data = {
+      data: {
+        referenceNo: this.referenceNo,
+        selectedLoanOption: this.loanOptionId
+      }
+    }
+    this.navCtrl.push(UploadDocumentsPage, data);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PropertyDetailsPage');
-    this.http.get("http://quickhomeloanapi.azurewebsites.net/api/loan/loanid")
+    let el = document.getElementById("loantab") as HTMLElement;
+    el.click();
+  }
+
+  getLoanDetails(referenceNo) {
+
+    this.http.get(client_url + "/api/loan/details/" + referenceNo + "/true")
       .subscribe((response) => {
         console.log(response);
-        this.presentLoadingDefault();
-        setTimeout(()=>{
+        setTimeout(() => {
           this.loanDetails = response;
           this.loading.dismiss();
-        },4000);
+        }, 4000);
       })
   }
 
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Fetching Account Information and Loan Tenure details...',
+      content: 'Fetching account information and loan tenure details',
       spinner: 'dots',
       showBackdrop: false
     });
 
     this.loading.present();
   }
-    
-  ionViewWillLeave(){
+
+  ionViewWillLeave() {
     this.loading.dismiss();
   }
 

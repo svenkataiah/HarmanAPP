@@ -63,8 +63,6 @@ export class MapViewPage {
 
   }
 
-
-
   propertyDetails() {
     var data = {
       data: {
@@ -74,7 +72,7 @@ export class MapViewPage {
       }
     }
     //this.navCtrl.push(PropertyDetailsPage, data);
-    this.navCtrl.setRoot(PropertyDetailsPage,data);
+    this.navCtrl.setRoot(PropertyDetailsPage, data);
   }
 
 
@@ -82,7 +80,7 @@ export class MapViewPage {
 
 
   mapInit(lat, lng, marker) {
-    this.presentLoadingDefault();
+    
     if (marker == 'drag') {
       //this.nearByPlaces = [];
       this.getCurrentLocationAddress(lat, lng);
@@ -98,7 +96,7 @@ export class MapViewPage {
     });
 
     var infowindow = new google.maps.InfoWindow();
-
+    
 
     this.nearByPlaceType.forEach((el) => {
       this.nearByPlacesProvider.getNearByPlaces(lat, lng, el)
@@ -123,13 +121,6 @@ export class MapViewPage {
           }
         );
     });
-
-
-
-
-
-
-
 
     function createMarker(place) {
       var url = place.icon;
@@ -166,14 +157,10 @@ export class MapViewPage {
         icon: icon
       });
 
-
-
       google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(place.name);
         infowindow.open(map, this);
       });
-
-      this.loading.dismiss();
     }
 
     //current location marker
@@ -211,7 +198,7 @@ export class MapViewPage {
     if (this.apiError) {
       this.showAlert(this.apiErrorMsg);
     }
-    this.loading.dismiss();
+
 
   }
 
@@ -247,8 +234,6 @@ export class MapViewPage {
 
   }
 
-
-
   userInfo() {
     this.navCtrl.push(UserInfoPage);
   }
@@ -264,7 +249,7 @@ export class MapViewPage {
 
   presentLoadingDefault() {
     this.loading = this.loadingCtrl.create({
-      content: 'Loading Map View...',
+      content: 'Loading Map View',
       spinner: 'dots',
       showBackdrop: false
     });
@@ -273,11 +258,5 @@ export class MapViewPage {
   }
 
 
-
-
-
-  ionViewWillLeave() {
-    this.loading.dismiss();
-  }
 
 }

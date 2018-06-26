@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { LoanDetailsPage } from '../pages/loan-details/loan-details';
 import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents';
+import { LoanHistoryPage } from '../pages/loan-history/loan-history';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,9 +22,9 @@ import { UploadDocumentsPage } from '../pages/upload-documents/upload-documents'
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = UploadDocumentsPage;
+  rootPage: any = LoginPage;
 
-  pages: Array<{ title: string, component: any }>;
+  pages: Array<{ title: string, icon: string, component: any }>;
 
   constructor(
     public platform: Platform,
@@ -38,10 +39,12 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Scan Property', component: HomePage },
-      { title: 'Notifications', component: NotificationsPage },
-      { title: 'Logout', component: LoginPage }
-      
+      { title: 'Scan Property', icon: '', component: HomePage },
+      { title: 'Notifications', icon: '', component: NotificationsPage },
+      { title: 'Loan History', icon: '', component: LoanHistoryPage },
+      { title: 'Logout', icon: '', component: LoginPage },
+
+
     ];
   }
 
@@ -116,6 +119,7 @@ export class MyApp {
       pushObject.on('notification').subscribe((notification: any) => {
         console.log('Received a notification', notification);
         //this.nav.push(NotificationsPage);
+        // this.storage.set('')
 
         setTimeout(() => {
           this.rootPage = LoanDetailsPage;
@@ -127,9 +131,7 @@ export class MyApp {
       pushObject.on('registration').subscribe((registration: any) => {
         this.storage.remove('registrationId');
         this.storage.set('registrationId', registration.registrationId);
-        console.log('Device registered', registration.registrationId)
-        this.regid = registration.registrationId;
-        this.http.post("http://quickhomeloanapi.azurewebsites.net/api/auth/register", { regid: this.regid });
+        console.log('Device registered', registration.registrationId);
       });
 
       pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
