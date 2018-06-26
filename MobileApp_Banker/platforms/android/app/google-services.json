@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "346116404894",
+    "firebase_url": "https://easyloanbranch.firebaseio.com",
+    "project_id": "easyloanbranch",
+    "storage_bucket": "easyloanbranch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346116404894:android:1974f08cf76782fa",
+        "android_client_info": {
+          "package_name": "com.easyloanbranch.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346116404894-48g85gckoc3binu1len3h7o57l54h9ra.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "346116404894-48g85gckoc3binu1len3h7o57l54h9ra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChLAP30xgGcGuR_YNtY3lQYxOyG8A6zWE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

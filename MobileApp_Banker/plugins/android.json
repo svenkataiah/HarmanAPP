@@ -1,0 +1,37 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-plugin-ionic-webview": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "phonegap-plugin-push": {
+      "FCM_VERSION": "11.6.2",
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    },
+    "cordova-sms-plugin": {
+      "PACKAGE_NAME": "com.easyloanbranch.android"
+    }
+  },
+  "dependent_plugins": {}
+}

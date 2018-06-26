@@ -1,0 +1,33 @@
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <h4 class="header">Login</h4>
+    </ion-item>
+    
+    <ion-item class="login-item">
+
+      <ion-label>
+        <img src="assets/imgs/Login/profile.png">
+      </ion-label>
+
+      <ion-input type="text" [(ngModel)]="username" placeholder="User Name"></ion-input>
+    </ion-item>
+    <br>
+    <ion-item class="login-item">
+      <ion-label>
+        <img src="assets/imgs/Login/lock.png" style="height: 21px;">
+      </ion-label>
+
+      <ion-input type="password" [(ngModel)]="password" placeholder="Password"></ion-input>
+    </ion-item>
+
+    <ion-item class="login-links">
+      <a text-start>Forgot Password?</a>
+      <a text-end (click)="signup()">User Signup</a>
+    </ion-item>
+
+  </ion-list>
+  <div padding text-center>
+    <button block ion-button [disabled]="loginBtn" (click)="login()">Sign In</button>
+  </div>
+</ion-content>

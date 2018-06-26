@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">346116404894-48g85gckoc3binu1len3h7o57l54h9ra.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://easyloanbranch.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">346116404894</string>
+    <string name="google_api_key" translatable="false">AIzaSyChLAP30xgGcGuR_YNtY3lQYxOyG8A6zWE</string>
+    <string name="google_app_id" translatable="false">1:346116404894:android:1974f08cf76782fa</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyChLAP30xgGcGuR_YNtY3lQYxOyG8A6zWE</string>
+    <string name="google_storage_bucket" translatable="false">easyloanbranch.appspot.com</string>
+</resources>
