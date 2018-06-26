@@ -1,0 +1,58 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "com-sarriaroman-photoviewer": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-camera-preview": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-device-motion": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-ionic-webview": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "phonegap-plugin-push": {
+      "FCM_VERSION": "11.6.2",
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    },
+    "cordova-plugin-filechooser": {
+      "PACKAGE_NAME": "com.easyhomeloan.android"
+    }
+  },
+  "dependent_plugins": {}
+}
