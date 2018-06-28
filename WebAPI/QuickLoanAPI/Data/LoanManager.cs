@@ -102,7 +102,7 @@ namespace QuickLoanAPI.Data
                 AssignedTo = receiver,
                 AssignedBranch = receiverBranch.Branch.Name,
                 Status = "LU",
-                Comments= "Yor are eligible for the loan."
+                Comments= "You are eligible for the loan."
             };
             _quickLoanDbContext.LoanApplications.Add(loanApplication);
             _quickLoanDbContext.SaveChanges();
