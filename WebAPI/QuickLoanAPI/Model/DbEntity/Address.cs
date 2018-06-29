@@ -16,5 +16,7 @@ namespace QuickLoanAPI.Model.DbEntity
         public string Country { get; set; }
         public string ZipCode { get; set; }
         public string FullAddress { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     }
 }

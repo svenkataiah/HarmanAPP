@@ -9,7 +9,8 @@ namespace QuickLoanAPI.Model.DbEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CreatedBy { get; set; }
+        public User CreatedBy { get; set; }
+        public int CreatedById { get; set; }
         public string Version { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsActive { get; set; }

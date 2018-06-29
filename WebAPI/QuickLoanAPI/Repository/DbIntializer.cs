@@ -7,6 +7,7 @@ namespace QuickLoanAPI.Repository
 
     public static class DbInitializer
     {
+        public static Branch Branch1 { get; set; }  
         public static void Initialize(QuickLoanDbContext context)
         {
             context.Database.EnsureCreated();
@@ -17,6 +18,21 @@ namespace QuickLoanAPI.Repository
             {
                 return;   // DB has been seeded
             }
+            Branch1   = new Branch
+            {
+                BranchCode = "BR0001",
+                Name = "Branch 1",
+                Address = new Address
+                {
+                    FullAddress = "43 Mosely Ave, Staten Island, NY 10312",
+                    City = "Staten Island",
+                    State = "NY",
+                    ZipCode = "10312",
+                    Country = "USA",
+                    StreetAddress = "43 Mosely Ave",
+                    StreetAddress1 = ""
+                }
+            };
             InitialiseAccount(context);
 
             IntialiseBanker(context);
@@ -31,11 +47,7 @@ namespace QuickLoanAPI.Repository
             new BankOfficer{
             FirstName = "ERIC",
             LastName = "JHON",
-            Branch =new Branch
-               {
-                   BranchCode="BR0002",
-                   Name = "Branch 2"
-               },
+            Branch =Branch1,
             OnlineUser = new User{
                 UserId = "eric",
                 Password = "eric",
@@ -59,14 +71,16 @@ namespace QuickLoanAPI.Repository
             LastName = "MURPHY",
             Number ="8976890760",
             Addresses = new List<Address> {
-            new Address {
-                AddressType = "PERM",
-                StreetAddress ="",
-                City ="",
-                State ="",
-                Country ="",
-                ZipCode =""
-            },
+            new Address
+                {
+                    FullAddress= "43 Mosely Ave, Staten Island, NY 10312",
+                    City = "Staten Island",
+                    State = "NY",
+                    ZipCode = "10312",
+                    Country = "USA",
+                    StreetAddress = "43 Mosely Ave",
+                    StreetAddress1 = ""
+                },
             new Address {
                 AddressType = "RESI",
                 StreetAddress ="",
@@ -76,11 +90,7 @@ namespace QuickLoanAPI.Repository
                 ZipCode =""
             }
             },
-            Branch = new Branch
-               {
-                   BranchCode="BR0001",
-                   Name = "Branch 1"
-               },
+            Branch =  Branch1,
             OnlineUser = new User{
                 UserId = "amurphy",
                 Password = "murphy",
@@ -120,7 +130,7 @@ namespace QuickLoanAPI.Repository
         }
         private static void InitialiseLoanOptions(QuickLoanDbContext context)
         {
-            var loanOptions =  new List<LoanOptions>{
+            var loanOptions = new List<LoanOptions>{
                         new LoanOptions {
                             Tenure = "5 Years",
                             LoanAmount = 100000.00m,
