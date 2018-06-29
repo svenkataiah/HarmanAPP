@@ -1,8 +1,8 @@
 ﻿using QuickLoanAPI.Model.DbEntity;
 
-namespace QuickLoanAPI.Data
+namespace QuickLoanAPI.Repository
 {
-    public class PropertyManager
+    public class PropertyRepository
     {
 
         public PropertyDetail GetPropertyDetail(Address address)

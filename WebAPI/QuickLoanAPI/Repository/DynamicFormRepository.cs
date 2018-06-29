@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace QuickLoanAPI.Data
 {
-    public class DynamicFormManager
+    public class DynamicFormRepository
     {
         private QuickLoanDbContext _context;
 
-        public DynamicFormManager(QuickLoanDbContext context)
+        public DynamicFormRepository(QuickLoanDbContext context)
         {
             _context = context;
         }

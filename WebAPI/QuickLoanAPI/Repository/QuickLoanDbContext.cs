@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuickLoanAPI.Model.DbEntity;
 
-namespace QuickLoanAPI.Data
+namespace QuickLoanAPI.Repository
 {
     public class QuickLoanDbContext : DbContext
     {

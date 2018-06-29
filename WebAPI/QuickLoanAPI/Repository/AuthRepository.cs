@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using QuickHomeLoanAPI.Model;
 using QuickLoanAPI.Model;
 
-namespace QuickLoanAPI.Data
+namespace QuickLoanAPI.Repository
 {
-    public class AuthManager
+    public class AuthRepository
     {
         QuickLoanDbContext _context = null;
-        public AuthManager(QuickLoanDbContext context)
+        public AuthRepository(QuickLoanDbContext context)
         {
             _context = context;
         }

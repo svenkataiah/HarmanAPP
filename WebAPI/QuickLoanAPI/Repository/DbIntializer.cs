@@ -2,7 +2,7 @@
 using System.Linq;
 using QuickLoanAPI.Model.DbEntity;
 
-namespace QuickLoanAPI.Data
+namespace QuickLoanAPI.Repository
 {
 
     public static class DbInitializer

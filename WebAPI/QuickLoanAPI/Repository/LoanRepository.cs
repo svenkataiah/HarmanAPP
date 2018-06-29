@@ -9,14 +9,14 @@ using QuickHomeLoanAPI.Manager;
 using QuickHomeLoanAPI.Model;
 using QuickLoanAPI.Model.DbEntity;
 
-namespace QuickLoanAPI.Data
+namespace QuickLoanAPI.Repository
 {
-    public class LoanManager
+    public class LoanRepository
     {
         private readonly QuickLoanDbContext _quickLoanDbContext;
         private readonly IConfiguration _configuration;
 
-        public LoanManager(QuickLoanDbContext quickLoanDbContext, IConfiguration configuration)
+        public LoanRepository(QuickLoanDbContext quickLoanDbContext, IConfiguration configuration)
         {
             _quickLoanDbContext = quickLoanDbContext;
             _configuration = configuration;
@@ -78,7 +78,7 @@ namespace QuickLoanAPI.Data
                            .Include(item => item.OnlineUser)
                             .Include(item => item.Branch))
                            .Where(item => item.OnlineUser.Id == loanRequest.UserId).FirstOrDefault();
-            var propMgr = new PropertyManager();
+            var propMgr = new PropertyRepository();
             var loan = _quickLoanDbContext.LoanApplications.LastOrDefault();
             var refNumber = account.Branch.BranchCode + "HL";
             string sequenceNumber = "0000001";
