@@ -11,6 +11,7 @@ namespace QuickLoanAPI.Data
         {
             context.Database.EnsureCreated();
             //InitialiseLoanOptions(context);
+            //IntialiseFormLibraryFields(context);
             // Look for any users.
             if (context.Users.Any())
             {
@@ -21,6 +22,7 @@ namespace QuickLoanAPI.Data
             IntialiseBanker(context);
 
             InitialiseLoanOptions(context);
+            IntialiseFormLibraryFields(context);
         }
         private static void IntialiseBanker(QuickLoanDbContext context)
         {
@@ -92,7 +94,30 @@ namespace QuickLoanAPI.Data
             }
             context.SaveChanges();
         }
+        private static void IntialiseFormLibraryFields(QuickLoanDbContext context)
+        {
+            var libraryFields = new LibraryField[]
+           {
+            new LibraryField{
+                Label ="TextField",
+                Type = "Text",
+                Attributes = new List<LibraryFieldAttribute>
+                {
+                    new LibraryFieldAttribute
+                    {
+                        Name ="MaxLength",
+                        Value = "100",
+                    }
+                }
+            }
+           };
 
+            foreach (LibraryField lf in libraryFields)
+            {
+                context.LibraryFields.Add(lf);
+            }
+            context.SaveChanges();
+        }
         private static void InitialiseLoanOptions(QuickLoanDbContext context)
         {
             var loanOptions =  new List<LoanOptions>{
