@@ -5,3 +5,4 @@
 /WebAPI/.vs
 /WebAPI/QuickLoanAPI/bin
 /WebAPI/QuickLoanAPI/obj
+WebAPI/QuickLoanAPI/Controllers/LoanController.cs

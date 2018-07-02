@@ -64,21 +64,23 @@ namespace QuickHomeLoanAPI.Controllers
         }
         [HttpPost]
         [Route("uploadfile")]
-        public async Task<string> Upload(IFormFile file)
+        public async Task<string> Upload(string file)
         {
-            var loanMgr = new LoanManager(_context, _configuration);
-            if (file == null) throw new Exception("File is null");
-            if (file.Length == 0) throw new Exception("File is empty");
-            string filePath = null;
-            using (Stream stream = file.OpenReadStream())
-            {
-                using (var binaryReader = new BinaryReader(stream))
-                {
-                    var fileContent = binaryReader.ReadBytes((int)file.Length);
-                    filePath = await loanMgr.UploadFile(fileContent, file.FileName, file.ContentType);
-                }
-            }
-            return filePath;
+            
+            return string.Empty;
+            //var loanMgr = new LoanManager(_context, _configuration);
+            //if (file == null) throw new Exception("File is null");
+            //if (file.Length == 0) throw new Exception("File is empty");
+            //string filePath = null;
+            //using (Stream stream = file.OpenReadStream())
+            //{
+            //    using (var binaryReader = new BinaryReader(stream))
+            //    {
+            //        var fileContent = binaryReader.ReadBytes((int)file.Length);
+            //        filePath = await loanMgr.UploadFile(fileContent, file.FileName, file.ContentType);
+            //    }
+            //}
+            //return filePath;
         }
     }
 }
